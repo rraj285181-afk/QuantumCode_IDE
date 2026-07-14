@@ -1,4 +1,4 @@
-# QuantumCode IDE - Stylish Online Compiler
+# CodeXrun IDE - Stylish Online Compiler
 
 A premium, modern web-based development environment (IDE) and compiler that executes Python, Java, C, and C++ code.
 

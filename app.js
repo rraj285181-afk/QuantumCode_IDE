@@ -1,5 +1,5 @@
 /**
- * QuantumCode IDE - Core Application Logic
+ * CodeXrun IDE - Core Application Logic
  * Integrates Monaco Editor, virtual file explorer, settings panels,
  * resizable drawer terminal, and the public Piston execution API.
  */
@@ -686,6 +686,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Setup Share Modal Listeners
   initShareModalListeners();
+
+  // Setup AdSense status observer
+  initAdSenseObserver();
 });
 
 // Register custom themes for Monaco Editor
@@ -871,25 +874,25 @@ function loadWorkspaceState() {
   }
 
   // Load settings
-  const cachedTheme = localStorage.getItem('qc_theme');
+  const cachedTheme = localStorage.getItem('codexrun_theme');
   if (cachedTheme) state.theme = cachedTheme;
   document.getElementById('theme-select').value = state.theme;
   applyAppThemeColors(state.theme);
 
-  const cachedFontSize = localStorage.getItem('qc_font_size');
+  const cachedFontSize = localStorage.getItem('codexrun_font_size');
   if (cachedFontSize) state.fontSize = parseInt(cachedFontSize, 10);
   document.getElementById('setting-font-size').value = state.fontSize.toString();
 
-  const cachedWordWrap = localStorage.getItem('qc_word_wrap');
+  const cachedWordWrap = localStorage.getItem('codexrun_word_wrap');
   if (cachedWordWrap) state.wordWrap = cachedWordWrap;
   document.getElementById('setting-word-wrap').value = state.wordWrap;
 
-  const cachedMinimap = localStorage.getItem('qc_minimap');
+  const cachedMinimap = localStorage.getItem('codexrun_minimap');
   if (cachedMinimap) state.minimap = cachedMinimap === 'true';
   document.getElementById('setting-minimap').value = state.minimap.toString();
 
   // Load files
-  const cachedFiles = localStorage.getItem('qc_files');
+  const cachedFiles = localStorage.getItem('codexrun_files');
   if (cachedFiles) {
     try {
       state.files = JSON.parse(cachedFiles);
@@ -898,7 +901,7 @@ function loadWorkspaceState() {
     }
   }
 
-  const cachedActiveFile = localStorage.getItem('qc_active_file_id');
+  const cachedActiveFile = localStorage.getItem('codexrun_active_file_id');
   if (cachedActiveFile) state.activeFileId = cachedActiveFile;
 
   // Setup default files if workspace is empty
@@ -922,12 +925,12 @@ function setupDefaultFiles() {
 }
 
 function saveStateToStorage() {
-  localStorage.setItem('qc_files', JSON.stringify(state.files));
-  localStorage.setItem('qc_active_file_id', state.activeFileId || '');
-  localStorage.setItem('qc_theme', state.theme);
-  localStorage.setItem('qc_font_size', state.fontSize.toString());
-  localStorage.setItem('qc_word_wrap', state.wordWrap);
-  localStorage.setItem('qc_minimap', state.minimap.toString());
+  localStorage.setItem('codexrun_files', JSON.stringify(state.files));
+  localStorage.setItem('codexrun_active_file_id', state.activeFileId || '');
+  localStorage.setItem('codexrun_theme', state.theme);
+  localStorage.setItem('codexrun_font_size', state.fontSize.toString());
+  localStorage.setItem('codexrun_word_wrap', state.wordWrap);
+  localStorage.setItem('codexrun_minimap', state.minimap.toString());
 }
 
 function triggerAutoSave() {
@@ -1344,12 +1347,12 @@ function initSettingsListeners() {
   const resetBtn = document.getElementById('reset-workspace-btn');
   resetBtn.addEventListener('click', () => {
     // Re-initialize default files and settings
-    localStorage.removeItem('qc_files');
-    localStorage.removeItem('qc_active_file_id');
-    localStorage.removeItem('qc_theme');
-    localStorage.removeItem('qc_font_size');
-    localStorage.removeItem('qc_word_wrap');
-    localStorage.removeItem('qc_minimap');
+    localStorage.removeItem('codexrun_files');
+    localStorage.removeItem('codexrun_active_file_id');
+    localStorage.removeItem('codexrun_theme');
+    localStorage.removeItem('codexrun_font_size');
+    localStorage.removeItem('codexrun_word_wrap');
+    localStorage.removeItem('codexrun_minimap');
     
     state.theme = 'vs-dark';
     state.fontSize = 14;
@@ -1720,10 +1723,10 @@ function shareCode() {
     // Populate modal inputs and social buttons
     document.getElementById('share-link-url').value = shareUrl;
     
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('QuantumCode IDE: Check out my workspace code! ' + shareUrl)}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('CodeXrun IDE: Check out my workspace code! ' + shareUrl)}`;
     document.getElementById('share-whatsapp-btn').setAttribute('href', whatsappUrl);
     
-    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('QuantumCode IDE: Check out my workspace code!')}`;
+    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('CodeXrun IDE: Check out my workspace code!')}`;
     document.getElementById('share-telegram-btn').setAttribute('href', telegramUrl);
     
     // Show Modal overlay
@@ -1850,11 +1853,11 @@ function downloadWorkspaceAsZip() {
     .then(blobContent => {
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blobContent);
-      link.download = 'quantumcode-workspace.zip';
+      link.download = 'codexrun-workspace.zip';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showTerminalLog('[System] Project successfully downloaded as "quantumcode-workspace.zip".', 'system-text');
+      showTerminalLog('[System] Project successfully downloaded as "codexrun-workspace.zip".', 'system-text');
     })
     .catch(err => {
       showTerminalLog(`[System Error] ZIP generation failed: ${err.message}`, 'error-text');
@@ -1973,6 +1976,38 @@ function initShareModalListeners() {
 
   copyBtn.addEventListener('click', executeCopy);
   linkCopyBtn.addEventListener('click', executeCopy);
+}
+
+// Observe Google AdSense ads and show them only when loaded
+function initAdSenseObserver() {
+  const ads = document.querySelectorAll('ins.adsbygoogle');
+  
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-ad-status') {
+        const ins = mutation.target;
+        const status = ins.getAttribute('data-ad-status');
+        const container = ins.closest('.adsense-sidebar-container') || ins.closest('.terminal-output-ad-panel');
+        if (container) {
+          if (status === 'filled') {
+            container.classList.add('ad-loaded');
+          } else {
+            container.classList.remove('ad-loaded');
+          }
+        }
+      }
+    });
+  });
+
+  ads.forEach(ad => {
+    const status = ad.getAttribute('data-ad-status');
+    const container = ad.closest('.adsense-sidebar-container') || ad.closest('.terminal-output-ad-panel');
+    if (container && status === 'filled') {
+      container.classList.add('ad-loaded');
+    }
+    
+    observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+  });
 }
 
 // ==========================================================================

@@ -1380,7 +1380,7 @@ kbd {
   margin-top: auto;
   border-top: 1px solid var(--border-color);
   padding-top: 15px;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -1429,7 +1429,7 @@ kbd {
   flex: 1.2;
   border-left: 1px solid var(--border-color);
   padding-left: 15px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   height: 100%;
@@ -1464,6 +1464,26 @@ kbd {
   text-align: center;
   font-family: var(--font-mono);
   padding: 10px;
+}
+
+/* Show ads only when they are successfully loaded */
+.adsense-sidebar-container.ad-loaded,
+.adsense-sidebar-container:has(ins.adsbygoogle[data-ad-status="filled"]) {
+  display: flex;
+}
+
+.terminal-output-ad-panel.ad-loaded,
+.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) {
+  display: flex;
+}
+
+/* Remove borders and background when the ad is loaded to blend it nicely */
+.adsense-sidebar-container.ad-loaded .adsense-placeholder-sidebar,
+.adsense-sidebar-container:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-sidebar,
+.terminal-output-ad-panel.ad-loaded .adsense-placeholder-terminal,
+.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-terminal {
+  border: none !important;
+  background: transparent !important;
 }
 
 
