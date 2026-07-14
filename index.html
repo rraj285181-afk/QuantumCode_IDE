@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuantumCode IDE | Stylish Online Compiler</title>
+  
+  <!-- Font and Icon Packages -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+  <!-- Main Styling -->
+  <link rel="stylesheet" href="/style.css">
+  
+  <!-- Monaco Editor AMD Loader -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+</head>
+<body>
+  <!-- Main IDE Wrapper -->
+  <div id="ide-container">
+    
+    <!-- Top Header Navigation -->
+    <header id="ide-header">
+      <div class="header-logo-group">
+        <span class="material-symbols-outlined logo-icon">terminal</span>
+        <div class="logo-text-group">
+          <h1>QuantumCode <span class="accent-text">IDE</span></h1>
+          <span class="system-status">System: Online</span>
+        </div>
+      </div>
+      
+      <div class="header-controls">
+        <!-- Language Selector -->
+        <div class="control-group">
+          <label for="language-select"><span class="material-symbols-outlined">code</span> Language</label>
+          <select id="language-select">
+            <option value="python">Python 3</option>
+            <option value="cpp">C++ (GCC)</option>
+            <option value="c">C (GCC)</option>
+            <option value="java">Java</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="rust">Rust</option>
+            <option value="go">Go</option>
+            <option value="csharp">C#</option>
+            <option value="kotlin">Kotlin</option>
+            <option value="swift">Swift</option>
+            <option value="ruby">Ruby</option>
+            <option value="dart">Dart</option>
+          </select>
+        </div>
+
+        <!-- Editor Theme Selector -->
+        <div class="control-group">
+          <label for="theme-select"><span class="material-symbols-outlined">palette</span> Theme</label>
+          <select id="theme-select">
+            <option value="vs-dark">Quantum Dark</option>
+            <option value="dracula">Dracula Theme</option>
+            <option value="monokai">Monokai Theme</option>
+            <option value="hc-black">High Contrast</option>
+            <option value="vs-light">Quantum Light</option>
+          </select>
+        </div>
+
+        <!-- Format Action Button -->
+        <button id="format-btn" class="secondary-btn" title="Format current file code">
+          <span class="material-symbols-outlined">format_align_left</span>
+          <span>Format</span>
+        </button>
+
+        <!-- Run Action Button -->
+        <button id="run-btn" class="primary-btn">
+          <span class="material-symbols-outlined play-icon">play_arrow</span>
+          <span class="material-symbols-outlined loading-spinner spinner-hide">progress_activity</span>
+          <span>Run Code</span>
+        </button>
+
+        <!-- Share Button -->
+        <button id="share-btn" class="secondary-btn" title="Copy shareable workspace link to clipboard">
+          <span class="material-symbols-outlined">share</span>
+          <span>Share Link</span>
+        </button>
+
+        <!-- Download ZIP Button -->
+        <button id="download-zip-btn" class="secondary-btn" title="Download workspace as ZIP">
+          <span class="material-symbols-outlined">download</span>
+          <span>ZIP</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main id="ide-workspace">
+      
+      <!-- Left Sidebar Navigation -->
+      <aside id="ide-sidebar">
+        <nav class="sidebar-nav">
+          <button id="tab-explorer-btn" class="sidebar-nav-btn active" title="File Explorer">
+            <span class="material-symbols-outlined">folder_open</span>
+          </button>
+          <button id="tab-settings-btn" class="sidebar-nav-btn" title="IDE Settings">
+            <span class="material-symbols-outlined">settings</span>
+          </button>
+          <button id="tab-templates-btn" class="sidebar-nav-btn" title="Code Templates">
+            <span class="material-symbols-outlined">menu_book</span>
+          </button>
+          <button id="tab-help-btn" class="sidebar-nav-btn" title="Help & Shortcuts">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </nav>
+
+        <!-- Sidebar Content Panels -->
+        <div class="sidebar-panel-container">
+          
+          <!-- File Explorer Panel -->
+          <div id="panel-explorer" class="sidebar-panel active">
+            <div class="panel-header">
+              <h2>Explorer</h2>
+              <button id="new-file-btn" class="icon-btn" title="Create New File">
+                <span class="material-symbols-outlined">add</span>
+              </button>
+            </div>
+            
+            <!-- File Creation Modal/Input (Hidden by default) -->
+            <div id="new-file-input-container" class="file-input-row hide">
+              <input type="text" id="new-file-name" placeholder="filename.py" autofocus autocomplete="off" />
+              <button id="new-file-confirm" class="confirm-btn"><span class="material-symbols-outlined">check</span></button>
+              <button id="new-file-cancel" class="cancel-btn"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            
+            <div id="file-tree" class="file-list">
+              <!-- Files will be dynamically populated here via app.js -->
+            </div>
+          </div>
+
+          <!-- Settings Panel -->
+          <div id="panel-settings" class="sidebar-panel">
+            <div class="panel-header">
+              <h2>Settings</h2>
+            </div>
+            <div class="settings-list">
+              <div class="setting-item">
+                <label for="setting-font-size">Font Size (px)</label>
+                <select id="setting-font-size">
+                  <option value="12">12</option>
+                  <option value="14" selected>14</option>
+                  <option value="16">16</option>
+                  <option value="18">18</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label for="setting-word-wrap">Word Wrap</label>
+                <select id="setting-word-wrap">
+                  <option value="on">On</option>
+                  <option value="off" selected>Off</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label for="setting-minimap">Minimap</label>
+                <select id="setting-minimap">
+                  <option value="true" selected>Show</option>
+                  <option value="false">Hide</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <button id="reset-workspace-btn" class="danger-btn">
+                  <span class="material-symbols-outlined">restart_alt</span>
+                  <span>Reset Workspace</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help/About Panel -->
+          <div id="panel-help" class="sidebar-panel">
+            <div class="panel-header">
+              <h2>Help & Info</h2>
+            </div>
+            <div class="help-content">
+              <h3>Execution Engine</h3>
+              <p>Uses the public sandboxed <strong>Piston API</strong>. Code runs in an isolated container on high-speed servers.</p>
+              
+              <h3>Important Templates</h3>
+              <p>For C and C++, declare your main function inside `main.c` / `main.cpp`. For Java, write code inside a class named `Main` inside `Main.java`.</p>
+
+              <h3>Keyboard Shortcuts</h3>
+              <ul>
+                <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> : Run Code</li>
+                <li><kbd>Ctrl</kbd> + <kbd>S</kbd> : Save Workspace</li>
+                <li><kbd>Alt</kbd> + <kbd>N</kbd> : New File</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Templates Panel -->
+          <div id="panel-templates" class="sidebar-panel">
+            <div class="panel-header">
+              <h2>Templates</h2>
+            </div>
+            <div class="templates-list">
+              <div class="template-category">
+                <h3>Algorithms</h3>
+                <button class="template-item-btn" data-template="bubble_sort">
+                  <span class="material-symbols-outlined">sort</span>
+                  <span>Bubble Sort</span>
+                </button>
+                <button class="template-item-btn" data-template="fibonacci">
+                  <span class="material-symbols-outlined">reorder</span>
+                  <span>Fibonacci Series</span>
+                </button>
+                <button class="template-item-btn" data-template="binary_search">
+                  <span class="material-symbols-outlined">search</span>
+                  <span>Binary Search</span>
+                </button>
+              </div>
+              <div class="template-category">
+                <h3>Data Structures</h3>
+                <button class="template-item-btn" data-template="stack">
+                  <span class="material-symbols-outlined">stack</span>
+                  <span>Stack Structure</span>
+                </button>
+                <button class="template-item-btn" data-template="queue">
+                  <span class="material-symbols-outlined">queue</span>
+                  <span>Queue Structure</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Center Code Editor & Terminal Panel -->
+      <section id="editor-terminal-container">
+        
+        <!-- Code Tabs Panel -->
+        <div id="editor-tabs-bar">
+          <div id="editor-tabs-list" class="tabs-list">
+            <!-- Open file tabs will be generated here -->
+          </div>
+        </div>
+
+        <!-- Monaco Editor Container -->
+        <div id="editor-frame">
+          <div id="editor-loading">
+            <span class="material-symbols-outlined spinner">progress_activity</span>
+            <span>Loading Quantum Monaco Editor...</span>
+          </div>
+          <div id="monaco-editor-anchor"></div>
+        </div>
+
+        <!-- Resizable Split Handle -->
+        <div id="terminal-resize-handle">
+          <div class="drag-bar"></div>
+        </div>
+
+        <!-- Drawer Terminal (Bottom Panel) -->
+        <footer id="ide-terminal">
+          <div class="terminal-header">
+            <div class="terminal-tab-group">
+              <button id="tab-output-btn" class="terminal-tab active">
+                <span class="material-symbols-outlined">terminal</span> Output
+              </button>
+              <button id="tab-input-btn" class="terminal-tab">
+                <span class="material-symbols-outlined">keyboard</span> Input (Stdin)
+              </button>
+              <button id="tab-visualizer-btn" class="terminal-tab">
+                <span class="material-symbols-outlined">analytics</span> Visualizer
+              </button>
+            </div>
+            <div class="terminal-actions">
+              <span id="exec-status-badge" class="status-badge idle">Idle</span>
+              <button id="clear-terminal-btn" class="icon-btn" title="Clear Terminal">
+                <span class="material-symbols-outlined">delete_sweep</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="terminal-body-container">
+            <!-- Execution Output Screen -->
+            <div id="terminal-output-panel" class="terminal-body active">
+              <div id="terminal-log" class="terminal-log-screen">
+                <div class="log-line system-text">QuantumCode Compiler Ready. Press 'Run Code' to execute.</div>
+              </div>
+              <div id="terminal-stats-bar">
+                <span id="stat-time">Time: -</span>
+                <span id="stat-status">Status: -</span>
+              </div>
+            </div>
+
+            <!-- Stdin Input Screen -->
+            <div id="terminal-input-panel" class="terminal-body">
+              <textarea id="stdin-textarea" placeholder="Enter standard inputs here. If your program reads multiple lines, enter each line on a new row."></textarea>
+            </div>
+
+            <!-- Visualizer Screen -->
+            <div id="terminal-visualizer-panel" class="terminal-body">
+              <div class="visualizer-container">
+                <div class="visualizer-canvas-panel">
+                  <div id="visualizer-canvas"></div>
+                  
+                  <div class="visualizer-controls">
+                    <button id="vis-control-prev" class="icon-btn" title="Previous Step">
+                      <span class="material-symbols-outlined">skip_previous</span>
+                    </button>
+                    <button id="vis-control-play" class="primary-btn play-btn" title="Play Simulation">
+                      <span class="material-symbols-outlined vis-play-icon">play_arrow</span>
+                    </button>
+                    <button id="vis-control-next" class="icon-btn" title="Next Step">
+                      <span class="material-symbols-outlined">skip_next</span>
+                    </button>
+                    <button id="vis-control-reset" class="icon-btn" title="Restart Simulation">
+                      <span class="material-symbols-outlined">replay</span>
+                    </button>
+                    
+                    <div class="slider-group">
+                      <span class="material-symbols-outlined">speed</span>
+                      <input type="range" id="vis-control-speed" min="100" max="2000" value="800" step="100" title="Step delay (ms)">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="visualizer-meta-panel">
+                  <div class="vis-meta-section">
+                    <h3><span class="material-symbols-outlined">monitoring</span> Variables</h3>
+                    <div id="vis-variables-list" class="vis-vars-grid"></div>
+                  </div>
+                  <div class="vis-meta-section">
+                    <h3><span class="material-symbols-outlined">info</span> Step Walkthrough</h3>
+                    <div id="vis-description-box" class="vis-desc-screen"></div>
+                  </div>
+                  <div class="vis-meta-section">
+                    <h3><span class="material-symbols-outlined">edit_note</span> Custom Data</h3>
+                    <div class="vis-custom-inputs">
+                      <input type="text" id="vis-custom-data-input" placeholder="e.g. 64, 34, 25, 12, 22, 11, 90" title="Comma-separated integers">
+                      <button id="vis-custom-data-btn" class="secondary-btn">Set Data</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Share Workspace Modal -->
+  <div id="share-modal" class="modal-overlay hide">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Share Workspace</h2>
+        <button id="close-share-modal" class="icon-btn" title="Close Dialouge">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Select a platform to share your current compiler workspace:</p>
+        <div class="share-options-grid">
+          <button id="share-copy-btn" class="share-opt-btn" title="Copy Link to Clipboard">
+            <span class="material-symbols-outlined">content_copy</span>
+            <span>Copy Link</span>
+          </button>
+          
+          <a id="share-whatsapp-btn" class="share-opt-btn" target="_blank" rel="noopener" title="Share via WhatsApp">
+            <span class="share-social-icon whatsapp-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.863-9.73.001-2.597-1.012-5.04-2.853-6.884-1.84-1.844-4.291-2.859-6.892-2.86-5.437 0-9.863 4.37-9.866 9.732-.001 1.705.451 3.372 1.309 4.866L1.298 22l6.239-1.636zm11.378-5.424c-.26-.13-1.54-.76-1.78-.85-.24-.09-.415-.13-.59.13-.175.26-.68.85-.83.99-.15.15-.3.17-.56.04-2.185-1.09-3.415-2.046-4.52-3.94-.29-.5-.07-.77.16-1.01.205-.22.46-.53.69-.8.155-.18.21-.3.32-.5.115-.2.06-.38-.03-.51-.09-.13-.78-1.88-1.07-2.58-.285-.685-.575-.59-.785-.6-.21-.01-.45-.01-.69-.01-.24 0-.63.09-.96.45-.33.36-1.25 1.22-1.25 2.97 0 1.75 1.27 3.438 1.45 3.68.18.24 2.502 3.82 6.06 5.358.848.367 1.51.584 2.029.749.854.27 1.631.232 2.245.14.686-.103 2.09-.855 2.385-1.683.295-.828.295-1.54.21-1.68-.086-.14-.262-.22-.522-.35z"/>
+              </svg>
+            </span>
+            <span>WhatsApp</span>
+          </a>
+          
+          <a id="share-telegram-btn" class="share-opt-btn" target="_blank" rel="noopener" title="Share via Telegram">
+            <span class="share-social-icon telegram-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <path d="M11.944 0C5.344 0 0 5.344 0 11.944 0 18.544 5.344 24 11.944 24c6.6 0 11.944-5.344 11.944-11.944C23.888 5.344 18.544 0 11.944 0zm5.82 8.358l-1.92 9.053c-.14.646-.525.805-1.07.5l-2.926-2.157-1.41 1.357c-.157.157-.288.288-.59.288l.21-2.98 5.428-4.903c.236-.21-.05-.327-.367-.117l-6.71 4.223-2.888-.903c-.628-.196-.64-.628.13-.928l11.29-4.354c.523-.19.98.12.784.887z"/>
+              </svg>
+            </span>
+            <span>Telegram</span>
+          </a>
+        </div>
+        
+        <div class="share-link-input-group">
+          <input type="text" id="share-link-url" readonly />
+          <button id="share-link-copy-btn" class="primary-btn">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JS Logic -->
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

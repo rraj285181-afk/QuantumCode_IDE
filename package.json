@@ -1,0 +1,17 @@
+{
+  "name": "stylish-online-compiler",
+  "version": "1.0.0",
+  "description": "A professional, modern, and stylish online compiler for Python, Java, C, and C++.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1"
+  }
+}
