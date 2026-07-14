@@ -1373,4 +1373,98 @@ kbd {
   font-size: 0.78rem;
 }
 
+/* ==========================================================================
+   AdSense Ad Banner Layouts
+   ========================================================================== */
+.adsense-sidebar-container {
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ad-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.adsense-placeholder-sidebar {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-output-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  gap: 15px;
+  overflow: hidden;
+}
+
+.terminal-output-left {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.terminal-output-ad-panel {
+  flex: 1.2;
+  border-left: 1px solid var(--border-color);
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-width: 160px;
+}
+
+.adsense-terminal-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.adsense-placeholder-terminal {
+  width: 100%;
+  height: 90%;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.adsense-mock-ad {
+  font-size: 0.72rem;
+  color: var(--text-dark);
+  text-align: center;
+  font-family: var(--font-mono);
+  padding: 10px;
+}
+
+
 

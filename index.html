@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuantumCode IDE | Stylish Online Compiler</title>
-  
+
   <!-- Font and Icon Packages -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    rel="stylesheet" />
 
   <!-- Main Styling -->
   <link rel="stylesheet" href="/style.css">
-  
+
   <!-- Monaco Editor AMD Loader -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
+  <!-- Google AdSense Main Library -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5471667535888198"
+       crossorigin="anonymous"></script>
 </head>
+
 <body>
   <!-- Main IDE Wrapper -->
   <div id="ide-container">
-    
+
     <!-- Top Header Navigation -->
     <header id="ide-header">
       <div class="header-logo-group">
@@ -30,15 +39,15 @@
           <span class="system-status">System: Online</span>
         </div>
       </div>
-      
+
       <div class="header-controls">
         <!-- Language Selector -->
         <div class="control-group">
           <label for="language-select"><span class="material-symbols-outlined">code</span> Language</label>
           <select id="language-select">
-            <option value="python">Python 3</option>
-            <option value="cpp">C++ (GCC)</option>
-            <option value="c">C (GCC)</option>
+            <option value="python">Python </option>
+            <option value="cpp">C++</option>
+            <option value="c">C</option>
             <option value="java">Java</option>
             <option value="javascript">JavaScript</option>
             <option value="typescript">TypeScript</option>
@@ -93,7 +102,7 @@
 
     <!-- Main Workspace Area -->
     <main id="ide-workspace">
-      
+
       <!-- Left Sidebar Navigation -->
       <aside id="ide-sidebar">
         <nav class="sidebar-nav">
@@ -113,7 +122,7 @@
 
         <!-- Sidebar Content Panels -->
         <div class="sidebar-panel-container">
-          
+
           <!-- File Explorer Panel -->
           <div id="panel-explorer" class="sidebar-panel active">
             <div class="panel-header">
@@ -122,16 +131,35 @@
                 <span class="material-symbols-outlined">add</span>
               </button>
             </div>
-            
+
             <!-- File Creation Modal/Input (Hidden by default) -->
             <div id="new-file-input-container" class="file-input-row hide">
               <input type="text" id="new-file-name" placeholder="filename.py" autofocus autocomplete="off" />
-              <button id="new-file-confirm" class="confirm-btn"><span class="material-symbols-outlined">check</span></button>
-              <button id="new-file-cancel" class="cancel-btn"><span class="material-symbols-outlined">close</span></button>
+              <button id="new-file-confirm" class="confirm-btn"><span
+                  class="material-symbols-outlined">check</span></button>
+              <button id="new-file-cancel" class="cancel-btn"><span
+                  class="material-symbols-outlined">close</span></button>
             </div>
-            
+
             <div id="file-tree" class="file-list">
               <!-- Files will be dynamically populated here via app.js -->
+            </div>
+            
+            <!-- AdSense Sidebar Banner -->
+            <div class="adsense-sidebar-container">
+              <span class="ad-label">SPONSOR</span>
+              <div class="adsense-placeholder-sidebar">
+                <!-- AdSense Skyscraper / Square Unit Code -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-5471667535888198"
+                     data-ad-slot="4680239312"
+                     data-ad-format="vertical"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+              </div>
             </div>
           </div>
 
@@ -181,10 +209,12 @@
             </div>
             <div class="help-content">
               <h3>Execution Engine</h3>
-              <p>Uses the public sandboxed <strong>Piston API</strong>. Code runs in an isolated container on high-speed servers.</p>
-              
+              <p>Uses the public sandboxed <strong>Piston API</strong>. Code runs in an isolated container on high-speed
+                servers.</p>
+
               <h3>Important Templates</h3>
-              <p>For C and C++, declare your main function inside `main.c` / `main.cpp`. For Java, write code inside a class named `Main` inside `Main.java`.</p>
+              <p>For C and C++, declare your main function inside `main.c` / `main.cpp`. For Java, write code inside a
+                class named `Main` inside `Main.java`.</p>
 
               <h3>Keyboard Shortcuts</h3>
               <ul>
@@ -235,7 +265,7 @@
 
       <!-- Center Code Editor & Terminal Panel -->
       <section id="editor-terminal-container">
-        
+
         <!-- Code Tabs Panel -->
         <div id="editor-tabs-bar">
           <div id="editor-tabs-list" class="tabs-list">
@@ -282,18 +312,42 @@
           <div class="terminal-body-container">
             <!-- Execution Output Screen -->
             <div id="terminal-output-panel" class="terminal-body active">
-              <div id="terminal-log" class="terminal-log-screen">
-                <div class="log-line system-text">QuantumCode Compiler Ready. Press 'Run Code' to execute.</div>
-              </div>
-              <div id="terminal-stats-bar">
-                <span id="stat-time">Time: -</span>
-                <span id="stat-status">Status: -</span>
+              <div class="terminal-output-layout">
+                <div class="terminal-output-left">
+                  <div id="terminal-log" class="terminal-log-screen">
+                    <div class="log-line system-text">QuantumCode Compiler Ready. Press 'Run Code' to execute.</div>
+                  </div>
+                  <div id="terminal-stats-bar">
+                    <span id="stat-time">Time: -</span>
+                    <span id="stat-status">Status: -</span>
+                  </div>
+                </div>
+                
+                <!-- AdSense Terminal Right Banner -->
+                <div class="terminal-output-ad-panel">
+                  <div class="adsense-terminal-container">
+                    <span class="ad-label">SPONSOR ADVERTISEMENT</span>
+                    <div class="adsense-placeholder-terminal">
+                      <!-- AdSense Horizontal / Rectangle Unit Code -->
+                      <ins class="adsbygoogle"
+                           style="display:block"
+                           data-ad-client="ca-pub-5471667535888198"
+                           data-ad-slot="4680239312"
+                           data-ad-format="horizontal"
+                           data-full-width-responsive="true"></ins>
+                      <script>
+                           (adsbygoogle = window.adsbygoogle || []).push({});
+                      </script>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- Stdin Input Screen -->
             <div id="terminal-input-panel" class="terminal-body">
-              <textarea id="stdin-textarea" placeholder="Enter standard inputs here. If your program reads multiple lines, enter each line on a new row."></textarea>
+              <textarea id="stdin-textarea"
+                placeholder="Enter standard inputs here. If your program reads multiple lines, enter each line on a new row."></textarea>
             </div>
 
             <!-- Visualizer Screen -->
@@ -301,7 +355,7 @@
               <div class="visualizer-container">
                 <div class="visualizer-canvas-panel">
                   <div id="visualizer-canvas"></div>
-                  
+
                   <div class="visualizer-controls">
                     <button id="vis-control-prev" class="icon-btn" title="Previous Step">
                       <span class="material-symbols-outlined">skip_previous</span>
@@ -315,14 +369,15 @@
                     <button id="vis-control-reset" class="icon-btn" title="Restart Simulation">
                       <span class="material-symbols-outlined">replay</span>
                     </button>
-                    
+
                     <div class="slider-group">
                       <span class="material-symbols-outlined">speed</span>
-                      <input type="range" id="vis-control-speed" min="100" max="2000" value="800" step="100" title="Step delay (ms)">
+                      <input type="range" id="vis-control-speed" min="100" max="2000" value="800" step="100"
+                        title="Step delay (ms)">
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="visualizer-meta-panel">
                   <div class="vis-meta-section">
                     <h3><span class="material-symbols-outlined">monitoring</span> Variables</h3>
@@ -335,7 +390,8 @@
                   <div class="vis-meta-section">
                     <h3><span class="material-symbols-outlined">edit_note</span> Custom Data</h3>
                     <div class="vis-custom-inputs">
-                      <input type="text" id="vis-custom-data-input" placeholder="e.g. 64, 34, 25, 12, 22, 11, 90" title="Comma-separated integers">
+                      <input type="text" id="vis-custom-data-input" placeholder="e.g. 64, 34, 25, 12, 22, 11, 90"
+                        title="Comma-separated integers">
                       <button id="vis-custom-data-btn" class="secondary-btn">Set Data</button>
                     </div>
                   </div>
@@ -366,26 +422,28 @@
             <span class="material-symbols-outlined">content_copy</span>
             <span>Copy Link</span>
           </button>
-          
+
           <a id="share-whatsapp-btn" class="share-opt-btn" target="_blank" rel="noopener" title="Share via WhatsApp">
             <span class="share-social-icon whatsapp-icon">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.863-9.73.001-2.597-1.012-5.04-2.853-6.884-1.84-1.844-4.291-2.859-6.892-2.86-5.437 0-9.863 4.37-9.866 9.732-.001 1.705.451 3.372 1.309 4.866L1.298 22l6.239-1.636zm11.378-5.424c-.26-.13-1.54-.76-1.78-.85-.24-.09-.415-.13-.59.13-.175.26-.68.85-.83.99-.15.15-.3.17-.56.04-2.185-1.09-3.415-2.046-4.52-3.94-.29-.5-.07-.77.16-1.01.205-.22.46-.53.69-.8.155-.18.21-.3.32-.5.115-.2.06-.38-.03-.51-.09-.13-.78-1.88-1.07-2.58-.285-.685-.575-.59-.785-.6-.21-.01-.45-.01-.69-.01-.24 0-.63.09-.96.45-.33.36-1.25 1.22-1.25 2.97 0 1.75 1.27 3.438 1.45 3.68.18.24 2.502 3.82 6.06 5.358.848.367 1.51.584 2.029.749.854.27 1.631.232 2.245.14.686-.103 2.09-.855 2.385-1.683.295-.828.295-1.54.21-1.68-.086-.14-.262-.22-.522-.35z"/>
+                <path
+                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.863-9.73.001-2.597-1.012-5.04-2.853-6.884-1.84-1.844-4.291-2.859-6.892-2.86-5.437 0-9.863 4.37-9.866 9.732-.001 1.705.451 3.372 1.309 4.866L1.298 22l6.239-1.636zm11.378-5.424c-.26-.13-1.54-.76-1.78-.85-.24-.09-.415-.13-.59.13-.175.26-.68.85-.83.99-.15.15-.3.17-.56.04-2.185-1.09-3.415-2.046-4.52-3.94-.29-.5-.07-.77.16-1.01.205-.22.46-.53.69-.8.155-.18.21-.3.32-.5.115-.2.06-.38-.03-.51-.09-.13-.78-1.88-1.07-2.58-.285-.685-.575-.59-.785-.6-.21-.01-.45-.01-.69-.01-.24 0-.63.09-.96.45-.33.36-1.25 1.22-1.25 2.97 0 1.75 1.27 3.438 1.45 3.68.18.24 2.502 3.82 6.06 5.358.848.367 1.51.584 2.029.749.854.27 1.631.232 2.245.14.686-.103 2.09-.855 2.385-1.683.295-.828.295-1.54.21-1.68-.086-.14-.262-.22-.522-.35z" />
               </svg>
             </span>
             <span>WhatsApp</span>
           </a>
-          
+
           <a id="share-telegram-btn" class="share-opt-btn" target="_blank" rel="noopener" title="Share via Telegram">
             <span class="share-social-icon telegram-icon">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-                <path d="M11.944 0C5.344 0 0 5.344 0 11.944 0 18.544 5.344 24 11.944 24c6.6 0 11.944-5.344 11.944-11.944C23.888 5.344 18.544 0 11.944 0zm5.82 8.358l-1.92 9.053c-.14.646-.525.805-1.07.5l-2.926-2.157-1.41 1.357c-.157.157-.288.288-.59.288l.21-2.98 5.428-4.903c.236-.21-.05-.327-.367-.117l-6.71 4.223-2.888-.903c-.628-.196-.64-.628.13-.928l11.29-4.354c.523-.19.98.12.784.887z"/>
+                <path
+                  d="M11.944 0C5.344 0 0 5.344 0 11.944 0 18.544 5.344 24 11.944 24c6.6 0 11.944-5.344 11.944-11.944C23.888 5.344 18.544 0 11.944 0zm5.82 8.358l-1.92 9.053c-.14.646-.525.805-1.07.5l-2.926-2.157-1.41 1.357c-.157.157-.288.288-.59.288l.21-2.98 5.428-4.903c.236-.21-.05-.327-.367-.117l-6.71 4.223-2.888-.903c-.628-.196-.64-.628.13-.928l11.29-4.354c.523-.19.98.12.784.887z" />
               </svg>
             </span>
             <span>Telegram</span>
           </a>
         </div>
-        
+
         <div class="share-link-input-group">
           <input type="text" id="share-link-url" readonly />
           <button id="share-link-copy-btn" class="primary-btn">Copy</button>
@@ -397,4 +455,5 @@
   <!-- Main JS Logic -->
   <script type="module" src="/app.js"></script>
 </body>
+
 </html>
