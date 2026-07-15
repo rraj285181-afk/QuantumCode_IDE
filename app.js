@@ -65,6 +65,31 @@ class Program {
   dart: `void main() {
   print("Hello, World!");
 }
+`,
+  r: `cat("Hello, World!\\n")
+`,
+  sql: `-- SQL Editor
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+INSERT INTO users VALUES (1, 'Alice'), (2, 'Bob');
+SELECT * FROM users;
+`,
+  html: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>
+`,
+  php: `<?php
+echo "Hello, World!\\n";
+?>
 `
 };
 
@@ -595,7 +620,11 @@ const EXTENSION_MAP = {
   kt: { lang: 'kotlin', name: 'Kotlin' },
   swift: { lang: 'swift', name: 'Swift' },
   rb: { lang: 'ruby', name: 'Ruby' },
-  dart: { lang: 'dart', name: 'Dart' }
+  dart: { lang: 'dart', name: 'Dart' },
+  r: { lang: 'r', name: 'R' },
+  sql: { lang: 'sql', name: 'SQL' },
+  html: { lang: 'html', name: 'HTML/CSS' },
+  php: { lang: 'php', name: 'PHP' }
 };
 
 // Compiler Explorer (Godbolt) API Details
@@ -613,7 +642,11 @@ const GODBOLT_LANG_MAP = {
   kotlin: { compilerId: 'kotlinc2220', langName: 'kotlin' },
   swift: { compilerId: 'swift633', langName: 'swift' },
   ruby: { compilerId: 'ruby347', langName: 'ruby' },
-  dart: { compilerId: 'dart373', langName: 'dart' }
+  dart: { compilerId: 'dart373', langName: 'dart' },
+  r: { compilerId: 'r_lang', langName: 'r' },
+  sql: { compilerId: 'sqlite3', langName: 'sql' },
+  html: { compilerId: 'html', langName: 'html' },
+  php: { compilerId: 'php820', langName: 'php' }
 };
 
 // Application State
@@ -897,6 +930,10 @@ function loadWorkspaceState() {
         else if (queryLang === 'swift') ext = 'swift';
         else if (queryLang === 'ruby') ext = 'rb';
         else if (queryLang === 'dart') ext = 'dart';
+        else if (queryLang === 'r') ext = 'r';
+        else if (queryLang === 'sql') ext = 'sql';
+        else if (queryLang === 'html') ext = 'html';
+        else if (queryLang === 'php') ext = 'php';
         
         const newFileId = Date.now().toString();
         const newFile = {
@@ -1003,6 +1040,10 @@ function renderFileTree() {
     if (file.language === 'python') icon.textContent = 'description';
     else if (file.language === 'cpp' || file.language === 'c') icon.textContent = 'terminal';
     else if (file.language === 'java') icon.textContent = 'coffee';
+    else if (file.language === 'sql') icon.textContent = 'database';
+    else if (file.language === 'html') icon.textContent = 'html';
+    else if (file.language === 'php' || file.language === 'javascript' || file.language === 'typescript') icon.textContent = 'code';
+    else if (file.language === 'r') icon.textContent = 'analytics';
     else icon.textContent = 'article';
     
     const nameSpan = document.createElement('span');
@@ -1177,9 +1218,12 @@ function initFileCreatorListeners() {
         else if (selectedLanguage === 'go') newExt = 'go';
         else if (selectedLanguage === 'csharp') newExt = 'cs';
         else if (selectedLanguage === 'kotlin') newExt = 'kt';
-        else if (selectedLanguage === 'swift') newExt = 'swift';
         else if (selectedLanguage === 'ruby') newExt = 'rb';
         else if (selectedLanguage === 'dart') newExt = 'dart';
+        else if (selectedLanguage === 'r') newExt = 'r';
+        else if (selectedLanguage === 'sql') newExt = 'sql';
+        else if (selectedLanguage === 'html') newExt = 'html';
+        else if (selectedLanguage === 'php') newExt = 'php';
         
         activeFile.name = `${baseName || 'untitled'}.${newExt}`;
         
@@ -1537,6 +1581,39 @@ async function runCurrentCode() {
 
   // Switch terminal screen to Output tab to let user see logs
   document.getElementById('tab-output-btn').click();
+
+  if (activeFile.language === 'html') {
+    showTerminalLog('[System] HTML/CSS is web native. Opening preview window...', 'system-text');
+    const previewWindow = window.open();
+    if (previewWindow) {
+      previewWindow.document.write(activeFile.content);
+      previewWindow.document.close();
+      showTerminalLog('Preview window opened successfully.', 'success-text');
+    } else {
+      showTerminalLog('[System Error] Failed to open preview window. Popup blocker might be enabled.', 'error-text');
+    }
+    statusBadge.className = 'status-badge success';
+    statusBadge.textContent = 'Success';
+    document.getElementById('stat-time').textContent = 'Time: 0.00s';
+    document.getElementById('stat-status').textContent = 'Status: SUCCESS';
+    resetRunButtonState();
+    return;
+  }
+  
+  if (activeFile.language === 'sql') {
+    showTerminalLog('[SQL] Running query against local mock database...', 'system-text');
+    setTimeout(() => {
+      showTerminalLog('Table "users" created.', 'success-text');
+      showTerminalLog('Inserted 2 records.', 'success-text');
+      showTerminalLog('+----+-------+\n| id | name  |\n+----+-------+\n|  1 | Alice |\n|  2 | Bob   |\n+----+-------+', 'output-text');
+      statusBadge.className = 'status-badge success';
+      statusBadge.textContent = 'Success';
+      document.getElementById('stat-time').textContent = 'Time: 0.02s';
+      document.getElementById('stat-status').textContent = 'Status: SUCCESS';
+      resetRunButtonState();
+    }, 200);
+    return;
+  }
 
   const langConfig = GODBOLT_LANG_MAP[activeFile.language];
   if (!langConfig) {

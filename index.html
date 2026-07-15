@@ -23,6 +23,17 @@
   <!-- Google AdSense Main Library -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5471667535888198"
     crossorigin="anonymous"></script>
+    
+  <style>
+    /* Smooth scrolling behavior for anchors */
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Offset scroll targets to account for sticky landing header */
+    #compilers, #tutorials, #examples {
+      scroll-margin-top: 100px;
+    }
+  </style>
 </head>
 
 <body class="landing-body">
@@ -39,44 +50,18 @@
         <span class="system-status">System: Online</span>
       </div>
     </div>
-    <nav class="landing-nav">
-      <a href="#compilers" class="nav-link">Compilers</a>
-      <a href="/tutorials.html" class="nav-link">Tutorials</a>
-      <a href="#features" class="nav-link">Features</a>
-      <a href="#about" class="nav-link">About</a>
-    </nav>
-    <a href="/compiler.html" class="primary-btn landing-cta-btn">
-      <span>Start Coding</span>
-      <span class="material-symbols-outlined">chevron_right</span>
-    </a>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="landing-hero">
-    <div class="hero-content">
-      <h1 class="hero-title">Learn Programming. <br><span class="gradient-text">Compiles in Seconds.</span></h1>
-      <p class="hero-subtitle">Code, run, and visualize algorithms on the web. Select a language below to launch our
-        high-performance sandboxed execution environment.</p>
-
-      <!-- Search Bar -->
-      <div class="search-container">
-        <span class="material-symbols-outlined search-icon">search</span>
-        <input type="text" id="compiler-search" placeholder="Search language (e.g. Python, C++, Java)..."
-          autocomplete="off">
-        <button id="search-clear-btn" class="icon-btn hide"><span
-            class="material-symbols-outlined">close</span></button>
-      </div>
-
-      <!-- Quick Tags -->
-      <div class="quick-tags">
-        <span class="quick-tag-label">Popular:</span>
-        <a href="/compiler.html?lang=python" class="quick-tag">Python</a>
-        <a href="/compiler.html?lang=cpp" class="quick-tag">C++</a>
-        <a href="/compiler.html?lang=java" class="quick-tag">Java</a>
-        <a href="/compiler.html?lang=javascript" class="quick-tag">JavaScript</a>
-      </div>
+    <div class="header-right-group" style="display: flex; align-items: center; gap: 40px;">
+      <nav class="landing-nav">
+        <a href="#tutorials" class="nav-link active">Tutorials</a>
+        <a href="#compilers" class="nav-link">Compiler</a>
+        <a href="#examples" class="nav-link">Examples</a>
+      </nav>
+      <a href="/compiler.html" class="primary-btn landing-cta-btn">
+        <span>Start Coding</span>
+        <span class="material-symbols-outlined">chevron_right</span>
+      </a>
     </div>
-  </section>
+  </header>
 
   <!-- AdSense Top Banner -->
   <div class="adsense-sidebar-container index-top-ad">
@@ -87,127 +72,238 @@
     </div>
   </div>
 
-  <!-- Compilers Grid Section -->
-  <section id="compilers" class="compilers-section">
+  <!-- ========================================== -->
+  <!-- 1. TUTORIALS SECTION                       -->
+  <!-- ========================================== -->
+  <section id="tutorials" class="compilers-section">
     <div class="section-header">
-      <h2>Online Compilers</h2>
-      <p>Choose from our list of optimized sandboxed compilers and launch the code terminal instantly.</p>
+      <h2>Interactive Programming Tutorials</h2>
+      <p>Master core coding concepts with step-by-step documentation, live code execution, and interactive algorithm walk-throughs.</p>
     </div>
 
-    <div class="compilers-grid" id="compilers-grid">
-      <!-- Python Card -->
-      <div class="compiler-card card-python" data-lang="python">
+    <div class="compilers-grid">
+      <!-- Learn Python -->
+      <div class="compiler-card card-python">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon python-icon">code</span>
-          <span class="lang-tag tag-python">Interactive</span>
+          <span class="lang-tag tag-python">Tutorials</span>
         </div>
-        <h3>Python Compiler</h3>
-        <p>Write clean script syntax. Perfect for data analysis, microservices, automation, and quick scripts.</p>
-        <a href="/compiler.html?lang=python" class="card-cta-btn">
-          <span>Run Python</span>
+        <h3>Learn Python</h3>
+        <p>Master Python variables, loops, classes, and micro-scripts. Fully integrated with our online execution engine.</p>
+        <a href="/python-tutorial.html" class="card-cta-btn">
+          <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
         </a>
       </div>
 
-      <!-- C++ Card -->
-      <div class="compiler-card card-cpp" data-lang="cpp">
+      <!-- Learn C++ -->
+      <div class="compiler-card card-cpp">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon cpp-icon">data_object</span>
-          <span class="lang-tag tag-cpp">High Speed</span>
+          <span class="lang-tag tag-cpp">Advanced</span>
         </div>
-        <h3>C++ Compiler</h3>
-        <p>Maximize performance. Build data structures, solve competitive challenges, and link multi-file headers.</p>
-        <a href="/compiler.html?lang=cpp" class="card-cta-btn">
-          <span>Run C++</span>
+        <h3>Learn C++</h3>
+        <p>Learn Object-Oriented C++, memory pointers, data vectors, templates, and basic data structures.</p>
+        <a href="/cpp-tutorial.html" class="card-cta-btn">
+          <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
         </a>
       </div>
 
-      <!-- C Card -->
-      <div class="compiler-card card-c" data-lang="c">
-        <div class="card-icon-group">
-          <span class="material-symbols-outlined lang-icon c-icon">settings_ethernet</span>
-          <span class="lang-tag tag-c">Classic</span>
-        </div>
-        <h3>C Compiler</h3>
-        <p>Program close to the hardware. Great for learning memory management, algorithms, and system modules.</p>
-        <a href="/compiler.html?lang=c" class="card-cta-btn">
-          <span>Run C</span>
-          <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
-
-      <!-- Java Card -->
-      <div class="compiler-card card-java" data-lang="java">
+      <!-- Learn Java -->
+      <div class="compiler-card card-java">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon java-icon">coffee</span>
           <span class="lang-tag tag-java">OOP</span>
         </div>
-        <h3>Java Compiler</h3>
-        <p>Object-Oriented sandbox. Compile robust Java applications using Main.java boilerplates instantly.</p>
-        <a href="/compiler.html?lang=java" class="card-cta-btn">
-          <span>Run Java</span>
-          <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
-
-      <!-- JavaScript Card -->
-      <div class="compiler-card card-javascript" data-lang="javascript">
-        <div class="card-icon-group">
-          <span class="material-symbols-outlined lang-icon javascript-icon">javascript</span>
-          <span class="lang-tag tag-javascript">Web Native</span>
-        </div>
-        <h3>JavaScript Compiler</h3>
-        <p>Execute scripts on high-performance engine. Run modern algorithms, async functions, and array filters.</p>
-        <a href="/compiler.html?lang=javascript" class="card-cta-btn">
-          <span>Run JavaScript</span>
-          <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
-
-      <!-- Rust Card -->
-      <div class="compiler-card card-rust" data-lang="rust">
-        <div class="card-icon-group">
-          <span class="material-symbols-outlined lang-icon rust-icon">shield</span>
-          <span class="lang-tag tag-rust">Memory Safe</span>
-        </div>
-        <h3>Rust Compiler</h3>
-        <p>Safe and concurrent compiler execution. Try out Rust memory ownership rules and modules.</p>
-        <a href="/compiler.html?lang=rust" class="card-cta-btn">
-          <span>Run Rust</span>
-          <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
-
-      <!-- Go Card -->
-      <div class="compiler-card card-go" data-lang="go">
-        <div class="card-icon-group">
-          <span class="material-symbols-outlined lang-icon go-icon">directions_run</span>
-          <span class="lang-tag tag-go">Cloud Native</span>
-        </div>
-        <h3>Go Compiler</h3>
-        <p>Build efficient microservices. Try concurrency channels and fast compiled functions directly.</p>
-        <a href="/compiler.html?lang=go" class="card-cta-btn">
-          <span>Run Go</span>
-          <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
-
-      <!-- C# Card -->
-      <div class="compiler-card card-csharp" data-lang="csharp">
-        <div class="card-icon-group">
-          <span class="material-symbols-outlined lang-icon csharp-icon">grid_view</span>
-          <span class="lang-tag tag-csharp">Enterprise</span>
-        </div>
-        <h3>C# Compiler</h3>
-        <p>Write robust OOP scripts. Try enterprise data collections and C# compiler features instantly.</p>
-        <a href="/compiler.html?lang=csharp" class="card-cta-btn">
-          <span>Run C#</span>
+        <h3>Learn Java</h3>
+        <p>Learn classes, polymorphism, interfaces, exceptions, and collections with Main.java boilerplate examples.</p>
+        <a href="/java-tutorial.html" class="card-cta-btn">
+          <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
         </a>
       </div>
     </div>
   </section>
+
+  <!-- ========================================== -->
+  <!-- 2. COMPILERS SECTION                       -->
+  <!-- ========================================== -->
+  <section id="compilers" class="compilers-section" style="border-top: 1px solid var(--border-color); padding-top: 60px;">
+    <div class="compilers-page-header">
+      <div class="compilers-title-group">
+        <div class="title-icon-container">
+          <span class="material-symbols-outlined">terminal</span>
+        </div>
+        <h2>Practice with our Online Compilers</h2>
+      </div>
+      <p>We believe coding should be accessible to all, so we made our own compilers for web and mobile–and they're free!</p>
+    </div>
+
+    <div class="compilers-grid-container" id="compilers-grid">
+      <a href="/compiler.html?lang=python" class="compiler-link-card" data-lang="python">
+        <span>Python Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=r" class="compiler-link-card" data-lang="r">
+        <span>R Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=sql" class="compiler-link-card" data-lang="sql">
+        <span>SQL Editor</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=html" class="compiler-link-card" data-lang="html">
+        <span>HTML/CSS Editor</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      
+      <a href="/compiler.html?lang=javascript" class="compiler-link-card" data-lang="javascript">
+        <span>JavaScript Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=typescript" class="compiler-link-card" data-lang="typescript">
+        <span>TypeScript Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=java" class="compiler-link-card" data-lang="java">
+        <span>Java Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=c" class="compiler-link-card" data-lang="c">
+        <span>C Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+
+      <a href="/compiler.html?lang=cpp" class="compiler-link-card" data-lang="cpp">
+        <span>C++ Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=csharp" class="compiler-link-card" data-lang="csharp">
+        <span>C# Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=go" class="compiler-link-card" data-lang="go">
+        <span>Go Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=php" class="compiler-link-card" data-lang="php">
+        <span>PHP Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+
+      <a href="/compiler.html?lang=swift" class="compiler-link-card" data-lang="swift">
+        <span>Swift Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=rust" class="compiler-link-card" data-lang="rust">
+        <span>Rust Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a href="/compiler.html?lang=ruby" class="compiler-link-card" data-lang="ruby">
+        <span>Ruby Compiler</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+    </div>
+    <!-- Decorative dot grid on bottom left -->
+    <div class="dots-decorator-left" style="position: relative; left: 0; bottom: 0; margin-top: 40px; margin-left: 20px;"></div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 3. EXAMPLES SECTION                        -->
+  <!-- ========================================== -->
+  <section id="examples" class="compilers-section" style="border-top: 1px solid var(--border-color); padding-top: 60px;">
+    <div class="section-header">
+      <h2>Ready-made Interactive Examples</h2>
+      <p>Select any standard algorithm or data structure template below to load and run it instantly inside our sandboxed online IDE.</p>
+    </div>
+
+    <div class="compilers-grid">
+      <!-- Bubble Sort Card -->
+      <div class="compiler-card card-cpp">
+        <div class="card-icon-group">
+          <span class="material-symbols-outlined lang-icon cpp-icon">sort</span>
+          <span class="lang-tag tag-cpp">Algorithm</span>
+        </div>
+        <h3>Bubble Sort</h3>
+        <p>Sort arrays of items step-by-step. Swap neighboring elements if they are in the wrong order.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button onclick="launchExample('bubble_sort', 'python')" class="try-btn"><span>Python</span></button>
+          <button onclick="launchExample('bubble_sort', 'cpp')" class="try-btn"><span>C++</span></button>
+          <button onclick="launchExample('bubble_sort', 'c')" class="try-btn"><span>C</span></button>
+          <button onclick="launchExample('bubble_sort', 'java')" class="try-btn"><span>Java</span></button>
+        </div>
+      </div>
+
+      <!-- Fibonacci Series Card -->
+      <div class="compiler-card card-python">
+        <div class="card-icon-group">
+          <span class="material-symbols-outlined lang-icon python-icon">reorder</span>
+          <span class="lang-tag tag-python">Math</span>
+        </div>
+        <h3>Fibonacci Series</h3>
+        <p>Generate sequences of numbers where each number is the sum of the preceding two numbers.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button onclick="launchExample('fibonacci', 'python')" class="try-btn"><span>Python</span></button>
+          <button onclick="launchExample('fibonacci', 'cpp')" class="try-btn"><span>C++</span></button>
+          <button onclick="launchExample('fibonacci', 'c')" class="try-btn"><span>C</span></button>
+          <button onclick="launchExample('fibonacci', 'java')" class="try-btn"><span>Java</span></button>
+        </div>
+      </div>
+
+      <!-- Binary Search Card -->
+      <div class="compiler-card card-go">
+        <div class="card-icon-group">
+          <span class="material-symbols-outlined lang-icon go-icon">search</span>
+          <span class="lang-tag tag-go">Search</span>
+        </div>
+        <h3>Binary Search</h3>
+        <p>Highly optimized log-time target search algorithm that halves the search space repeatedly.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button onclick="launchExample('binary_search', 'python')" class="try-btn"><span>Python</span></button>
+          <button onclick="launchExample('binary_search', 'cpp')" class="try-btn"><span>C++</span></button>
+          <button onclick="launchExample('binary_search', 'c')" class="try-btn"><span>C</span></button>
+          <button onclick="launchExample('binary_search', 'java')" class="try-btn"><span>Java</span></button>
+        </div>
+      </div>
+
+      <!-- Stack Structure Card -->
+      <div class="compiler-card card-csharp">
+        <div class="card-icon-group">
+          <span class="material-symbols-outlined lang-icon csharp-icon">stack</span>
+          <span class="lang-tag tag-csharp">LIFO</span>
+        </div>
+        <h3>Stack Structure</h3>
+        <p>Try standard Last-In-First-Out linear collections supporting push and pop operations.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button onclick="launchExample('stack', 'python')" class="try-btn"><span>Python</span></button>
+          <button onclick="launchExample('stack', 'cpp')" class="try-btn"><span>C++</span></button>
+          <button onclick="launchExample('stack', 'c')" class="try-btn"><span>C</span></button>
+          <button onclick="launchExample('stack', 'java')" class="try-btn"><span>Java</span></button>
+        </div>
+      </div>
+
+      <!-- Queue Structure Card -->
+      <div class="compiler-card card-java">
+        <div class="card-icon-group">
+          <span class="material-symbols-outlined lang-icon java-icon">queue</span>
+          <span class="lang-tag tag-java">FIFO</span>
+        </div>
+        <h3>Queue Structure</h3>
+        <p>Try linear First-In-First-Out collections supporting enqueue and dequeue operations.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button onclick="launchExample('queue', 'python')" class="try-btn"><span>Python</span></button>
+          <button onclick="launchExample('queue', 'cpp')" class="try-btn"><span>C++</span></button>
+          <button onclick="launchExample('queue', 'c')" class="try-btn"><span>C</span></button>
+          <button onclick="launchExample('queue', 'java')" class="try-btn"><span>Java</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- DYNAMIC FEATURES AND ABOUT (Always at bottom) -->
+  <!-- ========================================== -->
 
   <!-- Features Showcase Section -->
   <section id="features" class="features-showcase">
@@ -288,44 +384,167 @@
     </div>
   </footer>
 
+  <!-- Policies Modal (AdSense Compliance) -->
+  <div id="policy-modal" class="modal-overlay hide">
+    <div class="policy-modal-card">
+      <div class="modal-header">
+        <h3 id="modal-policy-title">Privacy Policy</h3>
+        <button id="close-policy-modal" class="icon-btn" style="background: none; border: none; color: var(--text-muted); cursor: pointer;">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-policy-content">
+        <!-- Dynamic content will be injected here -->
+      </div>
+    </div>
+  </div>
+
   <!-- Simple Search logic & AdSense Observer initialiser -->
   <script type="module">
-    // Search filtering logic
-    const searchInput = document.getElementById('compiler-search');
-    const cards = document.querySelectorAll('.compiler-card');
-    const clearBtn = document.getElementById('search-clear-btn');
+    // Scroll Spy logic to highlight active section in navbar
+    const navLinks = document.querySelectorAll('.landing-nav .nav-link');
+    const sections = [
+      document.getElementById('compilers'),
+      document.getElementById('tutorials'),
+      document.getElementById('examples')
+    ];
 
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        if (query) {
-          clearBtn.classList.remove('hide');
-        } else {
-          clearBtn.classList.add('hide');
-        }
+    window.addEventListener('scroll', () => {
+      let currentSectionId = 'tutorials';
+      const scrollPosition = window.scrollY + 150; // offset for sticky header
 
-        cards.forEach(card => {
-          const lang = card.getAttribute('data-lang') || '';
-          const name = card.querySelector('h3').textContent.toLowerCase();
-          const desc = card.querySelector('p').textContent.toLowerCase();
-
-          if (lang.includes(query) || name.includes(query) || desc.includes(query)) {
-            card.style.display = '';
-          } else {
-            card.style.display = 'none';
+      sections.forEach(section => {
+        if (section) {
+          const sectionTop = section.offsetTop;
+          if (scrollPosition >= sectionTop) {
+            currentSectionId = section.getAttribute('id');
           }
-        });
+        }
       });
-    }
 
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearBtn.classList.add('hide');
-        cards.forEach(card => card.style.display = '');
-        searchInput.focus();
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === `#${currentSectionId}` || href === `/#${currentSectionId}`) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
       });
-    }
+    });
+
+    // Code example definitions
+    const ALGORITHM_CODES = {
+      bubble_sort: {
+        python: {
+          name: 'bubble_sort.py',
+          content: 'def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n\nif __name__ == "__main__":\n    data = [64, 34, 25, 12, 22, 11, 90]\n    print("Original array:", data)\n    bubble_sort(data)\n    print("Sorted array:", data)\n'
+        },
+        cpp: {
+          name: 'bubble_sort.cpp',
+          content: '#include <iostream>\n#include <vector>\n\nvoid bubbleSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 0; i < n; ++i) {\n        for (int j = 0; j < n - i - 1; ++j) {\n            if (arr[j] > arr[j+1]) {\n                std::swap(arr[j], arr[j+1]);\n            }\n        }\n    }\n}\n\nint main() {\n    std::vector<int> data = {64, 34, 25, 12, 22, 11, 90};\n    std::cout << "Original array: ";\n    for (int x : data) std::cout << x << " ";\n    std::cout << "\\n";\n    bubbleSort(data);\n    std::cout << "Sorted array: ";\n    for (int x : data) std::cout << x << " ";\n    std::cout << "\\n";\n    return 0;\n}\n'
+        },
+        c: {
+          name: 'bubble_sort.c',
+          content: '#include <stdio.h>\n\nvoid bubbleSort(int arr[], int n) {\n    for (int i = 0; i < n; ++i) {\n        for (int j = 0; j < n - i - 1; ++j) {\n            if (arr[j] > arr[j+1]) {\n                int temp = arr[j];\n                arr[j] = arr[j+1];\n                arr[j+1] = temp;\n            }\n        }\n    }\n}\n\nint main() {\n    int data[] = {64, 34, 25, 12, 22, 11, 90};\n    int n = sizeof(data)/sizeof(data[0]);\n    printf("Original array: ");\n    for(int i=0; i<n; i++) printf("%d ", data[i]);\n    printf("\\n");\n    bubbleSort(data, n);\n    printf("Sorted array: ");\n    for(int i=0; i<n; i++) printf("%d ", data[i]);\n    printf("\\n");\n    return 0;\n}\n'
+        },
+        java: {
+          name: 'BubbleSort.java',
+          content: 'public class BubbleSort {\n    public static void bubbleSort(int[] arr) {\n        int n = arr.length;\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n - i - 1; j++) {\n                if (arr[j] > arr[j+1]) {\n                    int temp = arr[j];\n                    arr[j] = arr[j+1];\n                    arr[j+1] = temp;\n                }\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] data = {64, 34, 25, 12, 22, 11, 90};\n        System.out.print("Original array: ");\n        for(int x : data) System.out.print(x + " ");\n        System.out.println();\n        bubbleSort(data);\n        System.out.print("Sorted array: ");\n        for(int x : data) System.out.print(x + " ");\n        System.out.println();\n    }\n}\n'
+        }
+      },
+      fibonacci: {
+        python: {
+          name: 'fibonacci.py',
+          content: 'def fibonacci(n):\n    fib = [0, 1]\n    for i in range(2, n):\n        fib.append(fib[-1] + fib[-2])\n    return fib[:n]\n\nif __name__ == "__main__":\n    n = 10\n    print(f"First {n} Fibonacci numbers:")\n    print(fibonacci(n))\n'
+        },
+        cpp: {
+          name: 'fibonacci.cpp',
+          content: '#include <iostream>\n\nvoid printFibonacci(int n) {\n    long long a = 0, b = 1;\n    std::cout << a << " " << b << " ";\n    for (int i = 2; i < n; ++i) {\n        long long c = a + b;\n        std::cout << c << " ";\n        a = b;\n        b = c;\n    }\n    std::cout << "\\n";\n}\n\nint main() {\n    int n = 10;\n    std::cout << "First " << n << " Fibonacci numbers:\\n";\n    printFibonacci(n);\n    return 0;\n}\n'
+        },
+        c: {
+          name: 'fibonacci.c',
+          content: '#include <stdio.h>\n\nvoid printFibonacci(int n) {\n    long long a = 0, b = 1;\n    printf("%lld %lld ", a, b);\n    for (int i = 2; i < n; ++i) {\n        long long c = a + b;\n        printf("%lld ", c);\n        a = b;\n        b = c;\n    }\n    printf("\\n");\n}\n\nint main() {\n    int n = 10;\n    printf("First %d Fibonacci numbers:\\n", n);\n    printFibonacci(n);\n    return 0;\n}\n'
+        },
+        java: {
+          name: 'Fibonacci.java',
+          content: 'public class Fibonacci {\n    public static void printFibonacci(int n) {\n        long a = 0, b = 1;\n        System.out.print(a + " " + b + " ");\n        for (int i = 2; i < n; i++) {\n            long c = a + b;\n            System.out.print(c + " ");\n            a = b;\n            b = c;\n        }\n        System.out.println();\n    }\n\n    public static void main(String[] args) {\n        int n = 10;\n        System.out.println("First " + n + " Fibonacci numbers:");\n        printFibonacci(n);\n    }\n}\n'
+        }
+      },
+      binary_search: {
+        python: {
+          name: 'binary_search.py',
+          content: 'def binary_search(arr, x):\n    low = 0\n    high = len(arr) - 1\n    while low <= high:\n        mid = (high + low) // 2\n        if arr[mid] < x:\n            low = mid + 1\n        elif arr[mid] > x:\n            high = mid - 1\n        else:\n            return mid\n    return -1\n\nif __name__ == "__main__":\n    arr = [2, 3, 4, 10, 40]\n    x = 10\n    result = binary_search(arr, x)\n    if result != -1:\n        print(f"Element present at index {result}")\n    else:\n        print("Element not present in array")\n'
+        },
+        cpp: {
+          name: 'binary_search.cpp',
+          content: '#include <iostream>\n#include <vector>\n\nint binarySearch(const std::vector<int>& arr, int x) {\n    int low = 0, high = arr.size() - 1;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        if (arr[mid] == x) return mid;\n        if (arr[mid] < x) low = mid + 1;\n        else high = mid - 1;\n    }\n    return -1;\n}\n\nint main() {\n    std::vector<int> arr = {2, 3, 4, 10, 40};\n    int x = 10;\n    int result = binarySearch(arr, x);\n    if (result != -1) {\n        std::cout << "Element found at index " << result << std::endl;\n    } else {\n        std::cout << "Element not found" << std::endl;\n    }\n    return 0;\n}\n'
+        },
+        c: {
+          name: 'binary_search.c',
+          content: '#include <stdio.h>\n\nint binarySearch(int arr[], int l, int r, int x) {\n    while (l <= r) {\n        int m = l + (r - l) / 2;\n        if (arr[m] == x) return m;\n        if (arr[m] < x) l = m + 1;\n        else r = m - 1;\n    }\n    return -1;\n}\n\nint main() {\n    int arr[] = {2, 3, 4, 10, 40};\n    int n = sizeof(arr)/sizeof(arr[0]);\n    int x = 10;\n    int result = binarySearch(arr, 0, n - 1, x);\n    if (result != -1) printf("Element found at index %d\\n", result);\n    else printf("Element not found\\n");\n    return 0;\n}\n'
+        },
+        java: {
+          name: 'BinarySearch.java',
+          content: 'public class BinarySearch {\n    public static int binarySearch(int[] arr, int x) {\n        int l = 0, r = arr.length - 1;\n        while (l <= r) {\n            int m = l + (r - l) / 2;\n            if (arr[m] == x) return m;\n            if (arr[m] < x) l = m + 1;\n            else r = m - 1;\n        }\n        return -1;\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {2, 3, 4, 10, 40};\n        int x = 10;\n        int result = binarySearch(arr, x);\n        if (result != -1) {\n            System.out.println("Element found at index " + result);\n        } else {\n            System.out.println("Element not found");\n        }\n    }\n}\n'
+        }
+      },
+      stack: {
+        python: {
+          name: 'stack_demo.py',
+          content: 'class Stack:\n    def __init__(self):\n        self.items = []\n    def push(self, item):\n        self.items.append(item)\n        print(f"Pushed {item}")\n    def pop(self):\n        if not self.is_empty():\n            return self.items.pop()\n    def is_empty(self):\n        return len(self.items) == 0\n\nif __name__ == "__main__":\n    s = Stack()\n    s.push(10)\n    s.push(20)\n    print("Popped:", s.pop())\n    print("Popped:", s.pop())\n'
+        },
+        cpp: {
+          name: 'stack_demo.cpp',
+          content: '#include <iostream>\n#include <vector>\n\nclass Stack {\nprivate:\n    std::vector<int> items;\npublic:\n    void push(int val) {\n        items.push_back(val);\n        std::cout << "Pushed: " << val << "\\n";\n    }\n    void pop() {\n        if (items.empty()) return;\n        std::cout << "Popped: " << items.back() << "\\n";\n        items.pop_back();\n    }\n};\n\nint main() {\n    Stack s;\n    s.push(10);\n    s.push(20);\n    s.pop();\n    s.pop();\n    return 0;\n}\n'
+        },
+        c: {
+          name: 'stack_demo.c',
+          content: '#include <stdio.h>\n#define MAX 100\n\nstruct Stack {\n    int items[MAX];\n    int top;\n};\n\nvoid push(struct Stack *s, int val) {\n    if(s->top < MAX - 1) {\n        s->items[++(s->top)] = val;\n        printf("Pushed: %d\\n", val);\n    }\n}\n\nvoid pop(struct Stack *s) {\n    if(s->top >= 0) {\n        printf("Popped: %d\\n", s->items[(s->top)--]);\n    }\n}\n\nint main() {\n    struct Stack s;\n    s.top = -1;\n    push(&s, 10);\n    push(&s, 20);\n    pop(&s);\n    pop(&s);\n    return 0;\n}\n'
+        },
+        java: {
+          name: 'StackExample.java',
+          content: 'import java.util.Stack;\n\npublic class StackExample {\n    public static void main(String[] args) {\n        Stack<Integer> s = new Stack<>();\n        s.push(10);\n        System.out.println("Pushed 10");\n        s.push(20);\n        System.out.println("Pushed 20");\n        System.out.println("Popped: " + s.pop());\n        System.out.println("Popped: " + s.pop());\n    }\n}\n'
+        }
+      },
+      queue: {
+        python: {
+          name: 'queue_demo.py',
+          content: 'from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n    def enqueue(self, item):\n        self.items.append(item)\n        print(f"Enqueued {item}")\n    def dequeue(self):\n        if len(self.items) > 0:\n            return self.items.popleft()\n\nif __name__ == "__main__":\n    q = Queue()\n    q.enqueue(10)\n    q.enqueue(20)\n    print("Dequeued:", q.dequeue())\n    print("Dequeued:", q.dequeue())\n'
+        },
+        cpp: {
+          name: 'queue_demo.cpp',
+          content: '#include <iostream>\n#include <queue>\n\nint main() {\n    std::queue<int> q;\n    q.push(10);\n    std::cout << "Enqueued 10\\n";\n    q.push(20);\n    std::cout << "Enqueued 20\\n";\n    std::cout << "Dequeued: " << q.front() << "\\n";\n    q.pop();\n    std::cout << "Dequeued: " << q.front() << "\\n";\n    q.pop();\n    return 0;\n}\n'
+        },
+        c: {
+          name: 'queue_demo.c',
+          content: '#include <stdio.n>\n#define MAX 100\n\nstruct Queue {\n    int items[MAX];\n    int front, rear;\n};\n\nvoid enqueue(struct Queue *q, int val) {\n    if(q->rear < MAX - 1) {\n        q->items[++(q->rear)] = val;\n        printf("Enqueued: %d\\n", val);\n    }\n}\n\nvoid dequeue(struct Queue *q) {\n    if(q->front <= q->rear) {\n        printf("Dequeued: %d\\n", q->items[(q->front)++]);\n    }\n}\n\nint main() {\n    struct Queue q;\n    q.front = 0; q.rear = -1;\n    enqueue(&q, 10);\n    enqueue(&q, 20);\n    dequeue(&q);\n    dequeue(&q);\n    return 0;\n}\n'
+        },
+        java: {
+          name: 'QueueExample.java',
+          content: 'import java.util.LinkedList;\nimport java.util.Queue;\n\npublic class QueueExample {\n    public static void main(String[] args) {\n        Queue<Integer> q = new LinkedList<>();\n        q.add(10);\n        System.out.println("Enqueued 10");\n        q.add(20);\n        System.out.println("Enqueued 20");\n        System.out.println("Dequeued: " + q.poll());\n        System.out.println("Dequeued: " + q.poll());\n    }\n}\n'
+        }
+      }
+    };
+
+    window.launchExample = function(algoKey, lang) {
+      const item = ALGORITHM_CODES[algoKey]?.[lang];
+      if (!item) return;
+
+      const workspaceData = JSON.stringify({
+        files: [
+          {
+            id: "1",
+            name: item.name,
+            language: lang,
+            content: item.content
+          }
+        ],
+        activeFileId: "1"
+      });
+
+      const base64 = btoa(unescape(encodeURIComponent(workspaceData)));
+      window.open(`/compiler.html#code=${base64}`, '_blank');
+    };
 
     // Observe AdSense status and safely push ads when they have positive width
     const ads = document.querySelectorAll('ins.adsbygoogle');
@@ -381,6 +600,105 @@
           }
         });
         resizeObserver.observe(ad);
+      }
+    });
+
+    // Policy Modal interactive logic for AdSense compliance
+    const policyModal = document.getElementById('policy-modal');
+    const modalTitle = document.getElementById('modal-policy-title');
+    const modalContent = document.getElementById('modal-policy-content');
+    const closeModalBtn = document.getElementById('close-policy-modal');
+
+    const policies = {
+      privacy: `
+        <h4>Privacy Policy</h4>
+        <p>Last updated: July 15, 2026</p>
+        <p>At CodeXrun IDE, accessible from our website, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by CodeXrun IDE and how we use it.</p>
+        
+        <h4>Log Files</h4>
+        <p>CodeXrun IDE follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks.</p>
+        
+        <h4>Cookies and Web Beacons</h4>
+        <p>Like any other website, CodeXrun IDE uses 'cookies'. These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.</p>
+        
+        <h4>Google DoubleClick DART Cookie</h4>
+        <p>Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to our site and other sites on the internet.</p>
+        
+        <h4>Third Party Privacy Policies</h4>
+        <p>CodeXrun IDE's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information.</p>
+      `,
+      terms: `
+        <h4>Terms of Service</h4>
+        <p>Last updated: July 15, 2026</p>
+        <p>Welcome to CodeXrun IDE!</p>
+        <p>These terms and conditions outline the rules and regulations for the use of CodeXrun IDE's Website.</p>
+        
+        <h4>License</h4>
+        <p>Unless otherwise stated, CodeXrun IDE and/or its licensors own the intellectual property rights for all material on CodeXrun IDE. All intellectual property rights are reserved. You may access this from CodeXrun IDE for your own personal use subjected to restrictions set in these terms and conditions.</p>
+        
+        <h4>You must not:</h4>
+        <ul>
+          <li>Republish material from CodeXrun IDE</li>
+          <li>Sell, rent or sub-license material from CodeXrun IDE</li>
+          <li>Reproduce, duplicate or copy material from CodeXrun IDE</li>
+          <li>Redistribute content from CodeXrun IDE</li>
+        </ul>
+        
+        <h4>Disclaimer</h4>
+        <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. We will not be liable for any loss or damage of any nature.</p>
+      `,
+      cookies: `
+        <h4>Cookie Policy</h4>
+        <p>Last updated: July 15, 2026</p>
+        <p>This is the Cookie Policy for CodeXrun IDE, accessible from our website.</p>
+        
+        <h4>What Are Cookies</h4>
+        <p>As is common practice with almost all professional websites this site uses cookies, which are tiny files that are downloaded to your computer, to improve your experience.</p>
+        
+        <h4>How We Use Cookies</h4>
+        <p>We use cookies for a variety of reasons detailed below. Unfortunately in most cases there are no industry standard options for disabling cookies without completely disabling the functionality and features they add to this site.</p>
+        
+        <h4>Third Party Cookies</h4>
+        <p>In some special cases we also use cookies provided by trusted third parties. The following section details which third party cookies you might encounter through this site.</p>
+        <ul>
+          <li>This site uses Google AdSense which uses a DoubleClick cookie to serve more relevant ads across the web and limit the number of times that a given ad is shown to you.</li>
+        </ul>
+      `
+    };
+
+    function openPolicyModal(type) {
+      if (policies[type]) {
+        modalTitle.textContent = type === 'privacy' ? 'Privacy Policy' : type === 'terms' ? 'Terms of Service' : 'Cookie Policy';
+        modalContent.innerHTML = policies[type];
+        policyModal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePolicyModal() {
+      policyModal.classList.add('hide');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('policy-privacy').addEventListener('click', (e) => {
+      e.preventDefault();
+      openPolicyModal('privacy');
+    });
+
+    document.getElementById('policy-terms').addEventListener('click', (e) => {
+      e.preventDefault();
+      openPolicyModal('terms');
+    });
+
+    document.getElementById('policy-cookies').addEventListener('click', (e) => {
+      e.preventDefault();
+      openPolicyModal('cookies');
+    });
+
+    closeModalBtn.addEventListener('click', closePolicyModal);
+    policyModal.addEventListener('click', (e) => {
+      if (e.target === policyModal) {
+        closePolicyModal();
       }
     });
   </script>
