@@ -1582,7 +1582,7 @@ async function runCurrentCode() {
   showTerminalLog(`[System] Compiling and running "${activeFile.name}" on cloud sandbox...`, 'system-text');
 
   // Switch terminal screen to Output tab to let user see logs
-  document.getElementById('tab-output-btn').click();
+  document.getElementById('tab-output-btn')?.click();
 
   if (activeFile.language === 'html') {
     showTerminalLog('[System] HTML/CSS is web native. Opening preview window...', 'system-text');
@@ -1624,7 +1624,7 @@ async function runCurrentCode() {
     return;
   }
 
-  const stdinContent = document.getElementById('stdin-textarea').value;
+  const stdinContent = document.getElementById('stdin-textarea')?.value || '';
 
   // Gather additional project files (excluding active file)
   const payloadFiles = [];

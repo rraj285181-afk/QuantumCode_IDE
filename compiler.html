@@ -331,12 +331,9 @@
         <footer id="ide-terminal">
           <div class="terminal-header">
             <div class="terminal-tab-group">
-              <button id="tab-output-btn" class="terminal-tab active">
-                <span class="material-symbols-outlined">terminal</span> Output
-              </button>
-              <button id="tab-input-btn" class="terminal-tab">
-                <span class="material-symbols-outlined">keyboard</span> Input (Stdin)
-              </button>
+              <span class="terminal-console-title" style="display: flex; align-items: center; gap: 8px; color: #ffffff; font-size: 0.9rem; font-weight: 600; padding: 0 10px;">
+                <span class="material-symbols-outlined">terminal</span> Console
+              </span>
             </div>
             <div class="terminal-actions">
               <span id="exec-status-badge" class="status-badge idle">Idle</span>
@@ -347,43 +344,32 @@
           </div>
 
           <div class="terminal-body-container">
-            <!-- Execution Output Screen -->
-            <div id="terminal-output-panel" class="terminal-body active">
-              <div class="terminal-output-layout">
-                <div class="terminal-output-left">
-                  <div id="terminal-log" class="terminal-log-screen">
-                    <div class="log-line system-text">CodeXrun Compiler Ready. Press 'Run Code' to execute.</div>
-                  </div>
-                  <div id="terminal-stats-bar">
-                    <span id="stat-time">Time: -</span>
-                    <span id="stat-status">Status: -</span>
-                  </div>
+            <div class="terminal-combined-layout">
+              <!-- Column 1: Output -->
+              <div class="terminal-output-column">
+                <div id="terminal-log" class="terminal-log-screen" style="border-radius: 8px 8px 0 0;">
+                  <div class="log-line system-text">CodeXrun Compiler Ready. Press 'Run Code' to execute.</div>
                 </div>
-                
-                <!-- AdSense Terminal Right Banner -->
-                <div class="terminal-output-ad-panel">
-                  <div class="adsense-terminal-container">
-                    <span class="ad-label">SPONSOR ADVERTISEMENT</span>
-                    <div class="adsense-placeholder-terminal">
-                      <!-- AdSense Horizontal / Rectangle Unit Code -->
-                      <ins class="adsbygoogle"
-                           style="display:block"
-                           data-ad-client="ca-pub-5471667535888198"
-                           data-ad-slot="4680239312"
-                           data-ad-format="horizontal"
-                           data-full-width-responsive="true"></ins>
-                    </div>
+                <div id="terminal-stats-bar" style="border-radius: 0 0 8px 8px;">
+                  <span id="stat-time">Time: -</span>
+                  <span id="stat-status">Status: -</span>
+                </div>
+              </div>
+
+              <!-- Column 2: Ad Banner -->
+              <div class="terminal-output-ad-panel">
+                <div class="adsense-terminal-container">
+                  <span class="ad-label">SPONSOR ADVERTISEMENT</span>
+                  <div class="adsense-placeholder-terminal">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-5471667535888198"
+                         data-ad-slot="4680239312"
+                         data-ad-format="horizontal"
+                         data-full-width-responsive="true"></ins>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- Stdin Input Screen -->
-            <div id="terminal-input-panel" class="terminal-body">
-              <textarea id="stdin-textarea"
-                placeholder="Enter standard inputs here. If your program reads multiple lines, enter each line on a new row."></textarea>
-            </div>
-
             </div>
           </div>
         </footer>
