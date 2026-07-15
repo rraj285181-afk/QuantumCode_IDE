@@ -2619,6 +2619,12 @@ kbd {
   display: flex !important;
 }
 
+@media (max-width: 900px) {
+  #ide-header .landing-nav {
+    display: none !important;
+  }
+}
+
 
 
 
