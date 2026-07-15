@@ -2356,7 +2356,7 @@ kbd {
   max-width: 750px;
   gap: 16px;
   position: relative;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
 }
 
 .compilers-title-group {
