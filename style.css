@@ -2570,6 +2570,55 @@ kbd {
   margin-bottom: 6px;
 }
 
+/* AdSense Container Hide-by-default styles */
+.adsense-sidebar-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: auto;
+}
+
+/* Hide the ad label until loaded */
+.adsense-sidebar-container .ad-label {
+  display: none !important;
+}
+
+/* Hide the placeholder area or make it size-only but invisible */
+.adsense-sidebar-container .adsense-placeholder-sidebar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Show details only when ad is successfully loaded */
+.adsense-sidebar-container.ad-loaded {
+  background: #0f1322 !important; /* matches container card background */
+  border: 1px solid var(--border-color) !important;
+  padding: 15px !important;
+  margin: 20px 0 !important;
+  border-radius: 12px;
+}
+
+.adsense-sidebar-container.ad-loaded .ad-label {
+  display: inline-block !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+/* Hide the right advertising panel on tutorial pages until the ad loads */
+.tutorial-ads-panel {
+  display: none !important;
+}
+
+.tutorial-ads-panel:has(.adsense-sidebar-container.ad-loaded) {
+  display: flex !important;
+}
+
 
 
 
