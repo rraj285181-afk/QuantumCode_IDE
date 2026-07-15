@@ -116,9 +116,6 @@
            data-ad-slot="4680239312"
            data-ad-format="horizontal"
            data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
     </div>
   </div>
 
@@ -149,7 +146,7 @@
   </footer>
 
   <script type="module">
-    // Observe AdSense status
+    // Observe AdSense status and safely push ads when they have positive width
     const ads = document.querySelectorAll('ins.adsbygoogle');
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -175,6 +172,35 @@
         container.classList.add('ad-loaded');
       }
       observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+
+      // Safe push logic
+      if (ad.offsetWidth > 0) {
+        if (!ad.getAttribute('data-ad-pushed')) {
+          ad.setAttribute('data-ad-pushed', 'true');
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {
+            console.warn('AdSense push failed:', e);
+          }
+        }
+      } else {
+        const resizeObserver = new ResizeObserver((entries, obs) => {
+          for (let entry of entries) {
+            if (entry.contentRect.width > 0) {
+              if (!ad.getAttribute('data-ad-pushed')) {
+                ad.setAttribute('data-ad-pushed', 'true');
+                try {
+                  (window.adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                  console.warn('Deferred AdSense push failed:', e);
+                }
+              }
+              obs.disconnect();
+            }
+          }
+        });
+        resizeObserver.observe(ad);
+      }
     });
   </script>
 </body>

@@ -1342,6 +1342,8 @@ function initSidebarTabs() {
   });
 }
 
+
+
 function initSettingsListeners() {
   // Theme change
   const themeSelect = document.getElementById('theme-select');
@@ -2019,7 +2021,7 @@ function initShareModalListeners() {
   linkCopyBtn.addEventListener('click', executeCopy);
 }
 
-// Observe Google AdSense ads and show them only when loaded
+// Observe Google AdSense ads, safely push them when visible, and update container classes
 function initAdSenseObserver() {
   const ads = document.querySelectorAll('ins.adsbygoogle');
   
@@ -2048,6 +2050,35 @@ function initAdSenseObserver() {
     }
     
     observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+
+    // Safe push logic
+    if (ad.offsetWidth > 0) {
+      if (!ad.getAttribute('data-ad-pushed')) {
+        ad.setAttribute('data-ad-pushed', 'true');
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.warn('AdSense push failed:', e);
+        }
+      }
+    } else {
+      const resizeObserver = new ResizeObserver((entries, obs) => {
+        for (let entry of entries) {
+          if (entry.contentRect.width > 0) {
+            if (!ad.getAttribute('data-ad-pushed')) {
+              ad.setAttribute('data-ad-pushed', 'true');
+              try {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+              } catch (e) {
+                console.warn('Deferred AdSense push failed:', e);
+              }
+            }
+            obs.disconnect();
+          }
+        }
+      });
+      resizeObserver.observe(ad);
+    }
   });
 }
 

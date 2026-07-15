@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CodeXrun | Free Online Compilers & Programming Tutorials</title>
-  <meta name="description" content="Write, compile, and run your code online instantly with CodeXrun. High-speed online compiler supporting Python, C++, Java, C, JavaScript, Rust, Go and more.">
+  <meta name="description"
+    content="Write, compile, and run your code online instantly with CodeXrun. High-speed online compiler supporting Python, C++, Java, C, JavaScript, Rust, Go and more.">
 
   <!-- Font and Icon Packages -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +41,7 @@
     </div>
     <nav class="landing-nav">
       <a href="#compilers" class="nav-link">Compilers</a>
+      <a href="/tutorials.html" class="nav-link">Tutorials</a>
       <a href="#features" class="nav-link">Features</a>
       <a href="#about" class="nav-link">About</a>
     </nav>
@@ -53,13 +55,16 @@
   <section class="landing-hero">
     <div class="hero-content">
       <h1 class="hero-title">Learn Programming. <br><span class="gradient-text">Compiles in Seconds.</span></h1>
-      <p class="hero-subtitle">Code, run, and visualize algorithms on the web. Select a language below to launch our high-performance sandboxed execution environment.</p>
+      <p class="hero-subtitle">Code, run, and visualize algorithms on the web. Select a language below to launch our
+        high-performance sandboxed execution environment.</p>
 
       <!-- Search Bar -->
       <div class="search-container">
         <span class="material-symbols-outlined search-icon">search</span>
-        <input type="text" id="compiler-search" placeholder="Search language (e.g. Python, C++, Java)..." autocomplete="off">
-        <button id="search-clear-btn" class="icon-btn hide"><span class="material-symbols-outlined">close</span></button>
+        <input type="text" id="compiler-search" placeholder="Search language (e.g. Python, C++, Java)..."
+          autocomplete="off">
+        <button id="search-clear-btn" class="icon-btn hide"><span
+            class="material-symbols-outlined">close</span></button>
       </div>
 
       <!-- Quick Tags -->
@@ -77,15 +82,8 @@
   <div class="adsense-sidebar-container index-top-ad">
     <span class="ad-label">SPONSOR</span>
     <div class="adsense-placeholder-sidebar">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-5471667535888198"
-           data-ad-slot="4680239312"
-           data-ad-format="horizontal"
-           data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198" data-ad-slot="4680239312"
+        data-ad-format="horizontal" data-full-width-responsive="true"></ins>
     </div>
   </div>
 
@@ -222,19 +220,22 @@
       <div class="feature-box">
         <span class="material-symbols-outlined feature-icon">analytics</span>
         <h3>Interactive Visualizer</h3>
-        <p>Walk through algorithms (Sorting, stacks, queues) step-by-step. See variables change in real-time as simulation progresses.</p>
+        <p>Walk through algorithms (Sorting, stacks, queues) step-by-step. See variables change in real-time as
+          simulation progresses.</p>
       </div>
 
       <div class="feature-box">
         <span class="material-symbols-outlined feature-icon">folder_zip</span>
         <h3>Workspace ZIP Download</h3>
-        <p>Export your workspace files in one click as a ZIP file. Fully functional locally with all structures preserved.</p>
+        <p>Export your workspace files in one click as a ZIP file. Fully functional locally with all structures
+          preserved.</p>
       </div>
 
       <div class="feature-box">
         <span class="material-symbols-outlined feature-icon">share</span>
         <h3>Base64 Encoded Share</h3>
-        <p>Share code with others. Your workspace compiles into a secure Base64 hash that reloads the exact files on any browser.</p>
+        <p>Share code with others. Your workspace compiles into a secure Base64 hash that reloads the exact files on any
+          browser.</p>
       </div>
     </div>
   </section>
@@ -244,7 +245,10 @@
     <div class="about-card">
       <span class="material-symbols-outlined logo-icon large-icon">terminal</span>
       <h2>About CodeXrun IDE</h2>
-      <p>CodeXrun is a premium, lightweight, and modern development engine designed for educators, students, and professional developer sandboxing. Powered by Monaco (VS Code editor engine) and the isolated high-speed Piston sandbox, we ensure compile execution is secure, responsive, and responsive across all mobile and desktop layout configurations.</p>
+      <p>CodeXrun is a premium, lightweight, and modern development engine designed for educators, students, and
+        professional developer sandboxing. Powered by Monaco (VS Code editor engine) and the isolated high-speed Piston
+        sandbox, we ensure compile execution is secure, responsive, and responsive across all mobile and desktop layout
+        configurations.</p>
     </div>
   </section>
 
@@ -252,15 +256,8 @@
   <div class="adsense-sidebar-container index-bottom-ad">
     <span class="ad-label">SPONSOR</span>
     <div class="adsense-placeholder-sidebar">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-5471667535888198"
-           data-ad-slot="4680239312"
-           data-ad-format="horizontal"
-           data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198" data-ad-slot="4680239312"
+        data-ad-format="horizontal" data-full-width-responsive="true"></ins>
     </div>
   </div>
 
@@ -311,7 +308,7 @@
           const lang = card.getAttribute('data-lang') || '';
           const name = card.querySelector('h3').textContent.toLowerCase();
           const desc = card.querySelector('p').textContent.toLowerCase();
-          
+
           if (lang.includes(query) || name.includes(query) || desc.includes(query)) {
             card.style.display = '';
           } else {
@@ -330,7 +327,7 @@
       });
     }
 
-    // Observe AdSense status
+    // Observe AdSense status and safely push ads when they have positive width
     const ads = document.querySelectorAll('ins.adsbygoogle');
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -356,6 +353,35 @@
         container.classList.add('ad-loaded');
       }
       observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+
+      // Safe push logic
+      if (ad.offsetWidth > 0) {
+        if (!ad.getAttribute('data-ad-pushed')) {
+          ad.setAttribute('data-ad-pushed', 'true');
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {
+            console.warn('AdSense push failed:', e);
+          }
+        }
+      } else {
+        const resizeObserver = new ResizeObserver((entries, obs) => {
+          for (let entry of entries) {
+            if (entry.contentRect.width > 0) {
+              if (!ad.getAttribute('data-ad-pushed')) {
+                ad.setAttribute('data-ad-pushed', 'true');
+                try {
+                  (window.adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                  console.warn('Deferred AdSense push failed:', e);
+                }
+              }
+              obs.disconnect();
+            }
+          }
+        });
+        resizeObserver.observe(ad);
+      }
     });
   </script>
 </body>

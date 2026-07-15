@@ -1378,9 +1378,9 @@ kbd {
    ========================================================================== */
 .adsense-sidebar-container {
   margin-top: auto;
-  border-top: 1px solid var(--border-color);
-  padding-top: 15px;
-  display: none;
+  border-top: none;
+  padding-top: 0;
+  display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -1398,9 +1398,10 @@ kbd {
 
 .adsense-placeholder-sidebar {
   width: 100%;
-  min-height: 120px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed var(--border-color);
+  min-height: 0;
+  height: 0;
+  background: transparent;
+  border: none;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -1427,13 +1428,16 @@ kbd {
 
 .terminal-output-ad-panel {
   flex: 1.2;
-  border-left: 1px solid var(--border-color);
-  padding-left: 15px;
-  display: none;
+  border-left: none;
+  padding-left: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   min-width: 160px;
+  width: auto;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .adsense-terminal-container {
@@ -1446,10 +1450,10 @@ kbd {
 
 .adsense-placeholder-terminal {
   width: 100%;
-  height: 90%;
-  min-height: 100px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed var(--border-color);
+  height: 0;
+  min-height: 0;
+  background: transparent;
+  border: none;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -1469,21 +1473,59 @@ kbd {
 /* Show ads only when they are successfully loaded */
 .adsense-sidebar-container.ad-loaded,
 .adsense-sidebar-container:has(ins.adsbygoogle[data-ad-status="filled"]) {
-  display: flex;
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
 }
 
 .terminal-output-ad-panel.ad-loaded,
 .terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) {
-  display: flex;
+  border-left: 1px solid var(--border-color);
+  padding-left: 15px;
+  min-width: 160px;
+  width: auto;
 }
 
-/* Remove borders and background when the ad is loaded to blend it nicely */
+/* Set visual bounds only when the ad is loaded */
 .adsense-sidebar-container.ad-loaded .adsense-placeholder-sidebar,
 .adsense-sidebar-container:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-sidebar,
+.adsense-sidebar-container.ad-loaded .ad-label,
+.adsense-sidebar-container:has(ins.adsbygoogle[data-ad-status="filled"]) .ad-label {
+  min-height: 120px !important;
+  height: auto !important;
+  display: block !important;
+}
+
 .terminal-output-ad-panel.ad-loaded .adsense-placeholder-terminal,
-.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-terminal {
-  border: none !important;
-  background: transparent !important;
+.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-terminal,
+.terminal-output-ad-panel.ad-loaded .ad-label,
+.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) .ad-label {
+  min-height: 100px !important;
+  height: 90% !important;
+  display: block !important;
+}
+
+.index-top-ad.ad-loaded .adsense-placeholder-sidebar,
+.index-top-ad:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-sidebar,
+.index-bottom-ad.ad-loaded .adsense-placeholder-sidebar,
+.index-bottom-ad:has(ins.adsbygoogle[data-ad-status="filled"]) .adsense-placeholder-sidebar {
+  min-height: 120px !important;
+  height: auto !important;
+  display: block !important;
+}
+
+.index-top-ad.ad-loaded .ad-label,
+.index-top-ad:has(ins.adsbygoogle[data-ad-status="filled"]) .ad-label,
+.index-bottom-ad.ad-loaded .ad-label,
+.index-bottom-ad:has(ins.adsbygoogle[data-ad-status="filled"]) .ad-label {
+  display: block !important;
+}
+
+/* Hide containers completely if the ad is unfilled or blocked */
+.adsense-sidebar-container:has(ins.adsbygoogle[data-ad-status="unfilled"]),
+.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="unfilled"]),
+.index-top-ad:has(ins.adsbygoogle[data-ad-status="unfilled"]),
+.index-bottom-ad:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -1675,7 +1717,7 @@ kbd {
 /* Index Ads styling */
 .index-top-ad,
 .index-bottom-ad {
-  display: none; /* hidden by default, shown by JS */
+  display: block;
   margin: 0 auto 50px auto;
   max-width: 1200px;
   width: 90%;
