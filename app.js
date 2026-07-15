@@ -873,6 +873,47 @@ function loadWorkspaceState() {
     window.history.replaceState(null, null, window.location.pathname);
   }
 
+  // Handle query parameter for language pre-selection
+  const params = new URLSearchParams(window.location.search);
+  const queryLang = params.get('lang');
+  if (queryLang) {
+    const file = state.files.find(f => f.language === queryLang);
+    if (file) {
+      state.activeFileId = file.id;
+      saveStateToStorage();
+    } else {
+      const boilerplate = BOILERPLATE_TEMPLATES[queryLang];
+      if (boilerplate) {
+        let ext = 'py';
+        if (queryLang === 'cpp') ext = 'cpp';
+        else if (queryLang === 'c') ext = 'c';
+        else if (queryLang === 'java') ext = 'java';
+        else if (queryLang === 'javascript') ext = 'js';
+        else if (queryLang === 'typescript') ext = 'ts';
+        else if (queryLang === 'rust') ext = 'rs';
+        else if (queryLang === 'go') ext = 'go';
+        else if (queryLang === 'csharp') ext = 'cs';
+        else if (queryLang === 'kotlin') ext = 'kt';
+        else if (queryLang === 'swift') ext = 'swift';
+        else if (queryLang === 'ruby') ext = 'rb';
+        else if (queryLang === 'dart') ext = 'dart';
+        
+        const newFileId = Date.now().toString();
+        const newFile = {
+          id: newFileId,
+          name: queryLang === 'java' ? `Main.java` : `main.${ext}`,
+          language: queryLang,
+          content: boilerplate
+        };
+        state.files.push(newFile);
+        state.activeFileId = newFileId;
+        saveStateToStorage();
+      }
+    }
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState(null, null, cleanUrl);
+  }
+
   // Load settings
   const cachedTheme = localStorage.getItem('codexrun_theme');
   if (cachedTheme) state.theme = cachedTheme;
