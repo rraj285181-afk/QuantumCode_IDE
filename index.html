@@ -83,46 +83,46 @@
 
     <div class="compilers-grid">
       <!-- Learn Python -->
-      <div class="compiler-card card-python">
+      <a href="/python-tutorial.html" class="compiler-card card-python" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon python-icon">code</span>
           <span class="lang-tag tag-python">Tutorials</span>
         </div>
         <h3>Learn Python</h3>
         <p>Master Python variables, loops, classes, and micro-scripts. Fully integrated with our online execution engine.</p>
-        <a href="/python-tutorial.html" class="card-cta-btn">
+        <div class="card-cta-btn">
           <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
+        </div>
+      </a>
 
       <!-- Learn C++ -->
-      <div class="compiler-card card-cpp">
+      <a href="/cpp-tutorial.html" class="compiler-card card-cpp" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon cpp-icon">data_object</span>
           <span class="lang-tag tag-cpp">Advanced</span>
         </div>
         <h3>Learn C++</h3>
         <p>Learn Object-Oriented C++, memory pointers, data vectors, templates, and basic data structures.</p>
-        <a href="/cpp-tutorial.html" class="card-cta-btn">
+        <div class="card-cta-btn">
           <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
+        </div>
+      </a>
 
       <!-- Learn Java -->
-      <div class="compiler-card card-java">
+      <a href="/java-tutorial.html" class="compiler-card card-java" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon java-icon">coffee</span>
           <span class="lang-tag tag-java">OOP</span>
         </div>
         <h3>Learn Java</h3>
         <p>Learn classes, polymorphism, interfaces, exceptions, and collections with Main.java boilerplate examples.</p>
-        <a href="/java-tutorial.html" class="card-cta-btn">
+        <div class="card-cta-btn">
           <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -404,8 +404,8 @@
     // Scroll Spy logic to highlight active section in navbar
     const navLinks = document.querySelectorAll('.landing-nav .nav-link');
     const sections = [
-      document.getElementById('compilers'),
       document.getElementById('tutorials'),
+      document.getElementById('compilers'),
       document.getElementById('examples')
     ];
 
