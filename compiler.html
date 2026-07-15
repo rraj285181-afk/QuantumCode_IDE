@@ -337,9 +337,6 @@
               <button id="tab-input-btn" class="terminal-tab">
                 <span class="material-symbols-outlined">keyboard</span> Input (Stdin)
               </button>
-              <button id="tab-visualizer-btn" class="terminal-tab">
-                <span class="material-symbols-outlined">analytics</span> Visualizer
-              </button>
             </div>
             <div class="terminal-actions">
               <span id="exec-status-badge" class="status-badge idle">Idle</span>
@@ -387,53 +384,6 @@
                 placeholder="Enter standard inputs here. If your program reads multiple lines, enter each line on a new row."></textarea>
             </div>
 
-            <!-- Visualizer Screen -->
-            <div id="terminal-visualizer-panel" class="terminal-body">
-              <div class="visualizer-container">
-                <div class="visualizer-canvas-panel">
-                  <div id="visualizer-canvas"></div>
-
-                  <div class="visualizer-controls">
-                    <button id="vis-control-prev" class="icon-btn" title="Previous Step">
-                      <span class="material-symbols-outlined">skip_previous</span>
-                    </button>
-                    <button id="vis-control-play" class="primary-btn play-btn" title="Play Simulation">
-                      <span class="material-symbols-outlined vis-play-icon">play_arrow</span>
-                    </button>
-                    <button id="vis-control-next" class="icon-btn" title="Next Step">
-                      <span class="material-symbols-outlined">skip_next</span>
-                    </button>
-                    <button id="vis-control-reset" class="icon-btn" title="Restart Simulation">
-                      <span class="material-symbols-outlined">replay</span>
-                    </button>
-
-                    <div class="slider-group">
-                      <span class="material-symbols-outlined">speed</span>
-                      <input type="range" id="vis-control-speed" min="100" max="2000" value="800" step="100"
-                        title="Step delay (ms)">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="visualizer-meta-panel">
-                  <div class="vis-meta-section">
-                    <h3><span class="material-symbols-outlined">monitoring</span> Variables</h3>
-                    <div id="vis-variables-list" class="vis-vars-grid"></div>
-                  </div>
-                  <div class="vis-meta-section">
-                    <h3><span class="material-symbols-outlined">info</span> Step Walkthrough</h3>
-                    <div id="vis-description-box" class="vis-desc-screen"></div>
-                  </div>
-                  <div class="vis-meta-section">
-                    <h3><span class="material-symbols-outlined">edit_note</span> Custom Data</h3>
-                    <div class="vis-custom-inputs">
-                      <input type="text" id="vis-custom-data-input" placeholder="e.g. 64, 34, 25, 12, 22, 11, 90"
-                        title="Comma-separated integers">
-                      <button id="vis-custom-data-btn" class="secondary-btn">Set Data</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </footer>

@@ -1486,34 +1486,36 @@ function initTerminalTabs() {
   tabOutput.addEventListener('click', () => {
     tabOutput.classList.add('active');
     tabInput.classList.remove('active');
-    tabVisualizer.classList.remove('active');
+    if (tabVisualizer) tabVisualizer.classList.remove('active');
     
     panelOutput.classList.add('active');
     panelInput.classList.remove('active');
-    panelVisualizer.classList.remove('active');
+    if (panelVisualizer) panelVisualizer.classList.remove('active');
   });
 
   tabInput.addEventListener('click', () => {
     tabInput.classList.add('active');
     tabOutput.classList.remove('active');
-    tabVisualizer.classList.remove('active');
+    if (tabVisualizer) tabVisualizer.classList.remove('active');
     
     panelInput.classList.add('active');
     panelOutput.classList.remove('active');
-    panelVisualizer.classList.remove('active');
+    if (panelVisualizer) panelVisualizer.classList.remove('active');
   });
 
-  tabVisualizer.addEventListener('click', () => {
-    tabVisualizer.classList.add('active');
-    tabOutput.classList.remove('active');
-    tabInput.classList.remove('active');
-    
-    panelVisualizer.classList.add('active');
-    panelOutput.classList.remove('active');
-    panelInput.classList.remove('active');
-    
-    initializeVisualizer();
-  });
+  if (tabVisualizer) {
+    tabVisualizer.addEventListener('click', () => {
+      tabVisualizer.classList.add('active');
+      tabOutput.classList.remove('active');
+      tabInput.classList.remove('active');
+      
+      if (panelVisualizer) panelVisualizer.classList.add('active');
+      panelOutput.classList.remove('active');
+      panelInput.classList.remove('active');
+      
+      initializeVisualizer();
+    });
+  }
 }
 
 function initResizableTerminal() {
