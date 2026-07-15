@@ -23,7 +23,7 @@
 
   <!-- Google AdSense Main Library -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5471667535888198"
-       crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -150,18 +150,14 @@
             <div id="file-tree" class="file-list">
               <!-- Files will be dynamically populated here via app.js -->
             </div>
-            
+
             <!-- AdSense Sidebar Banner -->
             <div class="adsense-sidebar-container">
               <span class="ad-label">SPONSOR</span>
               <div class="adsense-placeholder-sidebar">
                 <!-- AdSense Skyscraper / Square Unit Code -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5471667535888198"
-                     data-ad-slot="4680239312"
-                     data-ad-format="vertical"
-                     data-full-width-responsive="true"></ins>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198"
+                  data-ad-slot="4680239312" data-ad-format="vertical" data-full-width-responsive="true"></ins>
 
               </div>
             </div>
@@ -210,12 +206,8 @@
               <span class="ad-label">SPONSOR</span>
               <div class="adsense-placeholder-sidebar">
                 <!-- AdSense Skyscraper / Square Unit Code -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5471667535888198"
-                     data-ad-slot="4680239312"
-                     data-ad-format="vertical"
-                     data-full-width-responsive="true"></ins>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198"
+                  data-ad-slot="4680239312" data-ad-format="vertical" data-full-width-responsive="true"></ins>
 
               </div>
             </div>
@@ -283,12 +275,8 @@
               <span class="ad-label">SPONSOR</span>
               <div class="adsense-placeholder-sidebar">
                 <!-- AdSense Skyscraper / Square Unit Code -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5471667535888198"
-                     data-ad-slot="4680239312"
-                     data-ad-format="vertical"
-                     data-full-width-responsive="true"></ins>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198"
+                  data-ad-slot="4680239312" data-ad-format="vertical" data-full-width-responsive="true"></ins>
 
               </div>
             </div>
@@ -325,9 +313,15 @@
         <footer id="ide-terminal">
           <div class="terminal-header">
             <div class="terminal-tab-group">
-              <span class="terminal-console-title" style="display: flex; align-items: center; gap: 8px; color: #ffffff; font-size: 0.9rem; font-weight: 600; padding: 0 10px;">
-                <span class="material-symbols-outlined">terminal</span> Console
-              </span>
+              <button id="tab-output-btn" class="terminal-tab active">
+                <span class="material-symbols-outlined">terminal</span> Output
+              </button>
+              <button id="tab-input-btn" class="terminal-tab">
+                <span class="material-symbols-outlined">keyboard</span> Input
+              </button>
+              <button id="tab-visualizer-btn" class="terminal-tab">
+                <span class="material-symbols-outlined">analytics</span> Visualizer
+              </button>
             </div>
             <div class="terminal-actions">
               <span id="exec-status-badge" class="status-badge idle">Idle</span>
@@ -338,33 +332,98 @@
           </div>
 
           <div class="terminal-body-container">
-            <div class="terminal-combined-layout">
-              <!-- Column 1: Output -->
-              <div class="terminal-output-column">
-                <div id="terminal-log" class="terminal-log-screen" style="border-radius: 8px 8px 0 0;">
-                  <div class="log-line system-text">CodeXrun Compiler Ready. Press 'Run Code' to execute.</div>
+            <!-- Output Panel -->
+            <div id="terminal-output-panel" class="terminal-body active">
+              <div class="terminal-output-layout">
+                <!-- Column 1: Output -->
+                <div class="terminal-output-left">
+                  <div id="terminal-log" class="terminal-log-screen" style="border-radius: 8px 8px 0 0;">
+                    <div class="log-line system-text">CodeXrun Compiler Ready. Press 'Run Code' to execute.</div>
+                  </div>
+                  <div id="terminal-stats-bar" style="border-radius: 0 0 8px 8px;">
+                    <span id="stat-time">Time: -</span>
+                    <span id="stat-status">Status: -</span>
+                  </div>
                 </div>
-                <div id="terminal-stats-bar" style="border-radius: 0 0 8px 8px;">
-                  <span id="stat-time">Time: -</span>
-                  <span id="stat-status">Status: -</span>
-                </div>
-              </div>
 
-              <!-- Column 2: Ad Banner -->
-              <div class="terminal-output-ad-panel">
-                <div class="adsense-terminal-container">
-                  <span class="ad-label">SPONSOR ADVERTISEMENT</span>
-                  <div class="adsense-placeholder-terminal">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-5471667535888198"
-                         data-ad-slot="4680239312"
-                         data-ad-format="horizontal"
-                         data-full-width-responsive="true"></ins>
+                <!-- Column 2: Ad Banner -->
+                <div class="terminal-output-ad-panel">
+                  <div class="adsense-terminal-container">
+                    <span class="ad-label">SPONSOR ADVERTISEMENT</span>
+                    <div class="adsense-placeholder-terminal">
+                      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198"
+                        data-ad-slot="4680239312" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Input Panel -->
+            <div id="terminal-input-panel" class="terminal-body">
+              <textarea id="stdin-textarea" placeholder="Enter program inputs (stdin) here, one per line. They will be passed to your program when running."></textarea>
+            </div>
+
+            <!-- Visualizer Panel -->
+            <div id="terminal-visualizer-panel" class="terminal-body">
+              <div class="visualizer-container">
+                <!-- Visualizer Main Canvas Panel (left) -->
+                <div class="visualizer-canvas-panel">
+                  <div id="visualizer-canvas">
+                    <!-- Dynamic sorting bars or list nodes will be injected here -->
+                  </div>
+                  
+                  <div class="visualizer-controls">
+                    <button id="vis-control-reset" class="secondary-btn" title="Reset Simulation">
+                      <span class="material-symbols-outlined">replay</span>
+                    </button>
+                    <button id="vis-control-prev" class="secondary-btn" title="Previous Step">
+                      <span class="material-symbols-outlined">skip_previous</span>
+                    </button>
+                    <button id="vis-control-play" class="primary-btn play-btn" title="Play/Pause Simulation">
+                      <span class="material-symbols-outlined vis-play-icon">play_arrow</span>
+                    </button>
+                    <button id="vis-control-next" class="secondary-btn" title="Next Step">
+                      <span class="material-symbols-outlined">skip_next</span>
+                    </button>
+                    
+                    <div class="slider-group">
+                      <span class="material-symbols-outlined">speed</span>
+                      <input type="range" id="vis-control-speed" min="200" max="2000" value="1300" step="100" />
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Visualizer Meta Info Panel (right) -->
+                <div class="visualizer-meta-panel">
+                  <!-- Section 1: Description -->
+                  <div class="vis-meta-section">
+                    <h3><span class="material-symbols-outlined">info</span> Description</h3>
+                    <div id="vis-description-box" class="vis-desc-screen">
+                      Select an algorithm template to begin visualization.
+                    </div>
+                  </div>
+                  
+                  <!-- Section 2: Variables -->
+                  <div class="vis-meta-section">
+                    <h3><span class="material-symbols-outlined">variables</span> Variables</h3>
+                    <div id="vis-variables-list" class="vis-vars-grid">
+                      <!-- Dynamic variable badges will be injected here -->
+                    </div>
+                  </div>
+                  
+                  <!-- Section 3: Custom Input -->
+                  <div class="vis-meta-section">
+                    <h3><span class="material-symbols-outlined">edit</span> Custom Data</h3>
+                    <div class="vis-custom-inputs">
+                      <input type="text" id="vis-custom-data-input" placeholder="e.g. 64, 34, 25, 12" />
+                      <button id="vis-custom-data-btn" class="primary-btn">Set</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </footer>
 

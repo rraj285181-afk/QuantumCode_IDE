@@ -904,6 +904,10 @@ kbd {
   color: #f87171;
 }
 
+.log-line.warning-text {
+  color: var(--color-warning);
+}
+
 .log-line.output-text {
   color: #f1f5f9;
   white-space: pre-wrap;
@@ -2621,6 +2625,110 @@ kbd {
 
 @media (max-width: 900px) {
   #ide-header .landing-nav {
+    display: none !important;
+  }
+}
+
+/* Combined Terminal Layout (Input & Output in one panel) */
+.terminal-combined-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  gap: 16px;
+  padding: 12px 16px;
+  overflow: hidden;
+}
+
+.terminal-input-column {
+  width: 28%;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.terminal-output-column {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.panel-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.panel-section-header span.material-symbols-outlined {
+  font-size: 1rem;
+}
+
+#stdin-textarea {
+  flex-grow: 1;
+  background: rgba(7, 9, 17, 0.95);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: #f1f5f9;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+#stdin-textarea:focus {
+  border-color: var(--accent-cyan);
+}
+
+.terminal-output-ad-panel {
+  width: 250px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.terminal-output-column .terminal-log-screen {
+  flex-grow: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 8px 8px 0 0;
+}
+
+.terminal-output-column #terminal-stats-bar {
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+@media (max-width: 900px) {
+  .terminal-combined-layout {
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 12px;
+    padding: 8px 10px;
+  }
+  .terminal-input-column {
+    width: 100%;
+    height: 120px;
+    min-height: 120px;
+  }
+  .terminal-output-column {
+    height: 250px;
+    flex-grow: unset;
+  }
+  .terminal-output-column .terminal-log-screen {
+    flex-grow: 1;
+  }
+  .terminal-output-ad-panel {
     display: none !important;
   }
 }

@@ -1483,35 +1483,39 @@ function initTerminalTabs() {
   const panelInput = document.getElementById('terminal-input-panel');
   const panelVisualizer = document.getElementById('terminal-visualizer-panel');
 
-  tabOutput.addEventListener('click', () => {
-    tabOutput.classList.add('active');
-    tabInput.classList.remove('active');
-    if (tabVisualizer) tabVisualizer.classList.remove('active');
-    
-    panelOutput.classList.add('active');
-    panelInput.classList.remove('active');
-    if (panelVisualizer) panelVisualizer.classList.remove('active');
-  });
+  if (tabOutput) {
+    tabOutput.addEventListener('click', () => {
+      tabOutput.classList.add('active');
+      if (tabInput) tabInput.classList.remove('active');
+      if (tabVisualizer) tabVisualizer.classList.remove('active');
+      
+      if (panelOutput) panelOutput.classList.add('active');
+      if (panelInput) panelInput.classList.remove('active');
+      if (panelVisualizer) panelVisualizer.classList.remove('active');
+    });
+  }
 
-  tabInput.addEventListener('click', () => {
-    tabInput.classList.add('active');
-    tabOutput.classList.remove('active');
-    if (tabVisualizer) tabVisualizer.classList.remove('active');
-    
-    panelInput.classList.add('active');
-    panelOutput.classList.remove('active');
-    if (panelVisualizer) panelVisualizer.classList.remove('active');
-  });
+  if (tabInput) {
+    tabInput.addEventListener('click', () => {
+      tabInput.classList.add('active');
+      if (tabOutput) tabOutput.classList.remove('active');
+      if (tabVisualizer) tabVisualizer.classList.remove('active');
+      
+      if (panelInput) panelInput.classList.add('active');
+      if (panelOutput) panelOutput.classList.remove('active');
+      if (panelVisualizer) panelVisualizer.classList.remove('active');
+    });
+  }
 
   if (tabVisualizer) {
     tabVisualizer.addEventListener('click', () => {
       tabVisualizer.classList.add('active');
-      tabOutput.classList.remove('active');
-      tabInput.classList.remove('active');
+      if (tabOutput) tabOutput.classList.remove('active');
+      if (tabInput) tabInput.classList.remove('active');
       
       if (panelVisualizer) panelVisualizer.classList.add('active');
-      panelOutput.classList.remove('active');
-      panelInput.classList.remove('active');
+      if (panelOutput) panelOutput.classList.remove('active');
+      if (panelInput) panelInput.classList.remove('active');
       
       initializeVisualizer();
     });
@@ -1625,6 +1629,18 @@ async function runCurrentCode() {
   }
 
   const stdinContent = document.getElementById('stdin-textarea')?.value || '';
+
+  // Proactively check if the user is running code requiring input but has empty stdin
+  const codeSourceLower = activeFile.content.toLowerCase();
+  const hasInputCall = codeSourceLower.includes('input(') || 
+                       codeSourceLower.includes('cin >>') || 
+                       codeSourceLower.includes('scanf(') || 
+                       codeSourceLower.includes('scanner') || 
+                       codeSourceLower.includes('system.in');
+                       
+  if (hasInputCall && !stdinContent.trim()) {
+    showTerminalLog('[System Tip] Your program may require inputs. If it fails, click the "Input" tab next to the "Output" tab below, type your inputs, and click "Run Code" again.', 'warning-text');
+  }
 
   // Gather additional project files (excluding active file)
   const payloadFiles = [];
@@ -1747,11 +1763,20 @@ function displayExecutionResult(result, duration) {
       });
     }
 
+    let hasEOFError = false;
+
     // Print program stderr
     if (result.stderr && result.stderr.length > 0) {
       result.stderr.forEach(line => {
         showTerminalLog(line.text, 'error-text');
+        if (line.text.includes('EOFError') || line.text.includes('NoSuchElementException')) {
+          hasEOFError = true;
+        }
       });
+    }
+
+    if (hasEOFError) {
+      showTerminalLog('[System Tip] Your program crashed due to missing input. Click on the "Input" tab next to the "Output" tab at the bottom to enter your program inputs, then click "Run Code" again.', 'warning-text');
     }
 
     if ((!result.stdout || result.stdout.length === 0) && (!result.stderr || result.stderr.length === 0)) {
