@@ -2033,5 +2033,266 @@ kbd {
   }
 }
 
+/* ==========================================================================
+   Programiz-style Interactive Tutorial Layout Styles
+   ========================================================================== */
+
+.tutorial-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  min-height: calc(100vh - 70px);
+  position: relative;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+/* Sidebar navigation of topics */
+.tutorial-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  border-right: 1px solid var(--border-color);
+  padding: 30px 20px 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-category {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sidebar-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-item {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sidebar-item.active {
+  color: var(--accent-cyan);
+  background: rgba(14, 165, 233, 0.08);
+  font-weight: 600;
+}
+
+/* Center Content Panel */
+.tutorial-content-panel {
+  flex: 1;
+  padding: 30px 20px;
+  min-width: 0; /* Prevents flex children from overflowing */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tutorial-panel {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.tutorial-panel.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tutorial-content-panel h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+.tutorial-content-panel h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.tutorial-content-panel p {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.tutorial-content-panel ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.tutorial-content-panel ul li {
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tutorial-content-panel ul li::before {
+  content: "•";
+  color: var(--accent-cyan);
+  font-size: 1.3rem;
+}
+
+.tutorial-content-panel code {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-purple);
+}
+
+/* Code Example Box */
+.code-example-box {
+  background: #0f1322;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.example-header {
+  height: 48px;
+  background: #141a30;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.example-header span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.try-btn {
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple));
+  color: #ffffff;
+  border: none;
+  height: 30px;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.try-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.try-btn span.material-symbols-outlined {
+  font-size: 1.1rem;
+}
+
+.code-example-box pre {
+  padding: 16px;
+  margin: 0;
+  overflow-x: auto;
+  background: #070911;
+}
+
+.code-example-box code {
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  color: #cbd5e1;
+  background: transparent;
+  padding: 0;
+}
+
+.code-keyword { color: #f43f5e; font-weight: 600; }
+.code-string { color: #10b981; }
+.code-number { color: #f59e0b; }
+.code-func { color: #0ea5e9; }
+
+/* Right Advertising Column */
+.tutorial-ads-panel {
+  width: 300px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 70px;
+  height: calc(100vh - 70px);
+  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  border-left: 1px solid var(--border-color);
+}
+
+.tutorial-skyscraper {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+  display: block; /* controlled by AdSense observer */
+}
+
+/* Responsive adjustments for tutorials */
+@media (max-width: 1024px) {
+  .tutorial-ads-panel {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .tutorial-wrapper {
+    flex-direction: column;
+    padding: 0 10px;
+  }
+  .tutorial-sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+  }
+  .sidebar-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+  .sidebar-item {
+    white-space: nowrap;
+  }
+}
+
 
 

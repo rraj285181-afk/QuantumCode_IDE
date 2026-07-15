@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Programming Tutorial | CodeXrun</title>
+  <meta name="description" content="Learn Python from basics to advanced. Interactive examples with real-time compilers.">
+
+  <!-- Font and Icon Packages -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    rel="stylesheet" />
+
+  <!-- Main Styling -->
+  <link rel="stylesheet" href="/style.css">
+
+  <!-- Google AdSense Main Library -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5471667535888198"
+    crossorigin="anonymous"></script>
+</head>
+
+<body class="landing-body">
+
+  <!-- Header Navigation -->
+  <header id="landing-header">
+    <div class="header-logo-group">
+      <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+        <span class="material-symbols-outlined logo-icon">terminal</span>
+        <div class="logo-text-group">
+          <span class="logo-title">CodeXrun <span class="accent-text">IDE</span></span>
+          <span class="system-status">System: Online</span>
+        </div>
+      </a>
+    </div>
+    <nav class="landing-nav">
+      <a href="/#compilers" class="nav-link">Compilers</a>
+      <a href="/tutorials.html" class="nav-link active">Tutorials</a>
+      <a href="/#features" class="nav-link">Features</a>
+    </nav>
+    <a href="/compiler.html" class="primary-btn landing-cta-btn">
+      <span>Start Coding</span>
+      <span class="material-symbols-outlined">chevron_right</span>
+    </a>
+  </header>
+
+  <!-- Main Tutorials Layout -->
+  <main class="tutorial-wrapper">
+    <!-- Left Navigation Sidebar -->
+    <aside class="tutorial-sidebar">
+      <h4 class="sidebar-category">Python Basics</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item active" data-target="py-intro">Introduction</li>
+        <li class="sidebar-item" data-target="py-vars">Variables & Types</li>
+        <li class="sidebar-item" data-target="py-operators">Operators</li>
+        <li class="sidebar-item" data-target="py-ifelse">If...Else Statements</li>
+        <li class="sidebar-item" data-target="py-loops">Loops (For & While)</li>
+        <li class="sidebar-item" data-target="py-funcs">Functions</li>
+      </ul>
+    </aside>
+
+    <!-- Center Content Panel -->
+    <section class="tutorial-content-panel">
+      <!-- Intro Section -->
+      <div id="py-intro" class="tutorial-panel active">
+        <h1>Python Introduction</h1>
+        <p>Python is a popular programming language. It was created by Guido van Rossum, and released in 1991.</p>
+        <p>It is used for:</p>
+        <ul>
+          <li>Web development (server-side)</li>
+          <li>Software development</li>
+          <li>Mathematics and Data Science</li>
+          <li>System scripting</li>
+        </ul>
+        <h2>Why Python?</h2>
+        <p>Python works on different platforms (Windows, Mac, Linux, etc.) and has a simple syntax similar to the English language.</p>
+
+        <!-- Code Example Box -->
+        <div class="code-example-box">
+          <div class="example-header">
+            <span>Example: Hello World</span>
+            <button class="try-btn" data-lang="python" data-file="main.py">
+              <span>Try it Yourself</span>
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+          </div>
+          <pre><code><span class="code-keyword">print</span>(<span class="code-string">"Hello, World!"</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Variables Section -->
+      <div id="py-vars" class="tutorial-panel">
+        <h1>Python Variables</h1>
+        <p>Variables are containers for storing data values. In Python, variables are created when you assign a value to it.</p>
+        <h2>Creating Variables</h2>
+        <p>Python has no command for declaring a variable. A variable is created the moment you first assign a value to it.</p>
+
+        <!-- Code Example Box -->
+        <div class="code-example-box">
+          <div class="example-header">
+            <span>Example: Storing Variables</span>
+            <button class="try-btn" data-lang="python" data-file="main.py">
+              <span>Try it Yourself</span>
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+          </div>
+          <pre><code>x = <span class="code-number">5</span>
+y = <span class="code-string">"John"</span>
+<span class="code-keyword">print</span>(x)
+<span class="code-keyword">print</span>(y)</code></pre>
+        </div>
+      </div>
+
+      <!-- Operators Section -->
+      <div id="py-operators" class="tutorial-panel">
+        <h1>Python Operators</h1>
+        <p>Operators are used to perform operations on variables and values. Python divides the operators in the following groups:</p>
+        <ul>
+          <li>Arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>)</li>
+          <li>Assignment operators (<code>=</code>, <code>+=</code>, <code>-=</code>)</li>
+          <li>Comparison operators (<code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>)</li>
+        </ul>
+
+        <!-- Code Example Box -->
+        <div class="code-example-box">
+          <div class="example-header">
+            <span>Example: Arithmetic</span>
+            <button class="try-btn" data-lang="python" data-file="main.py">
+              <span>Try it Yourself</span>
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+          </div>
+          <pre><code>a = <span class="code-number">10</span>
+b = <span class="code-number">3</span>
+sum_val = a + b
+<span class="code-keyword">print</span>(<span class="code-string">"The sum is:"</span>, sum_val)</code></pre>
+        </div>
+      </div>
+
+      <!-- If-Else Section -->
+      <div id="py-ifelse" class="tutorial-panel">
+        <h1>Python If...Else</h1>
+        <p>Python supports the usual logical conditions from mathematics:</p>
+        <ul>
+          <li>Equals: <code>a == b</code></li>
+          <li>Not Equals: <code>a != b</code></li>
+          <li>Less than: <code>a &lt; b</code></li>
+        </ul>
+        <p>These conditions can be used in several ways, most commonly in "if statements" and loops.</p>
+
+        <!-- Code Example Box -->
+        <div class="code-example-box">
+          <div class="example-header">
+            <span>Example: Conditional logic</span>
+            <button class="try-btn" data-lang="python" data-file="main.py">
+              <span>Try it Yourself</span>
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+          </div>
+          <pre><code>a = <span class="code-number">33</span>
+b = <span class="code-number">200</span>
+<span class="code-keyword">if</span> b &gt; a:
+    <span class="code-keyword">print</span>(<span class="code-string">"b is greater than a"</span>)</code></pre>
+        </div>
+      </div>
+
+      <!-- Loops Section -->
+      <div id="py-loops" class="tutorial-panel">
+        <h1>Python Loops</h1>
+        <p>Python has two primitive loop commands:</p>
+        <ul>
+          <li><code>while</code> loops</li>
+          <li><code>for</code> loops</li>
+        </ul>
+        <h2>The For Loop</h2>
+        <p>A <code>for</code> loop is used for iterating over a sequence (that is either a list, a tuple, a dictionary, a set, or a string).</p>
+
+        <!-- Code Example Box -->
+        <div class="code-example-box">
+          <div class="example-header">
+            <span>Example: Loop iteration</span>
+            <button class="try-btn" data-lang="python" data-file="main.py">
+              <span>Try it Yourself</span>
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+          </div>
+          <pre><code>fruits = [<span class="code-string">"apple"</span>, <span class="code-string">"banana"</span>, <span class="code-string">"cherry"</span>]
+<span class="code-keyword">for</span> x <span class="code-keyword">in</span> fruits:
+    <span class="code-keyword">print</span>(x)</code></pre>
+        </div>
+      </div>
+
+      <!-- Functions Section -->
+      <div id="py-funcs" class="tutorial-panel">
+        <h1>Python Functions</h1>
+        <p>A function is a block of code which only runs when it is called. You can pass data, known as parameters, into a function.</p>
+        <h2>Creating a Function</h2>
+        <p>In Python, a function is defined using the <code>def</code> keyword.</p>
+
+        <!-- Code Example Box -->
+        <div class="code-example-box">
+          <div class="example-header">
+            <span>Example: Defining functions</span>
+            <button class="try-btn" data-lang="python" data-file="main.py">
+              <span>Try it Yourself</span>
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+          </div>
+          <pre><code><span class="code-keyword">def</span> <span class="code-func">my_function</span>():
+    <span class="code-keyword">print</span>(<span class="code-string">"Hello from inside a function!"</span>)
+
+my_function()</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Advertising Panel -->
+    <aside class="tutorial-ads-panel">
+      <div class="adsense-sidebar-container tutorial-skyscraper">
+        <span class="ad-label">SPONSOR AD</span>
+        <div class="adsense-placeholder-sidebar" style="height: 600px;">
+          <!-- AdSense Vertical Skyscraper -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-5471667535888198"
+               data-ad-slot="4680239312"
+               data-ad-format="vertical"
+               data-full-width-responsive="true"></ins>
+          <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Footer Section -->
+  <footer id="landing-footer">
+    <div class="footer-bottom">
+      <p>&copy; 2026 CodeXrun IDE. All rights reserved. Created for developers.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    // Interactive Sidebar Tab switcher
+    const listItems = document.querySelectorAll('.sidebar-item');
+    const panels = document.querySelectorAll('.tutorial-panel');
+
+    listItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Remove active class from all items
+        listItems.forEach(li => li.classList.remove('active'));
+        // Add active class to clicked item
+        item.classList.add('active');
+
+        // Hide all content panels
+        panels.forEach(p => p.classList.remove('active'));
+        // Show targeted panel
+        const targetId = item.getAttribute('data-target');
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) {
+          activePanel.classList.add('active');
+        }
+      });
+    });
+
+    // Try it Yourself Base64 workspace generator
+    const tryButtons = document.querySelectorAll('.try-btn');
+    tryButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        const filename = btn.getAttribute('data-file');
+        
+        // Find the sibling pre code element and get text content
+        const codeBox = btn.closest('.code-example-box').querySelector('pre code');
+        const rawCode = codeBox.textContent || '';
+        
+        // Create custom workspace data payload
+        const workspaceData = JSON.stringify({
+          files: [
+            {
+              id: "1",
+              name: filename,
+              language: lang,
+              content: rawCode
+            }
+          ],
+          activeFileId: "1"
+        });
+
+        // Encode unicode string to base64
+        const base64 = btoa(unescape(encodeURIComponent(workspaceData)));
+        window.open(`/compiler.html#code=${base64}`, '_blank');
+      });
+    });
+
+    // Observe AdSense status
+    const ads = document.querySelectorAll('ins.adsbygoogle');
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-ad-status') {
+          const ins = mutation.target;
+          const status = ins.getAttribute('data-ad-status');
+          const container = ins.closest('.adsense-sidebar-container');
+          if (container) {
+            if (status === 'filled') {
+              container.classList.add('ad-loaded');
+            } else {
+              container.classList.remove('ad-loaded');
+            }
+          }
+        }
+      });
+    });
+
+    ads.forEach(ad => {
+      const status = ad.getAttribute('data-ad-status');
+      const container = ad.closest('.adsense-sidebar-container');
+      if (container && status === 'filled') {
+        container.classList.add('ad-loaded');
+      }
+      observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+    });
+  </script>
+</body>
+
+</html>
