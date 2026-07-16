@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VHDL Complete Course A-to-Z | CodeXrun</title>
-  <meta name="description" content="Complete VHDL course from basics to expert FPGA design. 44 modules covering all topics with interactive simulations.">
+  <meta name="description" content="Complete VHDL course from basics to expert FPGA design. 76 modules covering all topics with interactive simulations.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -99,6 +99,56 @@
         <li class="sidebar-item" data-target="vhdl-timing">42. Timing Constraints (SDC)</li>
         <li class="sidebar-item" data-target="vhdl-ipcore">43. IP Core Integration</li>
         <li class="sidebar-item" data-target="vhdl-power">44. Power Optimization</li>
+      </ul>
+      <h4 class="sidebar-category">VHDL Language Deep Dives</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item" data-target="vhdl-enum-encoding">45. Enumerated Types &amp; Encoding</li>
+        <li class="sidebar-item" data-target="vhdl-generate">46. Generate Statements</li>
+        <li class="sidebar-item" data-target="vhdl-alias">47. Alias &amp; Type Conversion</li>
+        <li class="sidebar-item" data-target="vhdl-guarded">48. Guarded Blocks</li>
+        <li class="sidebar-item" data-target="vhdl-wait">49. Wait Statements</li>
+        <li class="sidebar-item" data-target="vhdl-aggregates">50. Aggregate Assignments</li>
+      </ul>
+      <h4 class="sidebar-category">Real-World Hardware Modules</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item" data-target="vhdl-debounce">51. Debounce Circuit</li>
+        <li class="sidebar-item" data-target="vhdl-lfsr-gen">52. LFSR Generator</li>
+        <li class="sidebar-item" data-target="vhdl-crc">53. CRC (Error Detection)</li>
+        <li class="sidebar-item" data-target="vhdl-bcd">54. Binary to BCD Converter</li>
+        <li class="sidebar-item" data-target="vhdl-freq-div">55. Clock Prescaler</li>
+        <li class="sidebar-item" data-target="vhdl-servo">56. Servo Motor Controller</li>
+        <li class="sidebar-item" data-target="vhdl-vga">57. VGA Controller</li>
+        <li class="sidebar-item" data-target="vhdl-i2s">58. I2S Audio Interface</li>
+      </ul>
+      <h4 class="sidebar-category">Simulation &amp; Debug Tools</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item" data-target="vhdl-ghdl">59. GHDL Setup &amp; Usage</li>
+        <li class="sidebar-item" data-target="vhdl-gtkwave">60. GTKWave Analysis</li>
+        <li class="sidebar-item" data-target="vhdl-modelsim">61. ModelSim Basics</li>
+        <li class="sidebar-item" data-target="vhdl-vivadosim">62. Vivado Simulator</li>
+      </ul>
+      <h4 class="sidebar-category">FPGA Project Workflows</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item" data-target="vhdl-vivadosetup">63. Vivado Setup A-Z</li>
+        <li class="sidebar-item" data-target="vhdl-quartus">64. Quartus Prime Setup</li>
+        <li class="sidebar-item" data-target="vhdl-constraints">65. Constraint Files (XDC)</li>
+        <li class="sidebar-item" data-target="vhdl-bitstream">66. Bitstream Upload</li>
+        <li class="sidebar-item" data-target="vhdl-logicanalyzer">67. Logic Analyzer</li>
+      </ul>
+      <h4 class="sidebar-category">Advanced Architecture Patterns</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item" data-target="vhdl-axi4">68. AXI4 Bus Protocol</li>
+        <li class="sidebar-item" data-target="vhdl-wishbone">69. Wishbone Bus Interface</li>
+        <li class="sidebar-item" data-target="vhdl-dma">70. DMA Controller Design</li>
+        <li class="sidebar-item" data-target="vhdl-interrupt">71. Interrupt Controller</li>
+        <li class="sidebar-item" data-target="vhdl-cpu">72. Simple 8-Bit CPU</li>
+      </ul>
+      <h4 class="sidebar-category">Professional Certification Prep</h4>
+      <ul class="sidebar-list">
+        <li class="sidebar-item" data-target="vhdl-interview">73. Interview Questions</li>
+        <li class="sidebar-item" data-target="vhdl-exam">74. Coding Exam Practice</li>
+        <li class="sidebar-item" data-target="vhdl-bugs">75. Common Bugs &amp; Fixes</li>
+        <li class="sidebar-item" data-target="vhdl-comparison">76. VHDL vs Verilog</li>
       </ul>
     </aside>
 
@@ -2301,6 +2351,1021 @@ end architecture sim;</code></pre>
         <ul>
           <li>When <strong>enable='0'</strong>: the register doesn't update — no signal toggling = zero dynamic power consumption in this register.</li>
           <li>Synthesis tools recognize this pattern and insert an efficient hardware clock gate instead of routing the enable through the data path.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 45 ======================== -->
+      <div id="vhdl-enum-encoding" class="tutorial-panel">
+        <h1>45. Enumerated Types &amp; FSM Encoding</h1>
+        <p>VHDL enumerated types allow developers to use custom state names. Hardware compilers map these to binary representation logic using encoding schemes.</p>
+        <h2>Secret Codes Analogy</h2>
+        <p>A spy network uses secret handshakes. One-Hot encoding uses one flag per state (1000, 0100, 0010, 0001). Gray Code changes only a single bit between consecutive numbers (00, 01, 11, 10), preventing transitions spikes. Binary encoding uses the standard index value (00, 01, 10, 11).</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: FSM Encoding States</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Enum_Encoding is
+    port (
+        clk  : in  std_logic;
+        rst  : in  std_logic;
+        state_out : out std_logic_vector(1 downto 0)
+    );
+end entity Enum_Encoding;
+
+architecture behavioral of Enum_Encoding is
+    -- Custom state definition
+    type fsm_state is (STATE_A, STATE_B, STATE_C);
+    signal current_state : fsm_state := STATE_A;
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                current_state &lt;= STATE_A;
+            else
+                case current_state is
+                    when STATE_A =&gt; current_state &lt;= STATE_B;
+                    when STATE_B =&gt; current_state &lt;= STATE_C;
+                    when STATE_C =&gt; current_state &lt;= STATE_A;
+                end case;
+            end if;
+        end if;
+    process;
+    
+    -- Map enumerated states to raw outputs
+    state_out &lt;= "00" when current_state = STATE_A else
+                 "01" when current_state = STATE_B else
+                 "10";
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Enum_Encoding is end entity tb_Enum_Encoding;
+architecture sim of tb_Enum_Encoding is
+    signal clk, rst : std_logic := '0';
+    signal state_out : std_logic_vector(1 downto 0);
+begin
+    uut: entity work.Enum_Encoding port map (clk=&gt;clk, rst=&gt;rst, state_out=&gt;state_out);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        rst &lt;= '1'; wait for 10 ns;
+        rst &lt;= '0'; wait for 50 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>type fsm_state is (STATE_A...)</strong> — Declares a human-readable state type. The compiler decides the best physical bit mapping.</li>
+          <li><strong>case current_state</strong> — Determines transition states on rising clock ticks.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 46 ======================== -->
+      <div id="vhdl-generate" class="tutorial-panel">
+        <h1>46. Generate Statements</h1>
+        <p>Use generate statements to dynamically replicate structures or loops at compile time.</p>
+        <h2>Mirror Hallway Analogy</h2>
+        <p>Instead of manually placing 8 light bulbs on a wall, you specify a repeat pattern of 8 bulbs spaced 10cm apart. VHDL generate loop expands this instruction during synthesis to layout repeating logic circuits automatically.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Loop Generation of Buffers</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Generate_Demo is
+    port (
+        inputs  : in  std_logic_vector(3 downto 0);
+        outputs : out std_logic_vector(3 downto 0)
+    );
+end entity Generate_Demo;
+
+architecture behavioral of Generate_Demo is
+begin
+    -- Replicates logic assignments for all array indices
+    gen_block: for i in 0 to 3 generate
+        outputs(i) &lt;= not inputs(i);
+    end generate gen_block;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Generate is end entity tb_Generate;
+architecture sim of tb_Generate is
+    signal inputs  : std_logic_vector(3 downto 0) := "0000";
+    signal outputs : std_logic_vector(3 downto 0);
+begin
+    uut: entity work.Generate_Demo port map(inputs=&gt;inputs, outputs=&gt;outputs);
+    process begin
+        inputs &lt;= "1010"; wait for 10 ns;
+        inputs &lt;= "0101"; wait for 10 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>for i in 0 to 3 generate</strong> — Replicates the inverted assignments 4 times in parallel during synthesis.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 47 ======================== -->
+      <div id="vhdl-alias" class="tutorial-panel">
+        <h1>47. Alias &amp; Type Conversion</h1>
+        <p>Alias creates a new label name for an existing slice of signal vector. Type conversion safely reinterprets raw bits into new type layouts.</p>
+        <h2>Nicknames Analogy</h2>
+        <p>An alias is like calling "Alexander" by his short name "Alex" — it points to the exact same person. Type conversion is translating a menu from French to English — it maps the identical item to a format the local system reads.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Vector Alias</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Alias_Demo is
+    port (
+        instruction : in  std_logic_vector(15 downto 0);
+        op_code     : out std_logic_vector(3 downto 0)
+    );
+end entity Alias_Demo;
+
+architecture behavioral of Alias_Demo is
+    -- Create an alias nickname for the upper bits
+    alias cmd_op : std_logic_vector(3 downto 0) is instruction(15 downto 12);
+begin
+    op_code &lt;= cmd_op;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Alias is end entity tb_Alias;
+architecture sim of tb_Alias is
+    signal instruction : std_logic_vector(15 downto 0) := (others =&gt; '0');
+    signal op_code     : std_logic_vector(3 downto 0);
+begin
+    uut: entity work.Alias_Demo port map(instruction=&gt;instruction, op_code=&gt;op_code);
+    process begin
+        instruction &lt;= "1100101010101111"; wait for 10 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>alias cmd_op</strong> — Nicknames the upper 4 bits (`15 downto 12`) of the instruction bus. Op code extracts this slice directly.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 48 ======================== -->
+      <div id="vhdl-guarded" class="tutorial-panel">
+        <h1>48. Guarded Blocks</h1>
+        <p>Guarded blocks conditionally control concurrent signal assignments based on block control guard logic expressions.</p>
+        <h2>Gated Communities Analogy</h2>
+        <p>Guarded blocks act like gated doors. If the gatekeeper says "authorized", residents can walk in. When the block guard flag turns FALSE, drivers disconnect and maintain their previous state.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Simple Guarded Assignment</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Guarded_Demo is
+    port (
+        en   : in  std_logic;
+        d    : in  std_logic;
+        q    : out std_logic
+    );
+end entity Guarded_Demo;
+
+architecture behavioral of Guarded_Demo is
+begin
+    -- The block guard checks the enable line
+    latched_block: block (en = '1')
+    begin
+        q &lt;= guarded d; -- Updates only when en is '1'
+    end block latched_block;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Guarded is end entity tb_Guarded;
+architecture sim of tb_Guarded is
+    signal en, d, q : std_logic := '0';
+begin
+    uut: entity work.Guarded_Demo port map(en=&gt;en, d=&gt;d, q=&gt;q);
+    process begin
+        en &lt;= '1'; d &lt;= '1'; wait for 10 ns;
+        en &lt;= '0'; d &lt;= '0'; wait for 10 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>block (en = '1')</strong> — Defines the guard condition check.</li>
+          <li><strong>guarded d</strong> — Signal only writes when the guard condition matches.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 49 ======================== -->
+      <div id="vhdl-wait" class="tutorial-panel">
+        <h1>49. Wait Statements</h1>
+        <p>Wait statements halt process execution blocks until specific timing or signal event criteria are satisfied.</p>
+        <h2>Red Light game Analogy</h2>
+        <p>Wait statements act like traffic lights: `wait for 10ns` is a timer. `wait on clk` is waiting for a pedestrian button push. `wait until clk='1'` is waiting for the signal color to turn green.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Process using wait until</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Wait_Demo is
+    port (
+        clk : in  std_logic;
+        d   : in  std_logic;
+        q   : out std_logic
+    );
+end entity Wait_Demo;
+
+architecture behavioral of Wait_Demo is
+begin
+    process
+    begin
+        -- Halt process execution until clk changes to '1'
+        wait until clk = '1';
+        q &lt;= d;
+    end process;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Wait is end entity tb_Wait;
+architecture sim of tb_Wait is
+    signal clk, d, q : std_logic := '0';
+begin
+    uut: entity work.Wait_Demo port map(clk=&gt;clk, d=&gt;d, q=&gt;q);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        d &lt;= '1'; wait for 20 ns;
+        d &lt;= '0'; wait for 20 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>wait until clk = '1'</strong> — Pauses process execution flow until a clock edge occurs, syncing updates.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 50 ======================== -->
+      <div id="vhdl-aggregates" class="tutorial-panel">
+        <h1>50. Aggregate Assignments</h1>
+        <p>Aggregate assignments let you assign multiple elements of an array or record at the same time using index-value pairs.</p>
+        <h2>Gift Box Analogy</h2>
+        <p>Instead of placing items into a gift box one by one, you pack the entire box at once by slotting all compartments simultaneously. Aggregates let you initialize entire buses with a single line.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Aggregate Vector Settings</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Aggregate_Demo is
+    port (
+        out_vec : out std_logic_vector(3 downto 0)
+    );
+end entity Aggregate_Demo;
+
+architecture behavioral of Aggregate_Demo is
+begin
+    -- Assign indices 3, 2, and default the rest
+    out_vec &lt;= (3 =&gt; '1', 2 =&gt; '1', others =&gt; '0');
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Aggregate is end entity tb_Aggregate;
+architecture sim of tb_Aggregate is
+    signal out_vec : std_logic_vector(3 downto 0);
+begin
+    uut: entity work.Aggregate_Demo port map(out_vec=&gt;out_vec);
+    process begin
+        wait for 10 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>(3 =&gt; '1', 2 =&gt; '1', others =&gt; '0')</strong> — Sets indices 3 and 2 high, and sets 1 and 0 low, outputting `"1100"`.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 51 ======================== -->
+      <div id="vhdl-debounce" class="tutorial-panel">
+        <h1>51. Debounce Circuit</h1>
+        <p>Mechanical button presses cause electrical contact bounce, creating false signals. Debouncers filter this noise.</p>
+        <h2>Bouncing Ball Analogy</h2>
+        <p>When you drop a ball, it bounces rapidly before staying still. When you press a button, electrical springs bounce in microseconds. A debounce circuit waits for the bouncing to stop before forwarding the button state.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Simple Debouncer</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Debounce is
+    port (
+        clk      : in  std_logic;
+        button   : in  std_logic;
+        filtered : out std_logic
+    );
+end entity Debounce;
+
+architecture behavioral of Debounce is
+    signal delay1, delay2, delay3 : std_logic := '0';
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            delay1 &lt;= button;
+            delay2 &lt;= delay1;
+            delay3 &lt;= delay2;
+        end if;
+    end process;
+    -- Only output high if button remains stable for 3 clock cycles
+    filtered &lt;= delay1 and delay2 and delay3;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Debounce is end entity tb_Debounce;
+architecture sim of tb_Debounce is
+    signal clk, button, filtered : std_logic := '0';
+begin
+    uut: entity work.Debounce port map(clk=&gt;clk, button=&gt;button, filtered=&gt;filtered);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        button &lt;= '0'; wait for 20 ns;
+        button &lt;= '1'; wait for 5 ns; -- Short bounce glitch
+        button &lt;= '0'; wait for 10 ns;
+        button &lt;= '1'; wait for 50 ns; -- Stable press
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>delay1, delay2, delay3</strong> — Shift registers shift the signal through clock stages.</li>
+          <li><strong>delay1 and delay2 and delay3</strong> — Requires the signal to remain high across all stages to trigger.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 52 ======================== -->
+      <div id="vhdl-lfsr-gen" class="tutorial-panel">
+        <h1>52. LFSR (Pseudo-Random Generator)</h1>
+        <p>A Linear Feedback Shift Register (LFSR) uses XOR taps on key bits to generate pseudo-random patterns.</p>
+        <h2>Card Shuffling Analogy</h2>
+        <p>Imagine shuffling cards. By taking the top card, sliding it in the middle, and placing the bottom card on top repeatedly, you create a complex shuffle. An LFSR shifts bits and feeds back the XOR logic to generate random-looking binary values.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: 4-bit LFSR Generator</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity LFSR_Gen is
+    port (
+        clk  : in  std_logic;
+        rst  : in  std_logic;
+        rand : out std_logic_vector(3 downto 0)
+    );
+end entity LFSR_Gen;
+
+architecture behavioral of LFSR_Gen is
+    signal reg : std_logic_vector(3 downto 0) := "1000";
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                reg &lt;= "1000";
+            else
+                -- Feedback tap using XOR
+                reg &lt;= reg(2 downto 0) &amp; (reg(3) xor reg(2));
+            end if;
+        end if;
+    end process;
+    rand &lt;= reg;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_LFSR_Gen is end entity tb_LFSR_Gen;
+architecture sim of tb_LFSR_Gen is
+    signal clk, rst : std_logic := '0';
+    signal rand : std_logic_vector(3 downto 0);
+begin
+    uut: entity work.LFSR_Gen port map(clk=&gt;clk, rst=&gt;rst, rand=&gt;rand);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        rst &lt;= '1'; wait for 15 ns;
+        rst &lt;= '0'; wait for 100 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>reg(3) xor reg(2)</strong> — Calculates the feedback bit from the upper bits.</li>
+          <li><strong>reg(2 downto 0) &amp; ...</strong> — Shifts current bits left and inserts feedback at the LSB.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 53 ======================== -->
+      <div id="vhdl-crc" class="tutorial-panel">
+        <h1>53. CRC (Error Detection)</h1>
+        <p>CRC (Cyclic Redundancy Check) uses binary division math to generate checksum codes to verify data integrity.</p>
+        <h2>Parcel Signature Analogy</h2>
+        <p>A postal seal is calculated based on contents. If the recipient scans the parcel and finds the seal values match, the contents are intact. CRC computes this seal using mathematical bit operations.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: CRC-4 Checksum</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity CRC_Calc is
+    port (
+        clk  : in  std_logic;
+        data : in  std_logic;
+        crc  : out std_logic_vector(3 downto 0)
+    );
+end entity CRC_Calc;
+
+architecture behavioral of CRC_Calc is
+    signal reg : std_logic_vector(3 downto 0) := "0000";
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            -- Polynomial implementation: x^4 + x + 1
+            reg(0) &lt;= data xor reg(3);
+            reg(1) &lt;= reg(0) xor (data xor reg(3));
+            reg(2) &lt;= reg(1);
+            reg(3) &lt;= reg(2);
+        end if;
+    end process;
+    crc &lt;= reg;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_CRC is end entity tb_CRC;
+architecture sim of tb_CRC is
+    signal clk, data : std_logic := '0';
+    signal crc : std_logic_vector(3 downto 0);
+begin
+    uut: entity work.CRC_Calc port map(clk=&gt;clk, data=&gt;data, crc=&gt;crc);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        data &lt;= '1'; wait for 10 ns;
+        data &lt;= '0'; wait for 30 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>data xor reg(3)</strong> — The feedback loop calculates remainder values from division math.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 54 ======================== -->
+      <div id="vhdl-bcd" class="tutorial-panel">
+        <h1>54. Binary to BCD Converter</h1>
+        <p>Binary-to-BCD converters translate raw binary numbers into Binary Coded Decimal digits for 7-segment displays.</p>
+        <h2>Calculator Displays Analogy</h2>
+        <p>A screen wants decimal digits. It does not understand `1010` (binary 10); it wants to display `1` on the tens digit, and `0` on the units digit. The converter divides the binary number into separate decimal groups.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Binary to BCD Logic</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity Bin_To_Bcd is
+    port (
+        bin : in  std_logic_vector(3 downto 0);
+        tens: out std_logic_vector(3 downto 0);
+        ones: out std_logic_vector(3 downto 0)
+    );
+end entity Bin_To_Bcd;
+
+architecture behavioral of Bin_To_Bcd is
+begin
+    process(bin)
+        variable val : integer;
+    begin
+        val  := to_integer(unsigned(bin));
+        tens &lt;= std_logic_vector(to_unsigned(val / 10, 4));
+        ones &lt;= std_logic_vector(to_unsigned(val rem 10, 4));
+    end process;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Bin_Bcd is end entity tb_Bin_Bcd;
+architecture sim of tb_Bin_Bcd is
+    signal bin : std_logic_vector(3 downto 0) := "0000";
+    signal tens, ones : std_logic_vector(3 downto 0);
+begin
+    uut: entity work.Bin_To_Bcd port map(bin=&gt;bin, tens=&gt;tens, ones=&gt;ones);
+    process begin
+        bin &lt;= "1011"; wait for 10 ns; -- value 11 -> tens=1, ones=1
+        bin &lt;= "1110"; wait for 10 ns; -- value 14 -> tens=1, ones=4
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>val / 10</strong> — Isolates the tens digit component.</li>
+          <li><strong>val rem 10</strong> — Isolates the remainder units digit component.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 55 ======================== -->
+      <div id="vhdl-freq-div" class="tutorial-panel">
+        <h1>55. Clock Prescaler / Frequency Divider</h1>
+        <p>A clock divider reduces a high-speed clock signal down to slower frequencies for timers.</p>
+        <h2>Heartbeat Analogy</h2>
+        <p>A clock is a rapid heartbeat. By counting every 10 beats and toggling a flag, you create a slow output beat. This lets a 100MHz clock drive a 1Hz clock for a digital wall clock.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Divide-by-4 Clock</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Clock_Divider is
+    port (
+        clk_in  : in  std_logic;
+        clk_out : inout std_logic := '0'
+    );
+end entity Clock_Divider;
+
+architecture behavioral of Clock_Divider is
+    signal count : integer range 0 to 1 := 0;
+begin
+    process(clk_in)
+    begin
+        if rising_edge(clk_in) then
+            if count = 1 then
+                clk_out &lt;= not clk_out;
+                count &lt;= 0;
+            else
+                count &lt;= count + 1;
+            end if;
+        end if;
+    end process;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Clock_Div is end entity tb_Clock_Div;
+architecture sim of tb_Clock_Div is
+    signal clk_in, clk_out : std_logic := '0';
+begin
+    uut: entity work.Clock_Divider port map (clk_in=&gt;clk_in, clk_out=&gt;clk_out);
+    clk_in &lt;= not clk_in after 5 ns;
+    process begin
+        wait for 100 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>count = 1</strong> — Every 2 clock cycles, the output toggles, reducing the output frequency to 1/4th.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 56 ======================== -->
+      <div id="vhdl-servo" class="tutorial-panel">
+        <h1>56. Servo Motor Controller</h1>
+        <p>Servo motors read pulse-width signals to orient themselves to target angles.</p>
+        <h2>Steering Wheel Analogy</h2>
+        <p>A steering wheel sets rotation angles. In electronics, pulses of different widths (e.g. 1ms to 2ms) act as the instruction. The servo reads this pulse duration to position the motor shaft.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: Servo Controller</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Servo_Ctrl is
+    port (
+        clk  : in  std_logic;
+        pos  : in  integer range 0 to 10;
+        pwm  : out std_logic
+    );
+end entity Servo_Ctrl;
+
+architecture behavioral of Servo_Ctrl is
+    signal counter : integer range 0 to 100 := 0;
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if counter &lt; 99 then
+                counter &lt;= counter + 1;
+            else
+                counter &lt;= 0;
+            end if;
+            -- Pulse width modulated output
+            if counter &lt; (pos + 5) then
+                pwm &lt;= '1';
+            else
+                pwm &lt;= '0';
+            end if;
+        end if;
+    end process;
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Servo is end entity tb_Servo;
+architecture sim of tb_Servo is
+    signal clk : std_logic := '0';
+    signal pos : integer range 0 to 10 := 5;
+    signal pwm : std_logic;
+begin
+    uut: entity work.Servo_Ctrl port map(clk=&gt;clk, pos=&gt;pos, pwm=&gt;pwm);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        pos &lt;= 2; wait for 1000 ns;
+        pos &lt;= 8; wait for 1000 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>pos + 5</strong> — Translates the position input into proportional pulse duration widths on the PWM line.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 57 ======================== -->
+      <div id="vhdl-vga" class="tutorial-panel">
+        <h1>57. VGA Controller</h1>
+        <p>VGA controllers coordinate pixel sweep timing across screens using sync signals.</p>
+        <h2>Drawing Grid Analogy</h2>
+        <p>An artist sweeps left-to-right drawing lines. After a row, they step down (horizontal sync) and return to the start. After the bottom row, they restart at the top-left (vertical sync). VGA timing operates exactly like this sweep pattern.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: VGA Sync Generator</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Vga_Sync is
+    port (
+        clk    : in  std_logic;
+        hsync  : out std_logic;
+        vsync  : out std_logic
+    );
+end entity Vga_Sync;
+
+architecture behavioral of Vga_Sync is
+    signal h_pos : integer range 0 to 799 := 0;
+    signal v_pos : integer range 0 to 524 := 0;
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if h_pos &lt; 799 then
+                h_pos &lt;= h_pos + 1;
+            else
+                h_pos &lt;= 0;
+                if v_pos &lt; 524 then
+                    v_pos &lt;= v_pos + 1;
+                else
+                    v_pos &lt;= 0;
+                end if;
+            end if;
+        end if;
+    end process;
+    -- Horizontal sync logic active low
+    hsync &lt;= '0' when (h_pos &gt;= 656 and h_pos &lt; 752) else '1';
+    -- Vertical sync logic active low
+    vsync &lt;= '0' when (v_pos &gt;= 490 and v_pos &lt; 492) else '1';
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_Vga is end entity tb_Vga;
+architecture sim of tb_Vga is
+    signal clk : std_logic := '0';
+    signal hsync, vsync : std_logic;
+begin
+    uut: entity work.Vga_Sync port map(clk=&gt;clk, hsync=&gt;hsync, vsync=&gt;vsync);
+    clk &lt;= not clk after 5 ns;
+    process begin
+        wait for 2000 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>h_pos / v_pos</strong> — Increments coordinate sweep values horizontally and vertically across the display dimensions.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 58 ======================== -->
+      <div id="vhdl-i2s" class="tutorial-panel">
+        <h1>58. I2S Audio Interface</h1>
+        <p>I2S (Inter-IC Sound) is a serial bus standard used to transmit stereo digital audio data.</p>
+        <h2>Reel Tape Analogy</h2>
+        <p>Audio is sent down a track. A left/right clock signal (WS) decides if the note plays out of the left speaker or the right speaker. The serial clock (SCK) synchronizes data bit streams.</p>
+        <div class="code-example-box">
+          <div class="example-header"><span>Example: I2S Transmitter</span>
+            <button class="try-btn" data-lang="vhdl" data-file="main.vhd"><span>Try it Yourself</span><span class="material-symbols-outlined">play_arrow</span></button>
+          </div>
+          <pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity I2s_Transmitter is
+    port (
+        sclk : in  std_logic;
+        data : in  std_logic_vector(7 downto 0);
+        ws   : in  std_logic;
+        sd   : out std_logic
+    );
+end entity I2s_Transmitter;
+
+architecture behavioral of I2s_Transmitter is
+    signal reg : std_logic_vector(7 downto 0) := (others =&gt; '0');
+    signal bit_idx : integer range 0 to 7 := 7;
+begin
+    process(sclk)
+    begin
+        if rising_edge(sclk) then
+            if bit_idx = 7 then
+                reg &lt;= data;
+                bit_idx &lt;= 0;
+            else
+                bit_idx &lt;= bit_idx + 1;
+            end if;
+        end if;
+    end process;
+    -- Output MSB bit
+    sd &lt;= reg(7 - bit_idx);
+end architecture behavioral;
+
+library ieee; use ieee.std_logic_1164.all;
+entity tb_I2s is end entity tb_I2s;
+architecture sim of tb_I2s is
+    signal sclk, ws, sd : std_logic := '0';
+    signal data : std_logic_vector(7 downto 0) := "10110011";
+begin
+    uut: entity work.I2s_Transmitter port map(sclk=&gt;sclk, data=&gt;data, ws=&gt;ws, sd=&gt;sd);
+    sclk &lt;= not sclk after 5 ns;
+    process begin
+        ws &lt;= '0'; wait for 80 ns;
+        ws &lt;= '1'; wait for 80 ns;
+        wait;
+    end process;
+end architecture sim;</code></pre>
+        </div>
+        <h2>How this Code Works (Simplified)</h2>
+        <ul>
+          <li><strong>reg(7 - bit_idx)</strong> — Outputs bit contents sequentially to the single output sound wire `sd`.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 59 ======================== -->
+      <div id="vhdl-ghdl" class="tutorial-panel">
+        <h1>59. GHDL Setup &amp; Usage</h1>
+        <p>GHDL is an open-source simulator for VHDL, compiling source code directly into machine instructions.</p>
+        <h2>Toolbox Analogy</h2>
+        <p>GHDL is a tool that analyzes VHDL blueprints. It acts like a software engine that dry-runs your wiring design inside standard PC memory without requiring actual physical chips.</p>
+        <h2>Typical Workflow</h2>
+        <ol>
+          <li>Analyze syntax: <code>ghdl -a design.vhd tb_design.vhd</code></li>
+          <li>Elaborate the hierarchy: <code>ghdl -e tb_design</code></li>
+          <li>Run simulation: <code>ghdl -r tb_design --vcd=wave.vcd</code></li>
+        </ol>
+      </div>
+
+      <!-- ======================== MODULE 60 ======================== -->
+      <div id="vhdl-gtkwave" class="tutorial-panel">
+        <h1>60. GTKWave Analysis</h1>
+        <p>GTKWave is a fully-featured waveform viewer used to visual digital signals captured in VCD files.</p>
+        <h2>Voltage Oscilloscope Analogy</h2>
+        <p>GTKWave acts like an oscilloscope screen that maps out signal values over a timeline. It lets developers visually inspect the states of internal chip wires throughout simulation runs.</p>
+        <h2>Debugging Steps</h2>
+        <ol>
+          <li>Open the waveform file: <code>gtkwave wave.vcd</code></li>
+          <li>Select signals from the sidebar hierarchy and drag them into the wave window.</li>
+          <li>Inspect timing alignments and identify logic level glitches.</li>
+        </ol>
+      </div>
+
+      <!-- ======================== MODULE 61 ======================== -->
+      <div id="vhdl-modelsim" class="tutorial-panel">
+        <h1>61. ModelSim Basics</h1>
+        <p>ModelSim is an industry-standard hardware simulation environment developed by Siemens.</p>
+        <h2>Simulator Analogy</h2>
+        <p>ModelSim is a professional flight simulator for testing aircraft. It is highly detailed and allows engineers to run tests and assert behaviors on safety-critical designs.</p>
+        <h2>Basic GUI Commands</h2>
+        <ul>
+          <li>Create library workspace: <code>vlib work</code></li>
+          <li>Compile files: <code>vcom design.vhd</code></li>
+          <li>Start simulator: <code>vsim work.tb_design</code></li>
+          <li>Add signals: <code>add wave *</code></li>
+          <li>Run timeline: <code>run 100ns</code></li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 62 ======================== -->
+      <div id="vhdl-vivadosim" class="tutorial-panel">
+        <h1>62. Vivado Simulator</h1>
+        <p>Vivado Simulator is the built-in simulation package in AMD/Xilinx Vivado software.</p>
+        <h2>FPGA Sandbox Analogy</h2>
+        <p>Xilinx Vivado is an all-in-one workbench. The integrated simulator is the testing room where you test components before sending them to the assembly factory floor.</p>
+        <h2>Key Benefits</h2>
+        <ul>
+          <li>Integrated directly with IP generation libraries.</li>
+          <li>Seamless timing simulation matching real Xilinx chip delays.</li>
+          <li>Supports mixed-language designs (VHDL + Verilog).</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 63 ======================== -->
+      <div id="vhdl-vivadosetup" class="tutorial-panel">
+        <h1>63. Vivado Project Setup A-Z</h1>
+        <p>Creating a complete FPGA hardware project inside AMD/Xilinx Vivado.</p>
+        <h2>Workflow Steps</h2>
+        <ol>
+          <li>Create a new RTL Project and select the target FPGA part number (e.g. Artix-7).</li>
+          <li>Add VHDL source files and constraints.</li>
+          <li>Run Synthesis: translates VHDL code to logic gates.</li>
+          <li>Run Implementation: maps gates to actual LUTs and routes copper connections.</li>
+        </ol>
+      </div>
+
+      <!-- ======================== MODULE 64 ======================== -->
+      <div id="vhdl-quartus" class="tutorial-panel">
+        <h1>64. Quartus Prime Setup</h1>
+        <p>Creating a hardware compilation project inside Intel/Altera Quartus Prime.</p>
+        <h2>Workflow Steps</h2>
+        <ol>
+          <li>Initialize project using the New Project Wizard.</li>
+          <li>Assign target FPGA device profiles (e.g. Cyclone IV).</li>
+          <li>Compile Design (Analysis &amp; Synthesis, Fitter Place &amp; Route).</li>
+          <li>Generate programming files for board upload.</li>
+        </ol>
+      </div>
+
+      <!-- ======================== MODULE 65 ======================== -->
+      <div id="vhdl-constraints" class="tutorial-panel">
+        <h1>65. Constraint Files (XDC)</h1>
+        <p>Constraint files map your VHDL entity ports to physical pins on the FPGA chip package.</p>
+        <h2>Map Analogy</h2>
+        <p>VHDL defines ports as logical names (like `clk`). The constraint file acts as the roadmap mapping `clk` to physical pin location `E3` on the board.</p>
+        <h2>Example XDC Constraints</h2>
+        <pre><code># Map clock signal to pin E3
+set_property -dict { PACKAGE_PIN E3  IOSTANDARD LVCMOS33 } [get_ports { clk }];
+# Map output led to pin H17
+set_property -dict { PACKAGE_PIN H17 IOSTANDARD LVCMOS33 } [get_ports { led }];</code></pre>
+      </div>
+
+      <!-- ======================== MODULE 66 ======================== -->
+      <div id="vhdl-bitstream" class="tutorial-panel">
+        <h1>66. Bitstream Upload</h1>
+        <p>Generating the programming file and uploading it to physical FPGA boards.</p>
+        <h2>Firmware Loading Analogy</h2>
+        <p>Creating a bitstream is exporting the final blueprint layout into a binary machine format. Uploading is flashing this binary onto the chip memory, activating physical hardware switches.</p>
+        <h2>Steps</h2>
+        <ol>
+          <li>Run "Generate Bitstream" in your FPGA tool suite.</li>
+          <li>Open Hardware Manager and connect the FPGA via JTAG USB.</li>
+          <li>Select the bitstream file (e.g. `.bit` or `.sof`) and click Program.</li>
+        </ol>
+      </div>
+
+      <!-- ======================== MODULE 67 ======================== -->
+      <div id="vhdl-logicanalyzer" class="tutorial-panel">
+        <h1>67. Logic Analyzer Integration</h1>
+        <p>Integrated Logic Analyzers (ILA) probe physical registers inside the FPGA chip during operation.</p>
+        <h2>Diagnostics Analogy</h2>
+        <p>An ILA acts like medical telemetry gear attached to a patient. It records and plots internal state changes inside the chip and streams data back to your PC via USB JTAG.</p>
+        <h2>Setup Steps</h2>
+        <ol>
+          <li>Instantiate the ILA core inside your top design module or insert debug signals in synthesis.</li>
+          <li>Flash the debug-enabled bitstream.</li>
+          <li>Run trigger queries to capture real hardware waveforms in Vivado.</li>
+        </ol>
+      </div>
+
+      <!-- ======================== MODULE 68 ======================== -->
+      <div id="vhdl-axi4" class="tutorial-panel">
+        <h1>68. AXI4 Bus Protocol</h1>
+        <p>AXI4 is a high-speed bus standard used in System-on-Chip (SoC) architectures to link processors to memory controllers.</p>
+        <h2>Express Highway Analogy</h2>
+        <p>AXI4 acts like a high-speed express highway with dedicated lanes for read requests, write requests, addresses, and response receipts. This allows high bandwidth parallel data streams.</p>
+        <h2>Interfaces</h2>
+        <ul>
+          <li><strong>AXI4-Lite</strong> — Simple single-transaction register access.</li>
+          <li><strong>AXI4-Stream</strong> — High-speed streaming data interface without addresses.</li>
+          <li><strong>AXI4-Full</strong> — Memory-mapped burst transfers.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 69 ======================== -->
+      <div id="vhdl-wishbone" class="tutorial-panel">
+        <h1>69. Wishbone Bus Interface</h1>
+        <p>Wishbone is a lightweight, open-source hardware bus interconnect protocol.</p>
+        <h2>Secondary Road Analogy</h2>
+        <p>While AXI4 is an express highway, Wishbone is a local standard road. It is simple to build, lightweight on hardware resources, and is popular in open-source projects.</p>
+      </div>
+
+      <!-- ======================== MODULE 70 ======================== -->
+      <div id="vhdl-dma" class="tutorial-panel">
+        <h1>70. DMA Controller Design</h1>
+        <p>Direct Memory Access (DMA) controllers move data blocks between memory banks without involving the CPU.</p>
+        <h2>Courier Analogy</h2>
+        <p>Instead of a manager (CPU) carrying boxes from the warehouse to the shipping dock, they hire a courier (DMA). The manager gives instructions and resumes managing, while the courier transfers data directly.</p>
+      </div>
+
+      <!-- ======================== MODULE 71 ======================== -->
+      <div id="vhdl-interrupt" class="tutorial-panel">
+        <h1>71. Interrupt Controller</h1>
+        <p>Interrupt controllers receive asynchronous hardware signals and alert the CPU to handle them.</p>
+        <h2>Doorbell Analogy</h2>
+        <p>Instead of continuously checking the front door (polling), you install a doorbell (Interrupt). The bell rings, you pause what you are doing (interrupt handler), answer the door, and resume work.</p>
+      </div>
+
+      <!-- ======================== MODULE 72 ======================== -->
+      <div id="vhdl-cpu" class="tutorial-panel">
+        <h1>72. Simple 8-Bit CPU Design</h1>
+        <p>Building a basic microcomputer CPU (ALU, registers, instruction decoder) in VHDL.</p>
+        <h2>Basic Architecture Blocks</h2>
+        <ul>
+          <li><strong>Program Counter (PC)</strong> — Holds the address of the current instruction.</li>
+          <li><strong>Instruction Register</strong> — Stores the retrieved binary command.</li>
+          <li><strong>ALU (Arithmetic Logic Unit)</strong> — Performs arithmetic (addition, bitwise AND/OR).</li>
+          <li><strong>Register File</strong> — High-speed temporary memory locations.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 73 ======================== -->
+      <div id="vhdl-interview" class="tutorial-panel">
+        <h1>73. VHDL Interview Questions</h1>
+        <p>Top VHDL and digital design technical interview questions and answers.</p>
+        <h2>Key Questions</h2>
+        <ul>
+          <li><strong>Q: What is the difference between signals and variables?</strong>
+            <br>A: Signals represent physical wires updated at the end of delta cycles. Variables are local helpers updated instantly.
+          </li>
+          <li><strong>Q: What is metastability and how do you prevent it?</strong>
+            <br>A: An unstable state on a flip-flop output caused by setup/hold violations. Prevented using multi-flop synchronizers.
+          </li>
+          <li><strong>Q: What causes an unintended latch in synthesis?</strong>
+            <br>A: Incomplete conditional coverage inside sequential blocks (e.g. omitting the `else` branch in an `if` statement).
+          </li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 74 ======================== -->
+      <div id="vhdl-exam" class="tutorial-panel">
+        <h1>74. Coding Exam Practice</h1>
+        <p>Practice writing VHDL logic blocks commonly asked in examinations.</p>
+        <h2>Exercise: Clock-Enabled Register</h2>
+        <pre><code>-- Try writing a register that only updates on a rising clock edge when enable is high:
+if rising_edge(clk) then
+    if en = '1' then
+        q &lt;= d;
+    end if;
+end if;</code></pre>
+      </div>
+
+      <!-- ======================== MODULE 75 ======================== -->
+      <div id="vhdl-bugs" class="tutorial-panel">
+        <h1>75. Common VHDL Bugs &amp; Fixes</h1>
+        <p>Troubleshoot common design bugs and compiler errors.</p>
+        <h2>Common Mistakes</h2>
+        <ul>
+          <li><strong>Bug: Unintentional Latches</strong> — Fix: Ensure all branches are covered with `else` or default assignments.</li>
+          <li><strong>Bug: Multi-driver conflicts</strong> — Fix: Ensure a signal is only assigned inside a single process block.</li>
+          <li><strong>Bug: Type mismatches</strong> — Fix: Always cast arrays to numeric types (`unsigned`/`signed`) when performing arithmetic.</li>
+        </ul>
+      </div>
+
+      <!-- ======================== MODULE 76 ======================== -->
+      <div id="vhdl-comparison" class="tutorial-panel">
+        <h1>76. VHDL vs Verilog</h1>
+        <p>Comparing the two major hardware description languages in industry.</p>
+        <h2>Key Differences</h2>
+        <ul>
+          <li><strong>VHDL:</strong> Strongly typed, highly structured, strict syntax compiler checks. Popular in aerospace, defense, and European projects.</li>
+          <li><strong>Verilog:</strong> Weakly typed, flexible, C-like syntax. Fast to write but harder to catch type mismatch bugs at compile time.</li>
         </ul>
       </div>
 
