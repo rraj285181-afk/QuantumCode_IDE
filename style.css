@@ -2752,9 +2752,14 @@ kbd {
 .terminal-output-ad-panel {
   width: 250px;
   flex-shrink: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
+}
+
+.terminal-output-ad-panel.ad-loaded,
+.terminal-output-ad-panel:has(ins.adsbygoogle[data-ad-status="filled"]) {
+  display: flex !important;
 }
 
 .terminal-output-column .terminal-log-screen {
