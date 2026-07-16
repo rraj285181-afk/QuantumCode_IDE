@@ -1961,6 +1961,14 @@ kbd {
 .tag-csharp { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
 .card-csharp:hover .card-cta-btn { color: #a855f7; }
 
+.card-vhdl:hover {
+  border-color: #a855f7;
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.12);
+}
+.vhdl-icon { color: #a855f7; }
+.tag-vhdl { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+.card-vhdl:hover .card-cta-btn { color: #a855f7; }
+
 /* Features Showcase Section */
 .features-showcase {
   background: #0b0e1a;

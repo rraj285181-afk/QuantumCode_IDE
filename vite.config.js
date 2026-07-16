@@ -9,7 +9,8 @@ export default defineConfig({
         compiler: resolve(__dirname, 'compiler.html'),
         python: resolve(__dirname, 'python-tutorial.html'),
         cpp: resolve(__dirname, 'cpp-tutorial.html'),
-        java: resolve(__dirname, 'java-tutorial.html')
+        java: resolve(__dirname, 'java-tutorial.html'),
+        vhdl: resolve(__dirname, 'vhdl-tutorial.html')
       }
     }
   }
