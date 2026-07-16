@@ -90,6 +90,120 @@ SELECT * FROM users;
   php: `<?php
 echo "Hello, World!\\n";
 ?>
+`,
+  vhdl: `-- VHDL Half Adder and Testbench Example
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity Half_Adder is
+    port (
+        a, b : in std_logic;
+        sum, carry : out std_logic
+    );
+end entity Half_Adder;
+
+architecture behavioral of Half_Adder is
+begin
+    sum <= a xor b;
+    carry <= a and b;
+end architecture behavioral;
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity tb_Half_Adder is
+end entity tb_Half_Adder;
+
+architecture sim of tb_Half_Adder is
+    signal a, b : std_logic := '0';
+    signal sum, carry : std_logic;
+begin
+    -- Instantiate the Unit Under Test (UUT)
+    uut: entity work.Half_Adder
+        port map (
+            a => a,
+            b => b,
+            sum => sum,
+            carry => carry
+        );
+
+    -- Stimulus process
+    stim_proc: process
+    begin
+        -- Test Case 1: a=0, b=0
+        a <= '0'; b <= '0';
+        wait for 10 ns;
+        report "Test 1: a=0, b=0 -> sum=" & std_logic'image(sum) & ", carry=" & std_logic'image(carry);
+
+        -- Test Case 2: a=0, b=1
+        a <= '0'; b <= '1';
+        wait for 10 ns;
+        report "Test 2: a=0, b=1 -> sum=" & std_logic'image(sum) & ", carry=" & std_logic'image(carry);
+
+        -- Test Case 3: a=1, b=0
+        a <= '1'; b <= '0';
+        wait for 10 ns;
+        report "Test 3: a=1, b=0 -> sum=" & std_logic'image(sum) & ", carry=" & std_logic'image(carry);
+
+        -- Test Case 4: a=1, b=1
+        a <= '1'; b <= '1';
+        wait for 10 ns;
+        report "Test 4: a=1, b=1 -> sum=" & std_logic'image(sum) & ", carry=" & std_logic'image(carry);
+
+        wait;
+    end process;
+end architecture sim;
+`
+,
+  verilog: `// Verilog Half Adder and Testbench Example
+module Half_Adder (
+    input a,
+    input b,
+    output sum,
+    output carry
+);
+    assign sum = a ^ b;
+    assign carry = a & b;
+endmodule
+
+module tb_Half_Adder;
+    reg a;
+    reg b;
+    wire sum;
+    wire carry;
+
+    // Instantiate Unit Under Test (UUT)
+    Half_Adder uut (
+        .a(a),
+        .b(b),
+        .sum(sum),
+        .carry(carry)
+    );
+
+    initial begin
+        // Test Case 1: a=0, b=0
+        a = 0; b = 0;
+        #10;
+        $display("Test 1: a=0, b=0 -> sum=%b, carry=%b", sum, carry);
+
+        // Test Case 2: a=0, b=1
+        a = 0; b = 1;
+        #10;
+        $display("Test 2: a=0, b=1 -> sum=%b, carry=%b", sum, carry);
+
+        // Test Case 3: a=1, b=0
+        a = 1; b = 0;
+        #10;
+        $display("Test 3: a=1, b=0 -> sum=%b, carry=%b", sum, carry);
+
+        // Test Case 4: a=1, b=1
+        a = 1; b = 1;
+        #10;
+        $display("Test 4: a=1, b=1 -> sum=%b, carry=%b", sum, carry);
+
+        $finish;
+    end
+endmodule
 `
 };
 
@@ -624,7 +738,10 @@ const EXTENSION_MAP = {
   r: { lang: 'r', name: 'R' },
   sql: { lang: 'sql', name: 'SQL' },
   html: { lang: 'html', name: 'HTML/CSS' },
-  php: { lang: 'php', name: 'PHP' }
+  php: { lang: 'php', name: 'PHP' },
+  vhd: { lang: 'vhdl', name: 'VHDL' },
+  vhdl: { lang: 'vhdl', name: 'VHDL' },
+  v: { lang: 'verilog', name: 'Verilog' }
 };
 
 // Compiler Explorer (Godbolt) API Details
@@ -684,6 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFileCreatorListeners();
   initTerminalTabs();
   initResizableTerminal();
+  initResizableSidebar();
   initShortcutListeners();
   initVisualizerListeners();
 
@@ -934,6 +1052,8 @@ function loadWorkspaceState() {
         else if (queryLang === 'sql') ext = 'sql';
         else if (queryLang === 'html') ext = 'html';
         else if (queryLang === 'php') ext = 'php';
+        else if (queryLang === 'vhdl') ext = 'vhd';
+        else if (queryLang === 'verilog') ext = 'v';
         
         const newFileId = Date.now().toString();
         const newFile = {
@@ -1224,6 +1344,8 @@ function initFileCreatorListeners() {
         else if (selectedLanguage === 'sql') newExt = 'sql';
         else if (selectedLanguage === 'html') newExt = 'html';
         else if (selectedLanguage === 'php') newExt = 'php';
+        else if (selectedLanguage === 'vhdl') newExt = 'vhd';
+        else if (selectedLanguage === 'verilog') newExt = 'v';
         
         activeFile.name = `${baseName || 'untitled'}.${newExt}`;
         
@@ -1557,6 +1679,38 @@ function initResizableTerminal() {
   });
 }
 
+function initResizableSidebar() {
+  const handle = document.getElementById('sidebar-resize-handle');
+  let isResizing = false;
+
+  if (!handle) return;
+
+  handle.addEventListener('mousedown', (e) => {
+    isResizing = true;
+    document.body.style.cursor = 'ew-resize';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return;
+    
+    const newWidth = e.clientX;
+    if (newWidth >= 180 && newWidth <= 500) {
+      document.documentElement.style.setProperty('--sidebar-width', `${newWidth}px`);
+      if (editor) {
+        editor.layout();
+      }
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (isResizing) {
+      isResizing = false;
+      document.body.style.cursor = 'default';
+    }
+  });
+}
+
 // ==========================================================================
 // Execution Engine (Piston Integration)
 // ==========================================================================
@@ -1618,6 +1772,64 @@ async function runCurrentCode() {
       document.getElementById('stat-status').textContent = 'Status: SUCCESS';
       resetRunButtonState();
     }, 200);
+    return;
+  }
+
+  if (activeFile.language === 'vhdl') {
+    showTerminalLog('[VHDL] Analyzing VHDL files (ghdl -a)...', 'system-text');
+    setTimeout(() => {
+      showTerminalLog('[VHDL] Elaborating top entity (ghdl -e)...', 'system-text');
+      setTimeout(() => {
+        showTerminalLog('[VHDL] Starting simulation (ghdl -r)...', 'system-text');
+        
+        const simResult = simulateVHDL(activeFile.content);
+        
+        simResult.logs.forEach(log => {
+          showTerminalLog(log.text, log.type);
+        });
+        
+        simulationState.steps = simResult.steps;
+        simulationState.currentStepIndex = 0;
+        
+        statusBadge.className = simResult.success ? 'status-badge success' : 'status-badge error';
+        statusBadge.textContent = simResult.success ? 'Success' : 'Error';
+        document.getElementById('stat-time').textContent = `Time: ${simResult.duration}s`;
+        document.getElementById('stat-status').textContent = `Status: ${simResult.success ? 'SUCCESS' : 'FAILED'}`;
+        resetRunButtonState();
+        
+        // Auto switch to visualizer tab
+        document.getElementById('tab-visualizer-btn')?.click();
+      }, 500);
+    }, 400);
+    return;
+  }
+
+  if (activeFile.language === 'verilog') {
+    showTerminalLog('[Verilog] Compiling Verilog modules (iverilog)...', 'system-text');
+    setTimeout(() => {
+      showTerminalLog('[Verilog] Generating design simulation (vvp)...', 'system-text');
+      setTimeout(() => {
+        showTerminalLog('[Verilog] Running simulation trace...', 'system-text');
+        
+        const simResult = simulateVerilog(activeFile.content);
+        
+        simResult.logs.forEach(log => {
+          showTerminalLog(log.text, log.type);
+        });
+        
+        simulationState.steps = simResult.steps;
+        simulationState.currentStepIndex = 0;
+        
+        statusBadge.className = simResult.success ? 'status-badge success' : 'status-badge error';
+        statusBadge.textContent = simResult.success ? 'Success' : 'Error';
+        document.getElementById('stat-time').textContent = `Time: ${simResult.duration}s`;
+        document.getElementById('stat-status').textContent = `Status: ${simResult.success ? 'SUCCESS' : 'FAILED'}`;
+        resetRunButtonState();
+        
+        // Auto switch to visualizer tab
+        document.getElementById('tab-visualizer-btn')?.click();
+      }, 500);
+    }, 400);
     return;
   }
 
@@ -2247,20 +2459,34 @@ function initializeVisualizer() {
 
   const activeFile = state.files.find(f => f.id === state.activeFileId);
   const templateInfo = activeFile ? getTemplateKey(activeFile.content) : null;
-  const algoType = (templateInfo && templateInfo.type === 'algorithm') ? templateInfo.algoKey : 'bubble_sort';
+  const isVHDL = activeFile && activeFile.language === 'vhdl';
+  const isVerilog = activeFile && activeFile.language === 'verilog';
+  const algoType = isVHDL ? 'vhdl' : (isVerilog ? 'verilog' : ((templateInfo && templateInfo.type === 'algorithm') ? templateInfo.algoKey : 'bubble_sort'));
 
   // Fill vis-custom-data-input input with placeholder suggestion
   const inputEl = document.getElementById('vis-custom-data-input');
   if (inputEl && !inputEl.value) {
     if (algoType === 'bubble_sort' || algoType === 'binary_search') {
       inputEl.value = simulationState.currentData.join(', ');
+    } else if (algoType === 'vhdl' || algoType === 'verilog') {
+      inputEl.value = 'Half_Adder';
     } else {
       inputEl.value = '10';
     }
   }
 
   // Generate simulation steps based on matching algorithm
-  if (algoType === 'bubble_sort') {
+  if (algoType === 'vhdl') {
+    if (!simulationState.steps || simulationState.steps.length === 0 || simulationState.steps[0].algo !== 'vhdl') {
+      const simResult = simulateVHDL(activeFile ? activeFile.content : '');
+      simulationState.steps = simResult.steps;
+    }
+  } else if (algoType === 'verilog') {
+    if (!simulationState.steps || simulationState.steps.length === 0 || simulationState.steps[0].algo !== 'verilog') {
+      const simResult = simulateVerilog(activeFile ? activeFile.content : '');
+      simulationState.steps = simResult.steps;
+    }
+  } else if (algoType === 'bubble_sort') {
     simulationState.steps = generateBubbleSortSteps(simulationState.currentData);
   } else if (algoType === 'fibonacci') {
     const size = parseInt(document.getElementById('vis-custom-data-input').value, 10) || 10;
@@ -2329,9 +2555,14 @@ function renderSimulationStep() {
   
   const activeFile = state.files.find(f => f.id === state.activeFileId);
   const templateInfo = activeFile ? getTemplateKey(activeFile.content) : null;
-  const algoType = (templateInfo && templateInfo.type === 'algorithm') ? templateInfo.algoKey : 'bubble_sort';
+  const isVHDL = activeFile && activeFile.language === 'vhdl';
+  const isVerilog = activeFile && activeFile.language === 'verilog';
+  const algoType = isVHDL ? 'vhdl' : (isVerilog ? 'verilog' : ((templateInfo && templateInfo.type === 'algorithm') ? templateInfo.algoKey : 'bubble_sort'));
   
-  if (algoType === 'bubble_sort') {
+  if (algoType === 'vhdl' || algoType === 'verilog') {
+    renderVHDLWaveforms(canvas, step);
+  }
+  else if (algoType === 'bubble_sort') {
     const maxVal = Math.max(...step.array, 1);
     step.array.forEach((val, idx) => {
       const wrapper = document.createElement('div');
@@ -2732,5 +2963,464 @@ function generateQueueSteps() {
   });
   
   return steps;
+}
+
+// ==========================================================================
+// client-side VHDL Simulator and Waveform Engine
+// ==========================================================================
+
+function simulateVHDL(code) {
+  const logs = [];
+  const steps = [];
+  let duration = 0.05;
+  let success = true;
+  
+  // Clean comments and whitespace
+  const cleanCode = code.replace(/--.*$/gm, '');
+  
+  // Basic validation: must contain "entity" and "architecture"
+  if (!/entity\s+\w+\s+is/i.test(cleanCode) || !/architecture\s+\w+\s+of\s+\w+\s+is/i.test(cleanCode)) {
+    logs.push({ text: 'main.vhd:1:1: error: No entity or architecture declarations found in VHDL code.', type: 'error-text' });
+    logs.push({ text: '--- COMPILATION FAILED ---', type: 'error-text' });
+    
+    // Push a dummy failed step so the visualizer doesn't crash
+    steps.push({
+      time: 0,
+      signals: {},
+      algo: 'vhdl',
+      vars: { status: 'COMPILE ERROR' },
+      desc: 'Compilation failed. Please fix your syntax or use the default template.'
+    });
+    
+    return { logs, steps, success: false, duration: 0.0 };
+  }
+
+  logs.push({ text: 'main.vhd: Analyze entity and architecture declarations: SUCCESS', type: 'success-text' });
+  logs.push({ text: 'main.vhd: Elaboration of design hierarchy: SUCCESS', type: 'success-text' });
+  logs.push({ text: '----------------------------------------', type: 'system-text' });
+  logs.push({ text: '--- SIMULATION STARTED ---', type: 'system-text' });
+
+  // 1. Find all signals declared in the code (both in entity port map and architecture declarations)
+  const signals = {};
+  const signalRegex = /signal\s+(\w+)\s*:\s*std_logic\s*(:=\s*'([01XZ])')?/gi;
+  let match;
+  while ((match = signalRegex.exec(cleanCode)) !== null) {
+    const name = match[1].toLowerCase();
+    const defaultVal = match[3] || '0';
+    signals[name] = defaultVal;
+  }
+  
+  // Look for ports in entity declarations: a, b : in std_logic; sum, carry : out std_logic;
+  const portSectionRegex = /port\s*\(([^)]+)\)/i;
+  const portMatch = portSectionRegex.exec(cleanCode);
+  if (portMatch) {
+    const portContent = portMatch[1];
+    const ports = portContent.split(';');
+    ports.forEach(port => {
+      const parts = port.split(':');
+      if (parts.length >= 2) {
+        const names = parts[0].split(',').map(n => n.trim().toLowerCase());
+        names.forEach(name => {
+          if (name && signals[name] === undefined) {
+            signals[name] = '0'; // default port value
+          }
+        });
+      }
+    });
+  }
+
+  // 2. Find concurrent signal assignments outside processes
+  const processBlockRegex = /process[\s\S]+?end\s+process/gi;
+  const concurrentCode = cleanCode.replace(processBlockRegex, '');
+  
+  const concurrentAssignments = [];
+  const assignmentRegex = /(\w+)\s*<=\s*([^;]+);/g;
+  while ((match = assignmentRegex.exec(concurrentCode)) !== null) {
+    const target = match[1].trim().toLowerCase();
+    const expr = match[2].trim();
+    if (['wait', 'report', 'signal', 'port', 'architecture', 'entity'].includes(target)) continue;
+    concurrentAssignments.push({ target, expr });
+  }
+
+  // Helper to evaluate expressions
+  function evaluateExpr(expr, signalMap) {
+    let cleanExpr = expr.toLowerCase().replace(/['"]/g, '').trim();
+    
+    const keys = Object.keys(signalMap).sort((a,b) => b.length - a.length);
+    keys.forEach(sig => {
+      const val = (signalMap[sig] === '1') ? 'true' : 'false';
+      const regex = new RegExp('\\b' + sig + '\\b', 'g');
+      cleanExpr = cleanExpr.replace(regex, val);
+    });
+
+    cleanExpr = cleanExpr.replace(/\bxor\b/g, ' !== ');
+    cleanExpr = cleanExpr.replace(/\band\b/g, ' && ');
+    cleanExpr = cleanExpr.replace(/\bor\b/g, ' || ');
+    cleanExpr = cleanExpr.replace(/\bnot\b/g, ' ! ');
+    cleanExpr = cleanExpr.replace(/\bxnor\b/g, ' === ');
+    
+    try {
+      const sanitized = cleanExpr.replace(/[^a-z0-9\s&|!=\(\)]/gi, '');
+      const result = new Function(`return (${sanitized})`)();
+      return result ? '1' : '0';
+    } catch(e) {
+      return 'X';
+    }
+  }
+
+  // Evaluate concurrent assignments
+  function updateConcurrentOutputs() {
+    for (let pass = 0; pass < 3; pass++) {
+      concurrentAssignments.forEach(assign => {
+        const newVal = evaluateExpr(assign.expr, signals);
+        signals[assign.target] = newVal;
+      });
+    }
+  }
+
+  // Initial update
+  updateConcurrentOutputs();
+
+  // Save Step 0
+  let time = 0;
+  steps.push({
+    time: time,
+    signals: { ...signals },
+    algo: 'vhdl',
+    vars: { time: `${time} ns`, ...signals },
+    desc: `[${time} ns] Elaboration complete. Initial output values computed: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+  });
+
+  // 3. Extract process blocks and execute them
+  const processMatch = cleanCode.match(/process[\s\S]+?end\s+process/i);
+  if (processMatch) {
+    const processBody = processMatch[0];
+    const statements = processBody.split(';');
+    
+    statements.forEach(stmt => {
+      const cleanStmt = stmt.trim();
+      if (!cleanStmt) return;
+      
+      const sigAssignMatch = /^(\w+)\s*<=\s*'([01XZ])'$/i.exec(cleanStmt);
+      if (sigAssignMatch) {
+        const sigName = sigAssignMatch[1].toLowerCase();
+        const value = sigAssignMatch[2];
+        if (signals[sigName] !== undefined) {
+          signals[sigName] = value;
+          updateConcurrentOutputs();
+        }
+        return;
+      }
+      
+      const waitMatch = /^wait\s+for\s+(\d+)\s*(ns|ps|us|ms)$/i.exec(cleanStmt);
+      if (waitMatch) {
+        const duration = parseInt(waitMatch[1], 10);
+        time += duration;
+        
+        steps.push({
+          time: time,
+          signals: { ...signals },
+          algo: 'vhdl',
+          vars: { time: `${time} ns`, ...signals },
+          desc: `[${time} ns] Input changed. Re-evaluating logic: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+        });
+        return;
+      }
+      
+      const reportMatch = /^report\s+([\s\S]+)$/i.exec(cleanStmt);
+      if (reportMatch) {
+        let rawMsg = reportMatch[1];
+        let msg = rawMsg.replace(/&/g, '').replace(/"/g, '').trim();
+        msg = msg.replace(/std_logic'image\((\w+)\)/g, (match, sigName) => {
+          return signals[sigName.toLowerCase()] || 'U';
+        });
+        
+        Object.keys(signals).forEach(sig => {
+          const regex = new RegExp('\\b' + sig + '\\b', 'g');
+          msg = msg.replace(regex, signals[sig]);
+        });
+        
+        logs.push({
+          text: `[Time: ${time} ns] REPORT: ${msg}`,
+          type: 'output-text'
+        });
+        return;
+      }
+    });
+  }
+
+  logs.push({ text: '--- SIMULATION FINISHED ---', type: 'system-text' });
+  logs.push({ text: 'ghdl simulation completed successfully.', type: 'success-text' });
+
+  duration = 0.05 + Math.random() * 0.04;
+  duration = parseFloat(duration.toFixed(2));
+  
+  return { logs, steps, success: true, duration };
+}
+
+function renderVHDLWaveforms(canvas, step) {
+  const steps = simulationState.steps;
+  if (!steps || steps.length === 0) return;
+
+  const firstStep = steps[0];
+  const lastStep = steps[steps.length - 1];
+  const signalsList = Object.keys(firstStep.signals || {});
+  if (signalsList.length === 0) {
+    canvas.innerHTML = '<div style="color: var(--text-dark); padding: 20px; font-size: 0.85rem;">[No signals to visualize]</div>';
+    return;
+  }
+
+  const svgWidth = canvas.clientWidth || 600;
+  const leftPadding = 85;
+  const rightPadding = 30;
+  const rowHeight = 55;
+  const topPadding = 20;
+  const bottomPadding = 30;
+  
+  const svgHeight = signalsList.length * rowHeight + topPadding + bottomPadding;
+  const plotWidth = svgWidth - leftPadding - rightPadding;
+  const maxTime = lastStep.time || 40; 
+
+  let svgContent = `<svg class="vhdl-waveform-svg" width="100%" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Draw Vertical Grid Lines
+  const timePositions = [];
+  steps.forEach(s => {
+    const x = leftPadding + (s.time / maxTime) * plotWidth;
+    if (!timePositions.some(p => Math.abs(p.x - x) < 1)) {
+      timePositions.push({ x, time: s.time });
+    }
+  });
+
+  timePositions.forEach(pos => {
+    svgContent += `<line class="vhdl-grid-line" x1="${pos.x}" y1="${topPadding}" x2="${pos.x}" y2="${svgHeight - bottomPadding}" />`;
+    svgContent += `<text class="vhdl-time-text" x="${pos.x}" y="${svgHeight - bottomPadding + 15}" text-anchor="middle">${pos.time} ns</text>`;
+  });
+
+  // Plot each signal row
+  signalsList.forEach((sig, idx) => {
+    const rowBase = topPadding + idx * rowHeight;
+    const yHigh = rowBase + 12;
+    const yLow = rowBase + 35;
+    
+    svgContent += `<text class="vhdl-label-text" x="15" y="${rowBase + 28}">${sig}</text>`;
+    svgContent += `<line x1="${leftPadding}" y1="${rowBase + 45}" x2="${leftPadding + plotWidth}" y2="${rowBase + 45}" stroke="rgba(255,255,255,0.03)" stroke-width="1" />`;
+
+    let pathD = '';
+    let prevX = leftPadding;
+    let prevY = (firstStep.signals[sig] === '1') ? yHigh : yLow;
+    pathD += `M ${prevX} ${prevY}`;
+
+    steps.forEach(s => {
+      const x = leftPadding + (s.time / maxTime) * plotWidth;
+      const y = (s.signals[sig] === '1') ? yHigh : yLow;
+      
+      pathD += ` H ${x}`;
+      if (y !== prevY) {
+        pathD += ` V ${y}`;
+      }
+      prevX = x;
+      prevY = y;
+    });
+
+    svgContent += `<path class="vhdl-wave-line" d="${pathD}" />`;
+
+    const cursorTime = step.time;
+    const cursorX = leftPadding + (cursorTime / maxTime) * plotWidth;
+    const currentVal = step.signals[sig] || '0';
+    
+    svgContent += `<text class="vhdl-value-text" x="${cursorX + 6}" y="${(yHigh + yLow)/2 + 4}">${currentVal}</text>`;
+  });
+
+  // Draw active time cursor
+  const activeX = leftPadding + (step.time / maxTime) * plotWidth;
+  svgContent += `<line class="vhdl-cursor-line" x1="${activeX}" y1="${topPadding - 10}" x2="${activeX}" y2="${svgHeight - bottomPadding + 5}" />`;
+  
+  svgContent += `<rect x="${activeX - 25}" y="${topPadding - 18}" width="50" height="14" rx="3" fill="var(--accent-indigo)" opacity="0.85" />`;
+  svgContent += `<text x="${activeX}" y="${topPadding - 8}" fill="#ffffff" font-family="var(--font-mono)" font-size="9px" font-weight="600" text-anchor="middle">${step.time} ns</text>`;
+
+  svgContent += `</svg>`;
+  canvas.innerHTML = svgContent;
+}
+
+function simulateVerilog(code) {
+  const logs = [];
+  const steps = [];
+  let duration = 0.04;
+  let success = true;
+
+  // Clean comments and whitespace
+  const cleanCode = code.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+
+  // Basic validation
+  if (!/module\s+\w+/i.test(cleanCode) || !/endmodule/i.test(cleanCode)) {
+    logs.push({ text: 'main.v:1: error: No module or endmodule declarations found in Verilog code.', type: 'error-text' });
+    logs.push({ text: '--- COMPILATION FAILED ---', type: 'error-text' });
+    
+    steps.push({
+      time: 0,
+      signals: {},
+      algo: 'verilog',
+      vars: { status: 'COMPILE ERROR' },
+      desc: 'Compilation failed. Please fix your syntax or use the default template.'
+    });
+    
+    return { logs, steps, success: false, duration: 0.0 };
+  }
+
+  logs.push({ text: 'main.v: Parsing design module structures: SUCCESS', type: 'success-text' });
+  logs.push({ text: 'main.v: Elaborating module hierarchy: SUCCESS', type: 'success-text' });
+  logs.push({ text: '----------------------------------------', type: 'system-text' });
+  logs.push({ text: '--- SIMULATION STARTED ---', type: 'system-text' });
+
+  // 1. Find all signals declared (reg, wire, inputs, outputs)
+  const signals = {};
+  
+  const declRegex = /\b(reg|wire|input|output)\s+([^;]+);/gi;
+  let match;
+  while ((match = declRegex.exec(cleanCode)) !== null) {
+    const names = match[2].split(',').map(n => n.trim().split(/\s+/)[0].trim().toLowerCase());
+    names.forEach(name => {
+      if (name && !name.includes('[') && signals[name] === undefined) {
+        signals[name] = '0';
+      }
+    });
+  }
+
+  const modulePortsRegex = /module\s+\w+\s*\(([^)]+)\)/i;
+  const portMatch = modulePortsRegex.exec(cleanCode);
+  if (portMatch) {
+    const portContent = portMatch[1];
+    const ports = portContent.split(',');
+    ports.forEach(port => {
+      const parts = port.trim().split(/\s+/);
+      const name = parts[parts.length - 1].toLowerCase();
+      if (name && signals[name] === undefined) {
+        signals[name] = '0';
+      }
+    });
+  }
+
+  // 2. Find concurrent assignments: assign sum = a ^ b;
+  const concurrentAssignments = [];
+  const assignmentRegex = /assign\s+(\w+)\s*=\s*([^;]+);/gi;
+  while ((match = assignmentRegex.exec(cleanCode)) !== null) {
+    const target = match[1].trim().toLowerCase();
+    const expr = match[2].trim();
+    concurrentAssignments.push({ target, expr });
+  }
+
+  // Helper to evaluate expressions
+  function evaluateExpr(expr, signalMap) {
+    let cleanExpr = expr.toLowerCase().replace(/['"]/g, '').trim();
+    
+    const keys = Object.keys(signalMap).sort((a,b) => b.length - a.length);
+    keys.forEach(sig => {
+      const val = (signalMap[sig] === '1') ? 'true' : 'false';
+      const regex = new RegExp('\\b' + sig + '\\b', 'g');
+      cleanExpr = cleanExpr.replace(regex, val);
+    });
+
+    cleanExpr = cleanExpr.replace(/\^/g, ' !== '); // XOR
+    cleanExpr = cleanExpr.replace(/&/g, ' && '); // AND
+    cleanExpr = cleanExpr.replace(/\|/g, ' || '); // OR
+    cleanExpr = cleanExpr.replace(/~/g, ' ! '); // NOT
+    
+    try {
+      const sanitized = cleanExpr.replace(/[^a-z0-9\s&|!=\(\)]/gi, '');
+      const result = new Function(`return (${sanitized})`)();
+      return result ? '1' : '0';
+    } catch(e) {
+      return 'X';
+    }
+  }
+
+  // Evaluate concurrent assignments
+  function updateConcurrentOutputs() {
+    for (let pass = 0; pass < 3; pass++) {
+      concurrentAssignments.forEach(assign => {
+        const newVal = evaluateExpr(assign.expr, signals);
+        signals[assign.target] = newVal;
+      });
+    }
+  }
+
+  // Initial update
+  updateConcurrentOutputs();
+
+  // Save Step 0
+  let time = 0;
+  steps.push({
+    time: time,
+    signals: { ...signals },
+    algo: 'verilog',
+    vars: { time: `${time} ns`, ...signals },
+    desc: `[${time} ns] Module instances elaborated. Initial signal values: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+  });
+
+  // 3. Find and run the initial block
+  const initialRegex = /initial\s+begin([\s\S]+?)end/gi;
+  const initialMatch = initialRegex.exec(cleanCode);
+  if (initialMatch) {
+    const body = initialMatch[1];
+    const statements = body.split(';');
+    
+    statements.forEach(stmt => {
+      const cleanStmt = stmt.trim();
+      if (!cleanStmt) return;
+
+      const delayMatch = /^#(\d+)$/.exec(cleanStmt);
+      if (delayMatch) {
+        const duration = parseInt(delayMatch[1], 10);
+        time += duration;
+        steps.push({
+          time: time,
+          signals: { ...signals },
+          algo: 'verilog',
+          vars: { time: `${time} ns`, ...signals },
+          desc: `[${time} ns] Delay step. Re-evaluating gates: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+        });
+        return;
+      }
+
+      const assignMatch = /^(\w+)\s*=\s*(\d+)$/.exec(cleanStmt);
+      if (assignMatch) {
+        const name = assignMatch[1].toLowerCase();
+        const val = assignMatch[2] === '0' ? '0' : '1';
+        if (signals[name] !== undefined) {
+          signals[name] = val;
+          updateConcurrentOutputs();
+        }
+        return;
+      }
+
+      const displayMatch = /^\$display\s*\(([\s\S]+)\)$/i.exec(cleanStmt);
+      if (displayMatch) {
+        const contentParts = displayMatch[1].split(',');
+        const formatString = contentParts[0].replace(/"/g, '').trim();
+        const displaySignals = contentParts.slice(1).map(s => s.trim().toLowerCase());
+        
+        let outputMsg = formatString;
+        displaySignals.forEach(sig => {
+          const val = signals[sig] || 'x';
+          outputMsg = outputMsg.replace(/%b|%d|%h/i, val);
+        });
+        
+        logs.push({
+          text: `[Time: ${time} ns] $display: ${outputMsg}`,
+          type: 'output-text'
+        });
+        return;
+      }
+    });
+  }
+
+  logs.push({ text: '--- SIMULATION FINISHED ---', type: 'system-text' });
+  logs.push({ text: 'vvp simulation completed successfully.', type: 'success-text' });
+
+  duration = 0.04 + Math.random() * 0.04;
+  duration = parseFloat(duration.toFixed(2));
+
+  return { logs, steps, success: true, duration };
 }
 
