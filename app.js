@@ -3108,7 +3108,7 @@ function simulateVHDL(code) {
     signals: { ...signals },
     algo: 'vhdl',
     vars: { time: `${time} ns`, ...signals },
-    desc: `[${time} ns] Elaboration complete. Initial output values computed: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+    desc: `[${time} ns] Elaboration complete. Initial signal values: ` + Object.entries(signals).map(([n, v]) => `${n}=${v}`).join(', ')
   });
 
   // 3. Extract process blocks and execute them
@@ -3142,7 +3142,7 @@ function simulateVHDL(code) {
           signals: { ...signals },
           algo: 'vhdl',
           vars: { time: `${time} ns`, ...signals },
-          desc: `[${time} ns] Input changed. Re-evaluating logic: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+          desc: `[${time} ns] Input changed. Re-evaluating logic: ` + Object.entries(signals).map(([n, v]) => `${n}=${v}`).join(', ')
         });
         return;
       }
@@ -3375,7 +3375,7 @@ function simulateVerilog(code) {
     signals: { ...signals },
     algo: 'verilog',
     vars: { time: `${time} ns`, ...signals },
-    desc: `[${time} ns] Module instances elaborated. Initial signal values: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+    desc: `[${time} ns] Module instances elaborated. Initial signal values: ` + Object.entries(signals).map(([n, v]) => `${n}=${v}`).join(', ')
   });
 
   // 3. Find and run the initial block
@@ -3398,7 +3398,7 @@ function simulateVerilog(code) {
           signals: { ...signals },
           algo: 'verilog',
           vars: { time: `${time} ns`, ...signals },
-          desc: `[${time} ns] Delay step. Re-evaluating gates: sum=${signals.sum || '0'}, carry=${signals.carry || '0'}.`
+          desc: `[${time} ns] Delay step. Re-evaluating gates: ` + Object.entries(signals).map(([n, v]) => `${n}=${v}`).join(', ')
         });
         return;
       }
