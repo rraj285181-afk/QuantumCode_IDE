@@ -2849,6 +2849,94 @@ kbd {
   font-weight: 500;
 }
 
+/* Mobile and Responsiveness Enhancements */
+.mobile-only {
+  display: none !important;
+}
+
+/* Enable smooth scrolling on touch screens */
+.terminal-log-screen,
+.sidebar-panel,
+.vis-vars-grid,
+.vis-variables-list,
+.vis-desc-screen,
+.tutorial-sidebar,
+.tutorial-content-panel,
+.code-example-box pre {
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Minimize state for terminal */
+#ide-terminal.minimized {
+  height: 38px !important;
+}
+
+#ide-terminal.minimized .terminal-body-container {
+  display: none !important;
+}
+
+#ide-terminal.minimized #toggle-terminal-height-btn span {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: flex !important;
+  }
+
+  /* Shrink header spacing and hide labels to fit dropdown selectors */
+  .control-group label {
+    display: none !important;
+  }
+  .control-group {
+    padding: 0 8px;
+    gap: 0;
+    height: 34px;
+  }
+  #ide-header {
+    padding: 0 10px;
+    height: 50px;
+  }
+  
+  /* Top header height override in workspace variables */
+  :root {
+    --header-height: 50px;
+  }
+
+  /* Mobile Slide-out Drawer Sidebar Overlay */
+  #ide-sidebar {
+    position: absolute;
+    left: 0;
+    top: var(--header-height);
+    height: calc(100% - var(--header-height));
+    z-index: 1000;
+    width: var(--sidebar-width);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.65);
+    transition: transform var(--transition-normal);
+    transform: translateX(0); /* Expanded state default when not collapsed */
+  }
+
+  #ide-sidebar.collapsed {
+    transform: translateX(-100%) !important;
+    width: var(--sidebar-width) !important;
+  }
+
+  /* Hide resize split handles on mobile since layout overlay is absolute */
+  #sidebar-resize-handle {
+    display: none !important;
+  }
+
+  /* Make main workspace area stretch completely */
+  #editor-terminal-container {
+    width: 100% !important;
+  }
+
+  /* Shrink tabs to fit */
+  .editor-tab {
+    padding: 0 10px;
+  }
+}
+
 
 
 

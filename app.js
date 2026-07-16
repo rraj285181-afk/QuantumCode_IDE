@@ -802,6 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTerminalTabs();
   initResizableTerminal();
   initResizableSidebar();
+  initMobileLayout();
   initShortcutListeners();
   initVisualizerListeners();
 
@@ -1597,6 +1598,7 @@ function initSettingsListeners() {
 // ==========================================================================
 
 function initTerminalTabs() {
+  const terminal = document.getElementById('ide-terminal');
   const tabOutput = document.getElementById('tab-output-btn');
   const tabInput = document.getElementById('tab-input-btn');
   const tabVisualizer = document.getElementById('tab-visualizer-btn');
@@ -1607,6 +1609,12 @@ function initTerminalTabs() {
 
   if (tabOutput) {
     tabOutput.addEventListener('click', () => {
+      if (tabOutput.classList.contains('active')) {
+        terminal?.classList.toggle('minimized');
+        if (editor) setTimeout(() => editor.layout(), 100);
+        return;
+      }
+      terminal?.classList.remove('minimized');
       tabOutput.classList.add('active');
       if (tabInput) tabInput.classList.remove('active');
       if (tabVisualizer) tabVisualizer.classList.remove('active');
@@ -1619,6 +1627,12 @@ function initTerminalTabs() {
 
   if (tabInput) {
     tabInput.addEventListener('click', () => {
+      if (tabInput.classList.contains('active')) {
+        terminal?.classList.toggle('minimized');
+        if (editor) setTimeout(() => editor.layout(), 100);
+        return;
+      }
+      terminal?.classList.remove('minimized');
       tabInput.classList.add('active');
       if (tabOutput) tabOutput.classList.remove('active');
       if (tabVisualizer) tabVisualizer.classList.remove('active');
@@ -1631,6 +1645,12 @@ function initTerminalTabs() {
 
   if (tabVisualizer) {
     tabVisualizer.addEventListener('click', () => {
+      if (tabVisualizer.classList.contains('active')) {
+        terminal?.classList.toggle('minimized');
+        if (editor) setTimeout(() => editor.layout(), 100);
+        return;
+      }
+      terminal?.classList.remove('minimized');
       tabVisualizer.classList.add('active');
       if (tabOutput) tabOutput.classList.remove('active');
       if (tabInput) tabInput.classList.remove('active');
@@ -3422,5 +3442,39 @@ function simulateVerilog(code) {
   duration = parseFloat(duration.toFixed(2));
 
   return { logs, steps, success: true, duration };
+}
+
+function initMobileLayout() {
+  const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+  const sidebar = document.getElementById('ide-sidebar');
+  const toggleTerminalBtn = document.getElementById('toggle-terminal-height-btn');
+  const terminal = document.getElementById('ide-terminal');
+
+  if (mobileToggle && sidebar) {
+    mobileToggle.addEventListener('click', (e) => {
+      sidebar.classList.toggle('collapsed');
+      e.stopPropagation();
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      if (sidebar && !sidebar.classList.contains('collapsed')) {
+        if (!sidebar.contains(e.target) && (!mobileToggle || !mobileToggle.contains(e.target))) {
+          sidebar.classList.add('collapsed');
+          document.querySelectorAll('.sidebar-nav-btn').forEach(btn => btn.classList.remove('active'));
+        }
+      }
+    }
+  });
+
+  if (toggleTerminalBtn && terminal) {
+    toggleTerminalBtn.addEventListener('click', () => {
+      terminal.classList.toggle('minimized');
+      if (editor) {
+        setTimeout(() => editor.layout(), 100);
+      }
+    });
+  }
 }
 
