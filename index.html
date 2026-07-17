@@ -334,6 +334,22 @@
           <button onclick="launchExample('queue', 'java')" class="try-btn"><span>Java</span></button>
         </div>
       </div>
+
+      <!-- Binary Search Tree Card -->
+      <div class="compiler-card card-vhdl">
+        <div class="card-icon-group">
+          <span class="material-symbols-outlined lang-icon vhdl-icon">account_tree</span>
+          <span class="lang-tag tag-vhdl">BST</span>
+        </div>
+        <h4>Binary Search Tree</h4>
+        <p>Build and search a Binary Search Tree (BST) dynamically. Left child is smaller, right child is larger.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button onclick="launchExample('bst', 'python')" class="try-btn"><span>Python</span></button>
+          <button onclick="launchExample('bst', 'cpp')" class="try-btn"><span>C++</span></button>
+          <button onclick="launchExample('bst', 'c')" class="try-btn"><span>C</span></button>
+          <button onclick="launchExample('bst', 'java')" class="try-btn"><span>Java</span></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -554,11 +570,29 @@
         },
         c: {
           name: 'queue_demo.c',
-          content: '#include <stdio.n>\n#define MAX 100\n\nstruct Queue {\n    int items[MAX];\n    int front, rear;\n};\n\nvoid enqueue(struct Queue *q, int val) {\n    if(q->rear < MAX - 1) {\n        q->items[++(q->rear)] = val;\n        printf("Enqueued: %d\\n", val);\n    }\n}\n\nvoid dequeue(struct Queue *q) {\n    if(q->front <= q->rear) {\n        printf("Dequeued: %d\\n", q->items[(q->front)++]);\n    }\n}\n\nint main() {\n    struct Queue q;\n    q.front = 0; q.rear = -1;\n    enqueue(&q, 10);\n    enqueue(&q, 20);\n    dequeue(&q);\n    dequeue(&q);\n    return 0;\n}\n'
+          content: '#include <stdio.h>\n#define MAX 100\n\nstruct Queue {\n    int items[MAX];\n    int front, rear;\n};\n\nvoid enqueue(struct Queue *q, int val) {\n    if(q->rear < MAX - 1) {\n        q->items[++(q->rear)] = val;\n        printf("Enqueued: %d\\n", val);\n    }\n}\n\nvoid dequeue(struct Queue *q) {\n    if(q->front <= q->rear) {\n        printf("Dequeued: %d\\n", q->items[(q->front)++]);\n    }\n}\n\nint main() {\n    struct Queue q;\n    q.front = 0; q.rear = -1;\n    enqueue(&q, 10);\n    enqueue(&q, 20);\n    dequeue(&q);\n    dequeue(&q);\n    return 0;\n}\n'
         },
         java: {
           name: 'QueueExample.java',
           content: 'import java.util.LinkedList;\nimport java.util.Queue;\n\npublic class QueueExample {\n    public static void main(String[] args) {\n        Queue<Integer> q = new LinkedList<>();\n        q.add(10);\n        System.out.println("Enqueued 10");\n        q.add(20);\n        System.out.println("Enqueued 20");\n        System.out.println("Dequeued: " + q.poll());\n        System.out.println("Dequeued: " + q.poll());\n    }\n}\n'
+        }
+      },
+      bst: {
+        python: {
+          name: 'bst_demo.py',
+          content: 'class Node:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n\nclass BST:\n    def __init__(self):\n        self.root = None\n    def insert(self, val):\n        if not self.root:\n            self.root = Node(val)\n        else:\n            self._insert(self.root, val)\n    def _insert(self, node, val):\n        if val < node.val:\n            if not node.left:\n                node.left = Node(val)\n            else:\n                self._insert(node.left, val)\n        else:\n            if not node.right:\n                node.right = Node(val)\n            else:\n                self._insert(node.right, val)\n\nif __name__ == "__main__":\n    tree = BST()\n    data = [50, 30, 70, 20, 40, 60, 80]\n    for x in data:\n        tree.insert(x)\n    print("Constructed BST with root:", tree.root.val)\n'
+        },
+        cpp: {
+          name: 'bst_demo.cpp',
+          content: '#include <iostream>\n\nstruct Node {\n    int val;\n    Node* left;\n    Node* right;\n    Node(int v) : val(v), left(nullptr), right(nullptr) {}\n};\n\nNode* insert(Node* root, int val) {\n    if (!root) return new Node(val);\n    if (val < root->val) {\n        root->left = insert(root->left, val);\n    }\n    else {\n        root->right = insert(root->right, val);\n    }\n    return root;\n}\n\nint main() {\n    Node* root = nullptr;\n    int data[] = {50, 30, 70, 20, 40, 60, 80};\n    for (int x : data) {\n        root = insert(root, x);\n    }\n    std::cout << "BST root: " << root->val << std::endl;\n    return 0;\n}\n'
+        },
+        c: {
+          name: 'bst_demo.c',
+          content: '#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int val;\n    struct Node* left;\n    struct Node* right;\n};\n\nstruct Node* createNode(int val) {\n    struct Node* n = (struct Node*)malloc(sizeof(struct Node));\n    n->val = val;\n    n->left = NULL;\n    n->right = NULL;\n    return n;\n}\n\nstruct Node* insert(struct Node* root, int val) {\n    if (root == NULL) return createNode(val);\n    if (val < root->val) {\n        root->left = insert(root->left, val);\n    }\n    else {\n        root->right = insert(root->right, val);\n    }\n    return root;\n}\n\nint main() {\n    struct Node* root = NULL;\n    int data[] = {50, 30, 70, 20, 40, 60, 80};\n    for (int i = 0; i < 7; i++) {\n        root = insert(root, data[i]);\n    }\n    printf("BST Root: %d\\n", root->val);\n    return 0;\n}\n'
+        },
+        java: {
+          name: 'BSTExample.java',
+          content: 'class Node {\n    int val;\n    Node left, right;\n    Node(int v) {\n        val = v;\n    }\n}\n\npublic class BSTExample {\n    public static Node insert(Node root, int val) {\n        if (root == null) return new Node(val);\n        if (val < root.val) {\n            root.left = insert(root.left, val);\n        } else {\n            root.right = insert(root.right, val);\n        }\n        return root;\n    }\n\n    public static void main(String[] args) {\n        Node root = null;\n        int[] data = {50, 30, 70, 20, 40, 60, 80};\n        for (int x : data) {\n            root = insert(root, x);\n        }\n        System.out.println("BST Root: " + root.val);\n    }\n}\n'
         }
       }
     };

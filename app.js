@@ -715,6 +715,150 @@ public class QueueExample {
 }
 `
     }
+  },
+  bst: {
+    python: {
+      name: 'bst_demo.py',
+      content: `class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+
+class BST:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, val):
+        if not self.root:
+            self.root = Node(val)
+        else:
+            self._insert(self.root, val)
+
+    def _insert(self, node, val):
+        if val < node.val:
+            if not node.left:
+                node.left = Node(val)
+            else:
+                self._insert(node.left, val)
+        else:
+            if not node.right:
+                node.right = Node(val)
+            else:
+                self._insert(node.right, val)
+
+if __name__ == "__main__":
+    tree = BST()
+    data = [50, 30, 70, 20, 40, 60, 80]
+    for x in data:
+        tree.insert(x)
+    print("Constructed BST with root:", tree.root.val)
+`
+    },
+    cpp: {
+      name: 'bst_demo.cpp',
+      content: `#include <iostream>
+
+struct Node {
+    int val;
+    Node* left;
+    Node* right;
+    Node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+Node* insert(Node* root, int val) {
+    if (!root) return new Node(val);
+    if (val < root->val) {
+        root->left = insert(root->left, val);
+    } else {
+        root->right = insert(root->right, val);
+    }
+    return root;
+}
+
+int main() {
+    Node* root = nullptr;
+    int data[] = {50, 30, 70, 20, 40, 60, 80};
+    for (int x : data) {
+        root = insert(root, x);
+    }
+    std::cout << "BST root: " << root->val << "\\n";
+    return 0;
+}
+`
+    },
+    c: {
+      name: 'bst_demo.c',
+      content: `#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int val;
+    struct Node* left;
+    struct Node* right;
+};
+
+struct Node* createNode(int val) {
+    struct Node* n = (struct Node*)malloc(sizeof(struct Node));
+    n->val = val;
+    n->left = NULL;
+    n->right = NULL;
+    return n;
+}
+
+struct Node* insert(struct Node* root, int val) {
+    if (root == NULL) return createNode(val);
+    if (val < root->val) {
+        root->left = insert(root->left, val);
+    } else {
+        root->right = insert(root->right, val);
+    }
+    return root;
+}
+
+int main() {
+    struct Node* root = NULL;
+    int data[] = {50, 30, 70, 20, 40, 60, 80};
+    for (int i = 0; i < 7; i++) {
+        root = insert(root, data[i]);
+    }
+    printf("BST Root: %d\\n", root->val);
+    return 0;
+}
+`
+    },
+    java: {
+      name: 'BSTExample.java',
+      content: `class Node {
+    int val;
+    Node left, right;
+    Node(int v) {
+        val = v;
+    }
+}
+
+public class BSTExample {
+    public static Node insert(Node root, int val) {
+        if (root == null) return new Node(val);
+        if (val < root.val) {
+            root.left = insert(root.left, val);
+        } else {
+            root.right = insert(root.right, val);
+        }
+        return root;
+    }
+
+    public static void main(String[] args) {
+        Node root = null;
+        int[] data = {50, 30, 70, 20, 40, 60, 80};
+        for (int x : data) {
+            root = insert(root, x);
+        }
+        System.out.println("BST Root: " + root.val);
+    }
+}
+`
+    }
   }
 };
 
@@ -799,6 +943,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebarTabs();
   initSettingsListeners();
   initFileCreatorListeners();
+  initFolderCreatorListeners();
+  initCommandPaletteListeners();
   initTerminalTabs();
   initResizableTerminal();
   initResizableSidebar();
@@ -949,6 +1095,376 @@ function applyAppThemeColors(themeName) {
     root.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.08)');
     root.style.setProperty('--border-hover', 'rgba(255, 255, 255, 0.15)');
   }
+}
+
+// Theme Toggle Helper Functions
+function setTheme(themeName) {
+  state.theme = themeName;
+  const select = document.getElementById('theme-select');
+  if (select) select.value = themeName;
+  applyAppThemeColors(themeName);
+  if (editor) monaco.editor.setTheme(themeName);
+  updateThemeToggleIcon();
+  saveStateToStorage();
+  showTerminalLog(`[System] Theme switched to ${themeName}.`, 'system-text');
+}
+
+function setLanguage(lang) {
+  const select = document.getElementById('language-select');
+  if (select) {
+    select.value = lang;
+    select.dispatchEvent(new Event('change'));
+  }
+}
+
+function toggleAppTheme() {
+  const current = state.theme;
+  let next = 'vs-dark';
+  if (current === 'vs-dark' || current === 'dracula' || current === 'monokai' || current === 'hc-black') {
+    next = 'vs-light';
+  } else {
+    next = 'vs-dark';
+  }
+  setTheme(next);
+}
+
+function updateThemeToggleIcon() {
+  const btn = document.getElementById('theme-toggle-btn');
+  if (!btn) return;
+  const icon = btn.querySelector('span');
+  if (!icon) return;
+  
+  if (state.theme === 'vs-light') {
+    icon.textContent = 'light_mode';
+    btn.title = 'Switch to Dark Theme';
+  } else {
+    icon.textContent = 'dark_mode';
+    btn.title = 'Switch to Light Theme';
+  }
+}
+
+// Command Palette Registry & Logic
+const COMMANDS = [
+  { label: 'Run Code', action: () => runCurrentCode(), shortcut: 'Ctrl+Enter' },
+  { label: 'Format Document', action: () => formatCode(), shortcut: 'Alt+Shift+F' },
+  { label: 'Clear Terminal Output', action: () => clearTerminalLog(), shortcut: '' },
+  { label: 'Create New File', action: () => {
+    document.getElementById('tab-explorer-btn').click();
+    const container = document.getElementById('new-file-input-container');
+    container.classList.remove('hide');
+    document.getElementById('new-file-name').focus();
+  }, shortcut: 'Alt+N' },
+  { label: 'Create New Folder', action: () => {
+    document.getElementById('tab-explorer-btn').click();
+    const container = document.getElementById('new-folder-input-container');
+    container.classList.remove('hide');
+    document.getElementById('new-folder-name').focus();
+  }, shortcut: '' },
+  { label: 'Download Workspace (ZIP)', action: () => downloadWorkspaceAsZip(), shortcut: '' },
+  { label: 'Reset Workspace', action: () => {
+    if (confirm('Are you sure you want to reset your workspace? This will delete all custom files.')) {
+      document.getElementById('reset-workspace-btn')?.click();
+    }
+  }, shortcut: '' },
+  { label: 'Theme: CodeXrun Dark', action: () => setTheme('vs-dark') },
+  { label: 'Theme: Dracula', action: () => setTheme('dracula') },
+  { label: 'Theme: Monokai', action: () => setTheme('monokai') },
+  { label: 'Theme: CodeXrun Light', action: () => setTheme('vs-light') },
+  { label: 'Theme: High Contrast', action: () => setTheme('hc-black') },
+  { label: 'Language: Python', action: () => setLanguage('python') },
+  { label: 'Language: C++', action: () => setLanguage('cpp') },
+  { label: 'Language: C', action: () => setLanguage('c') },
+  { label: 'Language: Java', action: () => setLanguage('java') },
+  { label: 'Language: JavaScript', action: () => setLanguage('javascript') },
+  { label: 'Language: TypeScript', action: () => setLanguage('typescript') },
+  { label: 'Language: VHDL', action: () => setLanguage('vhdl') },
+  { label: 'Language: Verilog', action: () => setLanguage('verilog') }
+];
+
+let commandPaletteSelectedIndex = 0;
+let filteredCommands = [];
+
+function toggleCommandPalette() {
+  const modal = document.getElementById('command-palette-modal');
+  if (!modal) return;
+  
+  if (modal.classList.contains('hide')) {
+    modal.classList.remove('hide');
+    const input = document.getElementById('command-palette-input');
+    input.value = '';
+    input.focus();
+    renderCommandPaletteResults('');
+  } else {
+    modal.classList.add('hide');
+  }
+}
+
+function renderCommandPaletteResults(query = '') {
+  const resultsContainer = document.getElementById('command-palette-results');
+  if (!resultsContainer) return;
+  resultsContainer.innerHTML = '';
+
+  const cleanQuery = query.toLowerCase().replace('>', '').trim();
+  filteredCommands = COMMANDS.filter(cmd => 
+    cmd.label.toLowerCase().includes(cleanQuery)
+  );
+
+  if (filteredCommands.length === 0) {
+    resultsContainer.innerHTML = '<div style="color: var(--text-dark); padding: 12px; font-size: 0.85rem;">No commands found</div>';
+    commandPaletteSelectedIndex = -1;
+    return;
+  }
+
+  commandPaletteSelectedIndex = 0;
+  
+  filteredCommands.forEach((cmd, index) => {
+    const item = document.createElement('div');
+    item.className = `command-palette-item ${index === 0 ? 'selected' : ''}`;
+    
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = cmd.label;
+    item.appendChild(labelSpan);
+
+    if (cmd.shortcut) {
+      const shortcutSpan = document.createElement('span');
+      shortcutSpan.className = 'command-palette-item-shortcut';
+      shortcutSpan.textContent = cmd.shortcut;
+      item.appendChild(shortcutSpan);
+    }
+
+    item.addEventListener('click', () => {
+      executeCommand(cmd);
+    });
+
+    resultsContainer.appendChild(item);
+  });
+}
+
+function executeCommand(cmd) {
+  toggleCommandPalette();
+  cmd.action();
+}
+
+function initCommandPaletteListeners() {
+  const input = document.getElementById('command-palette-input');
+  const modal = document.getElementById('command-palette-modal');
+  if (!input || !modal) return;
+
+  input.addEventListener('input', (e) => {
+    renderCommandPaletteResults(e.target.value);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    const items = document.querySelectorAll('.command-palette-item');
+    if (items.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      items[commandPaletteSelectedIndex]?.classList.remove('selected');
+      commandPaletteSelectedIndex = (commandPaletteSelectedIndex + 1) % items.length;
+      items[commandPaletteSelectedIndex]?.classList.add('selected');
+      items[commandPaletteSelectedIndex]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      items[commandPaletteSelectedIndex]?.classList.remove('selected');
+      commandPaletteSelectedIndex = (commandPaletteSelectedIndex - 1 + items.length) % items.length;
+      items[commandPaletteSelectedIndex]?.classList.add('selected');
+      items[commandPaletteSelectedIndex]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const cmd = filteredCommands[commandPaletteSelectedIndex];
+      if (cmd) executeCommand(cmd);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      toggleCommandPalette();
+    }
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) toggleCommandPalette();
+  });
+}
+
+// Folders Explorer Custom Logic
+function getFullItemPath(item) {
+  if (!item) return '';
+  let pathParts = [item.name];
+  let parent = state.files.find(f => f.id === item.parentId);
+  while (parent) {
+    pathParts.unshift(parent.name);
+    parent = state.files.find(f => f.id === parent.parentId);
+  }
+  return pathParts.join('/');
+}
+
+function buildTree() {
+  const itemMap = {};
+  state.files.forEach(item => {
+    itemMap[item.id] = { ...item, type: item.type || 'file', children: [] };
+  });
+
+  const root = [];
+  Object.values(itemMap).forEach(item => {
+    if (item.parentId && itemMap[item.parentId]) {
+      itemMap[item.parentId].children.push(item);
+    } else {
+      root.push(item);
+    }
+  });
+
+  return root;
+}
+
+function sortTreeItems(items) {
+  items.sort((a, b) => {
+    const isFolderA = a.type === 'folder';
+    const isFolderB = b.type === 'folder';
+    if (isFolderA && !isFolderB) return -1;
+    if (!isFolderA && isFolderB) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  items.forEach(item => {
+    if (item.children) {
+      sortTreeItems(item.children);
+    }
+  });
+}
+
+function renderTreeNodes(nodes, container, depth = 0) {
+  nodes.forEach(node => {
+    const row = document.createElement('div');
+    row.className = `file-item ${node.type === 'folder' ? 'folder-item' : 'file-item-row'} ${node.id === state.activeFileId ? 'active' : ''}`;
+    row.style.paddingLeft = `${8 + depth * 12}px`;
+
+    const infoGroup = document.createElement('div');
+    infoGroup.className = 'file-info-group';
+
+    const icon = document.createElement('span');
+    icon.className = 'material-symbols-outlined';
+    if (node.type === 'folder') {
+      icon.textContent = node.collapsed ? 'folder' : 'folder_open';
+      icon.style.color = '#eab308';
+    } else {
+      icon.className += ` file-icon-${node.language}`;
+      if (node.language === 'python') icon.textContent = 'description';
+      else if (node.language === 'cpp' || node.language === 'c') icon.textContent = 'terminal';
+      else if (node.language === 'java') icon.textContent = 'coffee';
+      else if (node.language === 'sql') icon.textContent = 'database';
+      else if (node.language === 'html') icon.textContent = 'html';
+      else if (node.language === 'php' || node.language === 'javascript' || node.language === 'typescript') icon.textContent = 'code';
+      else if (node.language === 'r') icon.textContent = 'analytics';
+      else icon.textContent = 'article';
+    }
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'file-name';
+    nameSpan.textContent = node.name;
+
+    infoGroup.appendChild(icon);
+    infoGroup.appendChild(nameSpan);
+    row.appendChild(infoGroup);
+
+    // Actions Group
+    const actionsGroup = document.createElement('div');
+    actionsGroup.className = 'file-actions-group';
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'icon-btn';
+    deleteBtn.title = node.type === 'folder' ? 'Delete Folder' : 'Delete File';
+    const deleteIcon = document.createElement('span');
+    deleteIcon.className = 'material-symbols-outlined';
+    deleteIcon.textContent = 'delete';
+    deleteBtn.appendChild(deleteIcon);
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteFile(node.id);
+    });
+    actionsGroup.appendChild(deleteBtn);
+    row.appendChild(actionsGroup);
+
+    // Event listener
+    if (node.type === 'folder') {
+      row.addEventListener('click', () => {
+        const fileState = state.files.find(f => f.id === node.id);
+        if (fileState) {
+          fileState.collapsed = !fileState.collapsed;
+          saveStateToStorage();
+          renderFileTree();
+        }
+      });
+    } else {
+      row.addEventListener('click', () => {
+        selectFile(node.id);
+      });
+    }
+
+    container.appendChild(row);
+
+    if (node.type === 'folder' && !node.collapsed && node.children && node.children.length > 0) {
+      renderTreeNodes(node.children, container, depth + 1);
+    }
+  });
+}
+
+function createPathRecursive(fullPath, isFolder = false) {
+  const parts = fullPath.split('/').filter(p => p.trim() !== '');
+  if (parts.length === 0) return null;
+
+  let currentParentId = null;
+  let createdId = null;
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    const isLast = (i === parts.length - 1);
+    
+    let existing = state.files.find(f => f.name.toLowerCase() === part.toLowerCase() && f.parentId === currentParentId);
+    
+    if (existing) {
+      if (existing.type !== 'folder' && (!isLast || isFolder)) {
+        showTerminalLog(`[System Error] Conflict: "${part}" is a file.`, 'error-text');
+        return null;
+      }
+      currentParentId = existing.id;
+      createdId = existing.id;
+    } else {
+      const newId = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 4);
+      if (!isLast || isFolder) {
+        const newFolder = {
+          id: newId,
+          name: part,
+          type: 'folder',
+          parentId: currentParentId,
+          collapsed: false
+        };
+        state.files.push(newFolder);
+        currentParentId = newId;
+        createdId = newId;
+      } else {
+        const extension = part.split('.').pop().toLowerCase();
+        const matched = EXTENSION_MAP[extension];
+        if (!matched) {
+          showTerminalLog(`[System Error] Unsupported extension ".${extension}"`, 'error-text');
+          return null;
+        }
+        const defaultTemplate = BOILERPLATE_TEMPLATES[matched.lang] || '';
+        const newFile = {
+          id: newId,
+          name: part,
+          type: 'file',
+          parentId: currentParentId,
+          language: matched.lang,
+          content: defaultTemplate
+        };
+        state.files.push(newFile);
+        createdId = newId;
+      }
+    }
+  }
+
+  saveStateToStorage();
+  renderFileTree();
+  renderTabs();
+  return createdId;
 }
 
 // Initialize Monaco Editor
@@ -1145,72 +1661,22 @@ function triggerAutoSave() {
 
 function renderFileTree() {
   const treeContainer = document.getElementById('file-tree');
+  if (!treeContainer) return;
   treeContainer.replaceChildren(); // Safe DOM clear
 
-  state.files.forEach(file => {
-    const fileRow = document.createElement('div');
-    fileRow.className = `file-item ${file.id === state.activeFileId ? 'active' : ''}`;
-
-    // Left Info Group (Icon & Title)
-    const infoGroup = document.createElement('div');
-    infoGroup.className = 'file-info-group';
-
-    const icon = document.createElement('span');
-    icon.className = `material-symbols-outlined file-icon-${file.language}`;
-
-    if (file.language === 'python') icon.textContent = 'description';
-    else if (file.language === 'cpp' || file.language === 'c') icon.textContent = 'terminal';
-    else if (file.language === 'java') icon.textContent = 'coffee';
-    else if (file.language === 'sql') icon.textContent = 'database';
-    else if (file.language === 'html') icon.textContent = 'html';
-    else if (file.language === 'php' || file.language === 'javascript' || file.language === 'typescript') icon.textContent = 'code';
-    else if (file.language === 'r') icon.textContent = 'analytics';
-    else icon.textContent = 'article';
-
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'file-name';
-    nameSpan.textContent = file.name;
-
-    infoGroup.appendChild(icon);
-    infoGroup.appendChild(nameSpan);
-
-    // Right Actions Group (Rename, Delete)
-    const actionsGroup = document.createElement('div');
-    actionsGroup.className = 'file-actions-group';
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'icon-btn';
-    deleteBtn.title = 'Delete File';
-
-    const deleteIcon = document.createElement('span');
-    deleteIcon.className = 'material-symbols-outlined';
-    deleteIcon.textContent = 'delete';
-    deleteBtn.appendChild(deleteIcon);
-
-    deleteBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      deleteFile(file.id);
-    });
-
-    actionsGroup.appendChild(deleteBtn);
-
-    fileRow.appendChild(infoGroup);
-    fileRow.appendChild(actionsGroup);
-
-    // Switch file on click
-    fileRow.addEventListener('click', () => {
-      selectFile(file.id);
-    });
-
-    treeContainer.appendChild(fileRow);
-  });
+  const treeData = buildTree();
+  sortTreeItems(treeData);
+  renderTreeNodes(treeData, treeContainer, 0);
 }
 
 function renderTabs() {
   const tabsContainer = document.getElementById('editor-tabs-list');
+  if (!tabsContainer) return;
   tabsContainer.replaceChildren(); // Safe DOM clear
 
   state.files.forEach(file => {
+    if (file.type === 'folder') return; // Skip folders
+    
     const tab = document.createElement('div');
     tab.className = `editor-tab ${file.id === state.activeFileId ? 'active' : ''}`;
 
@@ -1378,12 +1844,69 @@ function initFileCreatorListeners() {
   });
 }
 
+function initFolderCreatorListeners() {
+  const newFolderBtn = document.getElementById('new-folder-btn');
+  const inputContainer = document.getElementById('new-folder-input-container');
+  const confirmBtn = document.getElementById('new-folder-confirm');
+  const cancelBtn = document.getElementById('new-folder-cancel');
+  const nameInput = document.getElementById('new-folder-name');
+
+  if (newFolderBtn && inputContainer) {
+    newFolderBtn.addEventListener('click', () => {
+      inputContainer.classList.remove('hide');
+      nameInput.value = '';
+      nameInput.focus();
+    });
+  }
+
+  if (cancelBtn && inputContainer) {
+    cancelBtn.addEventListener('click', () => {
+      inputContainer.classList.add('hide');
+    });
+  }
+
+  if (confirmBtn && nameInput) {
+    confirmBtn.addEventListener('click', () => {
+      const folderName = nameInput.value.trim();
+      if (folderName) {
+        createPathRecursive(folderName, true);
+        inputContainer.classList.add('hide');
+      }
+    });
+
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const folderName = nameInput.value.trim();
+        if (folderName) {
+          createPathRecursive(folderName, true);
+          inputContainer.classList.add('hide');
+        }
+      } else if (e.key === 'Escape') {
+        inputContainer.classList.add('hide');
+      }
+    });
+  }
+}
+
 function createNewFile() {
   const nameInput = document.getElementById('new-file-name');
   const filename = nameInput.value.trim();
 
   if (!filename) {
     showTerminalLog('[System Alert] Filename cannot be empty.', 'error-text');
+    return;
+  }
+
+  // Support slash-separated paths for nested file creation
+  if (filename.includes('/')) {
+    const createdId = createPathRecursive(filename, false);
+    if (createdId) {
+      state.activeFileId = createdId;
+      nameInput.value = '';
+      document.getElementById('new-file-input-container').classList.add('hide');
+      switchToActiveFile();
+      showTerminalLog(`[System] Created nested file path "${filename}" successfully.`, 'system-text');
+    }
     return;
   }
 
@@ -1396,10 +1919,10 @@ function createNewFile() {
     return;
   }
 
-  // Check for duplicates
-  const exists = state.files.some(f => f.name.toLowerCase() === filename.toLowerCase());
+  // Check for duplicates at root
+  const exists = state.files.some(f => f.name.toLowerCase() === filename.toLowerCase() && !f.parentId);
   if (exists) {
-    showTerminalLog(`[System Alert] A file named "${filename}" already exists.`, 'error-text');
+    showTerminalLog(`[System Alert] A file named "${filename}" already exists at root.`, 'error-text');
     return;
   }
 
@@ -1410,6 +1933,8 @@ function createNewFile() {
   const newFile = {
     id: newId,
     name: filename,
+    type: 'file',
+    parentId: null,
     language: matched.lang,
     content: defaultTemplate
   };
@@ -1430,35 +1955,56 @@ function createNewFile() {
 }
 
 function deleteFile(id) {
-  if (state.files.length <= 1) {
+  const item = state.files.find(f => f.id === id);
+  if (!item) return;
+
+  const totalFiles = state.files.filter(f => f.type !== 'folder').length;
+  if (item.type !== 'folder' && totalFiles <= 1) {
     showTerminalLog('[System Alert] Cannot delete the last file. The workspace requires at least one file.', 'error-text');
     return;
   }
 
-  // Confirm delete dialog (safe styling native confirmation substitute)
-  // To follow rule: "MUST NOT use native alert(), confirm(), or prompt() dialogues in production"
-  // Let's implement a simple inline confirm by showing a terminal log prompt or double click delete.
-  // Actually, we can remove the file directly but output a confirmation log with an 'undo' action stored in memory,
-  // or we can build a nice custom modal. Let's build a quick custom confirmation inside terminal status or simply complete the delete.
-  // Given that users appreciate rapid operations, we can just delete it, and log the action to the console.
-  const targetIndex = state.files.findIndex(f => f.id === id);
-  if (targetIndex === -1) return;
+  if (item.type === 'folder') {
+    const getChildrenIds = (parentId) => {
+      let ids = [];
+      state.files.forEach(f => {
+        if (f.parentId === parentId) {
+          ids.push(f.id);
+          if (f.type === 'folder') {
+            ids = ids.concat(getChildrenIds(f.id));
+          }
+        }
+      });
+      return ids;
+    };
+    const childrenIds = getChildrenIds(id);
+    const affectedFilesCount = state.files.filter(f => childrenIds.includes(f.id) && f.type !== 'folder').length;
+    if (totalFiles - affectedFilesCount < 1) {
+      showTerminalLog('[System Alert] Cannot delete folder: Deleting it would remove all files from workspace.', 'error-text');
+      return;
+    }
+    state.files = state.files.filter(f => f.id !== id && !childrenIds.includes(f.id));
+    showTerminalLog(`[System] Deleted folder "${item.name}" and all its contents recursively.`, 'system-text');
+  } else {
+    state.files = state.files.filter(f => f.id !== id);
+    showTerminalLog(`[System] Deleted file "${item.name}".`, 'system-text');
+  }
 
-  const deletedFile = state.files[targetIndex];
-  state.files.splice(targetIndex, 1);
-
-  // If deleted file was the active file, switch active file
-  if (state.activeFileId === id) {
-    const nextActive = state.files[Math.max(0, targetIndex - 1)];
-    state.activeFileId = nextActive.id;
+  // If deleted file/folder contained the active file, switch active file
+  const activeFileExists = state.files.some(f => f.id === state.activeFileId && f.type !== 'folder');
+  if (!activeFileExists) {
+    const remainingFiles = state.files.filter(f => f.type !== 'folder');
+    if (remainingFiles.length > 0) {
+      state.activeFileId = remainingFiles[0].id;
+    } else {
+      state.activeFileId = null;
+    }
   }
 
   saveStateToStorage();
   renderFileTree();
   renderTabs();
   switchToActiveFile();
-
-  showTerminalLog(`[System] Deleted file "${deletedFile.name}".`, 'system-text');
 }
 
 // ==========================================================================
@@ -2228,7 +2774,9 @@ function downloadWorkspaceAsZip() {
 
   const zip = new JSZip();
   state.files.forEach(file => {
-    zip.file(file.name, file.content);
+    if (file.type === 'folder') return;
+    const fullPath = getFullItemPath(file);
+    zip.file(fullPath, file.content);
   });
 
   zip.generateAsync({ type: 'blob' })
@@ -2489,7 +3037,7 @@ function initializeVisualizer() {
   // Fill vis-custom-data-input input with placeholder suggestion
   const inputEl = document.getElementById('vis-custom-data-input');
   if (inputEl && !inputEl.value) {
-    if (algoType === 'bubble_sort' || algoType === 'binary_search') {
+    if (algoType === 'bubble_sort' || algoType === 'binary_search' || algoType === 'bst') {
       inputEl.value = simulationState.currentData.join(', ');
     } else if (algoType === 'vhdl' || algoType === 'verilog') {
       inputEl.value = 'Half_Adder';
@@ -2522,6 +3070,8 @@ function initializeVisualizer() {
     simulationState.steps = generateStackSteps();
   } else if (algoType === 'queue') {
     simulationState.steps = generateQueueSteps();
+  } else if (algoType === 'bst') {
+    simulationState.steps = generateBSTSteps(simulationState.currentData);
   }
 
   simulationState.currentStepIndex = 0;
@@ -2552,6 +3102,62 @@ function runSimulationLoop() {
       toggleVisPlay();
     }
   }, simulationState.delay);
+}
+
+function assignNodePositions(node, x = 300, y = 30, xOffset = 120) {
+  if (!node) return;
+  node.x = x;
+  node.y = y;
+  assignNodePositions(node.left, x - xOffset, y + 45, xOffset * 0.5);
+  assignNodePositions(node.right, x + xOffset, y + 45, xOffset * 0.5);
+}
+
+function renderBST(canvas, step) {
+  if (!step.tree) {
+    canvas.innerHTML = '<span style="color: var(--text-dark); font-size: 0.8rem; display: block; padding: 20px; text-align: center;">[Tree is Empty]</span>';
+    return;
+  }
+
+  const root = step.tree;
+  const svgWidth = canvas.clientWidth || 600;
+  const svgHeight = 220;
+  
+  assignNodePositions(root, svgWidth / 2, 30, svgWidth / 4);
+
+  let svgContent = `<svg width="100%" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
+
+  function drawEdges(node) {
+    if (!node) return;
+    if (node.left) {
+      svgContent += `<line x1="${node.x}" y1="${node.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="rgba(255,255,255,0.15)" stroke-width="2" />`;
+      drawEdges(node.left);
+    }
+    if (node.right) {
+      svgContent += `<line x1="${node.x}" y1="${node.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="rgba(255,255,255,0.15)" stroke-width="2" />`;
+      drawEdges(node.right);
+    }
+  }
+  drawEdges(root);
+
+  function drawNodes(node) {
+    if (!node) return;
+    const isHighlighted = (step.highlight === node.val);
+    const circleColor = isHighlighted ? 'var(--accent-indigo)' : 'var(--bg-tertiary)';
+    const strokeColor = isHighlighted ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.2)';
+    const textColor = '#ffffff';
+
+    svgContent += `
+      <circle cx="${node.x}" cy="${node.y}" r="15" fill="${circleColor}" stroke="${strokeColor}" stroke-width="2" />
+      <text x="${node.x}" y="${node.y + 4}" fill="${textColor}" font-size="11px" font-weight="600" font-family="var(--font-mono)" text-anchor="middle">${node.val}</text>
+    `;
+
+    drawNodes(node.left);
+    drawNodes(node.right);
+  }
+  drawNodes(root);
+
+  svgContent += `</svg>`;
+  canvas.innerHTML = svgContent;
 }
 
 function renderSimulationStep() {
@@ -2677,6 +3283,9 @@ function renderSimulationStep() {
       list.innerHTML = '<span style="color: var(--text-dark); font-size: 0.8rem;">[Queue Empty]</span>';
     }
     canvas.appendChild(list);
+  }
+  else if (algoType === 'bst') {
+    renderBST(canvas, step);
   }
 }
 
@@ -2984,6 +3593,84 @@ function generateQueueSteps() {
     val: dequeued,
     vars: { size: 0, 'dequeued': dequeued },
     desc: `Dequeued ${dequeued} from the front of the queue. The queue is now empty.`
+  });
+
+  return steps;
+}
+
+function generateBSTSteps(arr) {
+  const steps = [];
+  const tree = { root: null };
+
+  class BSTNode {
+    constructor(val) {
+      this.val = val;
+      this.left = null;
+      this.right = null;
+      this.x = 0;
+      this.y = 0;
+    }
+  }
+
+  function serializeTree(node) {
+    if (!node) return null;
+    return {
+      val: node.val,
+      left: serializeTree(node.left),
+      right: serializeTree(node.right),
+      x: node.x,
+      y: node.y
+    };
+  }
+
+  steps.push({
+    type: 'init',
+    tree: null,
+    highlight: null,
+    vars: { size: 0 },
+    desc: 'Initializing empty Binary Search Tree (BST).'
+  });
+
+  function insert(root, val, currentPath = []) {
+    if (!root) {
+      const newNode = new BSTNode(val);
+      steps.push({
+        type: 'insert',
+        tree: serializeTree(tree.root || newNode),
+        highlight: val,
+        vars: { inserted: val, path: currentPath.join(' -> ') || 'Root' },
+        desc: `Inserting ${val} as new leaf node.`
+      });
+      return newNode;
+    }
+
+    currentPath.push(root.val);
+    steps.push({
+      type: 'traverse',
+      tree: serializeTree(tree.root),
+      highlight: root.val,
+      vars: { current: root.val, comparing: val, direction: val < root.val ? 'Left' : 'Right' },
+      desc: `Comparing ${val} with ${root.val}. Going ${val < root.val ? 'Left' : 'Right'}.`
+    });
+
+    if (val < root.val) {
+      root.left = insert(root.left, val, currentPath);
+    } else {
+      root.right = insert(root.right, val, currentPath);
+    }
+    return root;
+  }
+
+  arr.forEach(val => {
+    tree.root = insert(tree.root, val);
+  });
+
+  steps.push({
+    type: 'final',
+    tree: serializeTree(tree.root),
+    highlight: null,
+    vars: { total_nodes: arr.length },
+    desc: `BST construction complete with nodes: [${arr.join(', ')}].`
   });
 
   return steps;
