@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Programming Tutorial | CodeXrun</title>
-  <meta name="description" content="Learn Python from basics to advanced. Interactive examples with real-time compilers.">
+  <meta name="description"
+    content="Learn Python from basics to advanced. Interactive examples with real-time compilers.">
 
   <!-- Font and Icon Packages -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +31,7 @@
   <header id="landing-header">
     <div class="header-logo-group">
       <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
-        <span class="material-symbols-outlined logo-icon">terminal</span>
+        <img src="/logo.png" class="logo-image" alt="CodeXrun Logo">
         <div class="logo-text-group">
           <span class="logo-title">CodeXrun <span class="accent-text">IDE</span></span>
         </div>
@@ -68,7 +69,7 @@
     <section class="tutorial-content-panel">
       <!-- Intro Section -->
       <div id="py-intro" class="tutorial-panel active">
-        <h1>Python Introduction</h1>
+        <h2>Python Introduction</h2>
         <p>Python is a popular programming language. It was created by Guido van Rossum, and released in 1991.</p>
         <p>It is used for:</p>
         <ul>
@@ -77,8 +78,9 @@
           <li>Mathematics and Data Science</li>
           <li>System scripting</li>
         </ul>
-        <h2>Why Python?</h2>
-        <p>Python works on different platforms (Windows, Mac, Linux, etc.) and has a simple syntax similar to the English language.</p>
+        <h3>Why Python?</h3>
+        <p>Python works on different platforms (Windows, Mac, Linux, etc.) and has a simple syntax similar to the
+          English language.</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -95,10 +97,12 @@
 
       <!-- Variables Section -->
       <div id="py-vars" class="tutorial-panel">
-        <h1>Python Variables</h1>
-        <p>Variables are containers for storing data values. In Python, variables are created when you assign a value to it.</p>
-        <h2>Creating Variables</h2>
-        <p>Python has no command for declaring a variable. A variable is created the moment you first assign a value to it.</p>
+        <h2>Python Variables</h2>
+        <p>Variables are containers for storing data values. In Python, variables are created when you assign a value to
+          it.</p>
+        <h3>Creating Variables</h3>
+        <p>Python has no command for declaring a variable. A variable is created the moment you first assign a value to
+          it.</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -118,8 +122,9 @@ y = <span class="code-string">"John"</span>
 
       <!-- Operators Section -->
       <div id="py-operators" class="tutorial-panel">
-        <h1>Python Operators</h1>
-        <p>Operators are used to perform operations on variables and values. Python divides the operators in the following groups:</p>
+        <h2>Python Operators</h2>
+        <p>Operators are used to perform operations on variables and values. Python divides the operators in the
+          following groups:</p>
         <ul>
           <li>Arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>)</li>
           <li>Assignment operators (<code>=</code>, <code>+=</code>, <code>-=</code>)</li>
@@ -144,7 +149,7 @@ sum_val = a + b
 
       <!-- If-Else Section -->
       <div id="py-ifelse" class="tutorial-panel">
-        <h1>Python If...Else</h1>
+        <h2>Python If...Else</h2>
         <p>Python supports the usual logical conditions from mathematics:</p>
         <ul>
           <li>Equals: <code>a == b</code></li>
@@ -171,14 +176,15 @@ b = <span class="code-number">200</span>
 
       <!-- Loops Section -->
       <div id="py-loops" class="tutorial-panel">
-        <h1>Python Loops</h1>
+        <h2>Python Loops</h2>
         <p>Python has two primitive loop commands:</p>
         <ul>
           <li><code>while</code> loops</li>
           <li><code>for</code> loops</li>
         </ul>
-        <h2>The For Loop</h2>
-        <p>A <code>for</code> loop is used for iterating over a sequence (that is either a list, a tuple, a dictionary, a set, or a string).</p>
+        <h3>The For Loop</h3>
+        <p>A <code>for</code> loop is used for iterating over a sequence (that is either a list, a tuple, a dictionary,
+          a set, or a string).</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -197,9 +203,10 @@ b = <span class="code-number">200</span>
 
       <!-- Functions Section -->
       <div id="py-funcs" class="tutorial-panel">
-        <h1>Python Functions</h1>
-        <p>A function is a block of code which only runs when it is called. You can pass data, known as parameters, into a function.</p>
-        <h2>Creating a Function</h2>
+        <h2>Python Functions</h2>
+        <p>A function is a block of code which only runs when it is called. You can pass data, known as parameters, into
+          a function.</p>
+        <h3>Creating a Function</h3>
         <p>In Python, a function is defined using the <code>def</code> keyword.</p>
 
         <!-- Code Example Box -->
@@ -225,12 +232,8 @@ my_function()</code></pre>
         <span class="ad-label">SPONSOR AD</span>
         <div class="adsense-placeholder-sidebar" style="height: 600px;">
           <!-- AdSense Vertical Skyscraper -->
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-5471667535888198"
-               data-ad-slot="4680239312"
-               data-ad-format="vertical"
-               data-full-width-responsive="true"></ins>
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198"
+            data-ad-slot="4680239312" data-ad-format="vertical" data-full-width-responsive="true"></ins>
         </div>
       </div>
     </aside>
@@ -272,11 +275,11 @@ my_function()</code></pre>
       btn.addEventListener('click', () => {
         const lang = btn.getAttribute('data-lang');
         const filename = btn.getAttribute('data-file');
-        
+
         // Find the sibling pre code element and get text content
         const codeBox = btn.closest('.code-example-box').querySelector('pre code');
         const rawCode = codeBox.textContent || '';
-        
+
         // Create custom workspace data payload
         const workspaceData = JSON.stringify({
           files: [

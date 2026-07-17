@@ -23,14 +23,17 @@
   <!-- Google AdSense Main Library -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5471667535888198"
     crossorigin="anonymous"></script>
-    
+
   <style>
     /* Smooth scrolling behavior for anchors */
     html {
       scroll-behavior: smooth;
     }
+
     /* Offset scroll targets to account for sticky landing header */
-    #compilers, #tutorials, #examples {
+    #compilers,
+    #tutorials,
+    #examples {
       scroll-margin-top: 100px;
     }
   </style>
@@ -44,7 +47,7 @@
   <!-- Header Navigation -->
   <header id="landing-header">
     <div class="header-logo-group">
-      <span class="material-symbols-outlined logo-icon">terminal</span>
+      <img src="/logo.png" class="logo-image" alt="CodeXrun Logo">
       <div class="logo-text-group">
         <span class="logo-title">CodeXrun <span class="accent-text">IDE</span></span>
       </div>
@@ -76,19 +79,22 @@
   <!-- ========================================== -->
   <section id="tutorials" class="compilers-section">
     <div class="section-header">
-      <h2>Interactive Programming Tutorials</h2>
-      <p>Master core coding concepts with step-by-step documentation, live code execution, and interactive algorithm walk-throughs.</p>
+      <h3>Interactive Programming Tutorials</h3>
+      <p>Master core coding concepts with step-by-step documentation, live code execution, and interactive algorithm
+        walk-throughs.</p>
     </div>
 
     <div class="compilers-grid">
       <!-- Learn Python -->
-      <a href="/python-tutorial.html" class="compiler-card card-python" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
+      <a href="/python-tutorial.html" class="compiler-card card-python"
+        style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon python-icon">code</span>
           <span class="lang-tag tag-python">Tutorials</span>
         </div>
-        <h3>Learn Python</h3>
-        <p>Master Python variables, loops, classes, and micro-scripts. Fully integrated with our online execution engine.</p>
+        <h4>Learn Python</h4>
+        <p>Master Python variables, loops, classes, and micro-scripts. Fully integrated with our online execution
+          engine.</p>
         <div class="card-cta-btn">
           <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
@@ -96,12 +102,13 @@
       </a>
 
       <!-- Learn C++ -->
-      <a href="/cpp-tutorial.html" class="compiler-card card-cpp" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
+      <a href="/cpp-tutorial.html" class="compiler-card card-cpp"
+        style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon cpp-icon">data_object</span>
           <span class="lang-tag tag-cpp">Advanced</span>
         </div>
-        <h3>Learn C++</h3>
+        <h4>Learn C++</h4>
         <p>Learn Object-Oriented C++, memory pointers, data vectors, templates, and basic data structures.</p>
         <div class="card-cta-btn">
           <span>Start Learning</span>
@@ -110,12 +117,13 @@
       </a>
 
       <!-- Learn Java -->
-      <a href="/java-tutorial.html" class="compiler-card card-java" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
+      <a href="/java-tutorial.html" class="compiler-card card-java"
+        style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon java-icon">coffee</span>
           <span class="lang-tag tag-java">OOP</span>
         </div>
-        <h3>Learn Java</h3>
+        <h4>Learn Java</h4>
         <p>Learn classes, polymorphism, interfaces, exceptions, and collections with Main.java boilerplate examples.</p>
         <div class="card-cta-btn">
           <span>Start Learning</span>
@@ -124,13 +132,15 @@
       </a>
 
       <!-- Learn VHDL -->
-      <a href="/vhdl-tutorial.html" class="compiler-card card-vhdl" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
+      <a href="/vhdl-tutorial.html" class="compiler-card card-vhdl"
+        style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
         <div class="card-icon-group">
           <span class="material-symbols-outlined lang-icon vhdl-icon">memory</span>
           <span class="lang-tag tag-vhdl">Hardware</span>
         </div>
-        <h3>Learn VHDL</h3>
-        <p>Learn VHDL syntax, entity/architecture models, processes, signals, and concurrent logic with our interactive simulator.</p>
+        <h4>Learn VHDL</h4>
+        <p>Learn VHDL syntax, entity/architecture models, processes, signals, and concurrent logic with our interactive
+          simulator.</p>
         <div class="card-cta-btn">
           <span>Start Learning</span>
           <span class="material-symbols-outlined">arrow_right_alt</span>
@@ -142,15 +152,17 @@
   <!-- ========================================== -->
   <!-- 2. COMPILERS SECTION                       -->
   <!-- ========================================== -->
-  <section id="compilers" class="compilers-section" style="border-top: 1px solid var(--border-color); padding-top: 60px;">
+  <section id="compilers" class="compilers-section"
+    style="border-top: 1px solid var(--border-color); padding-top: 60px;">
     <div class="compilers-page-header">
       <div class="compilers-title-group">
         <div class="title-icon-container">
           <span class="material-symbols-outlined">terminal</span>
         </div>
-        <h2>Practice with our Online Compilers</h2>
+        <h3>Practice with our Online Compilers</h3>
       </div>
-      <p>We believe coding should be accessible to all, so we made our own compilers for web and mobile–and they're free!</p>
+      <p>We believe coding should be accessible to all, so we made our own compilers for web and mobile–and they're
+        free!</p>
     </div>
 
     <div class="compilers-grid-container" id="compilers-grid">
@@ -170,7 +182,7 @@
         <span>HTML/CSS Editor</span>
         <span class="material-symbols-outlined">arrow_forward</span>
       </a>
-      
+
       <a href="/compiler.html?lang=javascript" class="compiler-link-card" data-lang="javascript">
         <span>JavaScript Compiler</span>
         <span class="material-symbols-outlined">arrow_forward</span>
@@ -227,16 +239,19 @@
       </a>
     </div>
     <!-- Decorative dot grid on bottom left -->
-    <div class="dots-decorator-left" style="position: relative; left: 0; bottom: 0; margin-top: 40px; margin-left: 20px;"></div>
+    <div class="dots-decorator-left"
+      style="position: relative; left: 0; bottom: 0; margin-top: 40px; margin-left: 20px;"></div>
   </section>
 
   <!-- ========================================== -->
   <!-- 3. EXAMPLES SECTION                        -->
   <!-- ========================================== -->
-  <section id="examples" class="compilers-section" style="border-top: 1px solid var(--border-color); padding-top: 60px;">
+  <section id="examples" class="compilers-section"
+    style="border-top: 1px solid var(--border-color); padding-top: 60px;">
     <div class="section-header">
-      <h2>Ready-made Interactive Examples</h2>
-      <p>Select any standard algorithm or data structure template below to load and run it instantly inside our sandboxed online IDE.</p>
+      <h3>Ready-made Interactive Examples</h3>
+      <p>Select any standard algorithm or data structure template below to load and run it instantly inside our
+        sandboxed online IDE.</p>
     </div>
 
     <div class="compilers-grid">
@@ -246,7 +261,7 @@
           <span class="material-symbols-outlined lang-icon cpp-icon">sort</span>
           <span class="lang-tag tag-cpp">Algorithm</span>
         </div>
-        <h3>Bubble Sort</h3>
+        <h4>Bubble Sort</h4>
         <p>Sort arrays of items step-by-step. Swap neighboring elements if they are in the wrong order.</p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
           <button onclick="launchExample('bubble_sort', 'python')" class="try-btn"><span>Python</span></button>
@@ -262,7 +277,7 @@
           <span class="material-symbols-outlined lang-icon python-icon">reorder</span>
           <span class="lang-tag tag-python">Math</span>
         </div>
-        <h3>Fibonacci Series</h3>
+        <h4>Fibonacci Series</h4>
         <p>Generate sequences of numbers where each number is the sum of the preceding two numbers.</p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
           <button onclick="launchExample('fibonacci', 'python')" class="try-btn"><span>Python</span></button>
@@ -278,7 +293,7 @@
           <span class="material-symbols-outlined lang-icon go-icon">search</span>
           <span class="lang-tag tag-go">Search</span>
         </div>
-        <h3>Binary Search</h3>
+        <h4>Binary Search</h4>
         <p>Highly optimized log-time target search algorithm that halves the search space repeatedly.</p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
           <button onclick="launchExample('binary_search', 'python')" class="try-btn"><span>Python</span></button>
@@ -294,7 +309,7 @@
           <span class="material-symbols-outlined lang-icon csharp-icon">stack</span>
           <span class="lang-tag tag-csharp">LIFO</span>
         </div>
-        <h3>Stack Structure</h3>
+        <h4>Stack Structure</h4>
         <p>Try standard Last-In-First-Out linear collections supporting push and pop operations.</p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
           <button onclick="launchExample('stack', 'python')" class="try-btn"><span>Python</span></button>
@@ -310,7 +325,7 @@
           <span class="material-symbols-outlined lang-icon java-icon">queue</span>
           <span class="lang-tag tag-java">FIFO</span>
         </div>
-        <h3>Queue Structure</h3>
+        <h4>Queue Structure</h4>
         <p>Try linear First-In-First-Out collections supporting enqueue and dequeue operations.</p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
           <button onclick="launchExample('queue', 'python')" class="try-btn"><span>Python</span></button>
@@ -329,28 +344,28 @@
   <!-- Features Showcase Section -->
   <section id="features" class="features-showcase">
     <div class="section-header">
-      <h2>Advanced IDE Capabilities</h2>
+      <h3>Advanced IDE Capabilities</h3>
       <p>CodeXrun provides more than a compiler; it is a full in-browser developmental playground.</p>
     </div>
 
     <div class="features-grid">
       <div class="feature-box">
         <span class="material-symbols-outlined feature-icon">analytics</span>
-        <h3>Interactive Visualizer</h3>
+        <h4>Interactive Visualizer</h4>
         <p>Walk through algorithms (Sorting, stacks, queues) step-by-step. See variables change in real-time as
           simulation progresses.</p>
       </div>
 
       <div class="feature-box">
         <span class="material-symbols-outlined feature-icon">folder_zip</span>
-        <h3>Workspace ZIP Download</h3>
+        <h4>Workspace ZIP Download</h4>
         <p>Export your workspace files in one click as a ZIP file. Fully functional locally with all structures
           preserved.</p>
       </div>
 
       <div class="feature-box">
         <span class="material-symbols-outlined feature-icon">share</span>
-        <h3>Base64 Encoded Share</h3>
+        <h4>Base64 Encoded Share</h4>
         <p>Share code with others. Your workspace compiles into a secure Base64 hash that reloads the exact files on any
           browser.</p>
       </div>
@@ -360,8 +375,8 @@
   <!-- About Section -->
   <section id="about" class="about-section">
     <div class="about-card">
-      <span class="material-symbols-outlined logo-icon large-icon">terminal</span>
-      <h2>About CodeXrun IDE</h2>
+      <img src="/logo.png" class="logo-image large-logo" alt="CodeXrun Logo">
+      <h3>About CodeXrun IDE</h3>
       <p>CodeXrun is a premium, lightweight, and modern development engine designed for educators, students, and
         professional developer sandboxing. Powered by Monaco (VS Code editor engine) and the isolated high-speed Piston
         sandbox, we ensure compile execution is secure, responsive, and responsive across all mobile and desktop layout
@@ -410,7 +425,8 @@
     <div class="policy-modal-card">
       <div class="modal-header">
         <h3 id="modal-policy-title">Privacy Policy</h3>
-        <button id="close-policy-modal" class="icon-btn" style="background: none; border: none; color: var(--text-muted); cursor: pointer;">
+        <button id="close-policy-modal" class="icon-btn"
+          style="background: none; border: none; color: var(--text-muted); cursor: pointer;">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
@@ -547,7 +563,7 @@
       }
     };
 
-    window.launchExample = function(algoKey, lang) {
+    window.launchExample = function (algoKey, lang) {
       const item = ALGORITHM_CODES[algoKey]?.[lang];
       if (!item) return;
 

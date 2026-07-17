@@ -30,7 +30,7 @@
   <header id="landing-header">
     <div class="header-logo-group">
       <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
-        <span class="material-symbols-outlined logo-icon">terminal</span>
+        <img src="/logo.png" class="logo-image" alt="CodeXrun Logo">
         <div class="logo-text-group">
           <span class="logo-title">CodeXrun <span class="accent-text">IDE</span></span>
         </div>
@@ -68,10 +68,12 @@
     <section class="tutorial-content-panel">
       <!-- Intro Section -->
       <div id="java-intro" class="tutorial-panel active">
-        <h1>Java Introduction</h1>
-        <p>Java is a popular programming language, created in 1995. It is owned by Oracle, and more than 3 billion devices run Java.</p>
-        <h2>Why Java?</h2>
-        <p>Java works on different platforms (Windows, Mac, Linux, etc.). It is easy to learn and simple to use, open-source, secure, fast, and powerful.</p>
+        <h2>Java Introduction</h2>
+        <p>Java is a popular programming language, created in 1995. It is owned by Oracle, and more than 3 billion
+          devices run Java.</p>
+        <h3>Why Java?</h3>
+        <p>Java works on different platforms (Windows, Mac, Linux, etc.). It is easy to learn and simple to use,
+          open-source, secure, fast, and powerful.</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -92,7 +94,7 @@
 
       <!-- Variables Section -->
       <div id="java-vars" class="tutorial-panel">
-        <h1>Java Variables</h1>
+        <h2>Java Variables</h2>
         <p>Variables are containers for storing data values. In Java, there are different types of variables:</p>
         <ul>
           <li><code>String</code> - stores text</li>
@@ -124,8 +126,10 @@
 
       <!-- Operators Section -->
       <div id="java-operators" class="tutorial-panel">
-        <h1>Java Operators</h1>
-        <p>Operators are used to perform operations on variables and values. In the example below, we use the <code>+</code> operator to add together two values:</p>
+        <h2>Java Operators</h2>
+        <p>Operators are used to perform operations on variables and values. In the example below, we use the
+          <code>+</code> operator to add together two values:
+        </p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -147,8 +151,9 @@
 
       <!-- If-Else Section -->
       <div id="java-ifelse" class="tutorial-panel">
-        <h1>Java Conditions and If...Else</h1>
-        <p>Java supports the usual logical conditions from mathematics. Use the <code>if</code> statement to specify a block of Java code to be executed if a condition is true.</p>
+        <h2>Java Conditions and If...Else</h2>
+        <p>Java supports the usual logical conditions from mathematics. Use the <code>if</code> statement to specify a
+          block of Java code to be executed if a condition is true.</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -173,10 +178,12 @@
 
       <!-- Loops Section -->
       <div id="java-loops" class="tutorial-panel">
-        <h1>Java Loops</h1>
-        <p>Loops can execute a block of code as long as a specified condition is reached. Loops are handy because they save time, reduce errors, and they make code more readable.</p>
-        <h2>Java For Loop</h2>
-        <p>When you know exactly how many times you want to loop through a block of code, use the <code>for</code> loop instead of a <code>while</code> loop.</p>
+        <h2>Java Loops</h2>
+        <p>Loops can execute a block of code as long as a specified condition is reached. Loops are handy because they
+          save time, reduce errors, and they make code more readable.</p>
+        <h3>Java For Loop</h3>
+        <p>When you know exactly how many times you want to loop through a block of code, use the <code>for</code> loop
+          instead of a <code>while</code> loop.</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -199,8 +206,9 @@
 
       <!-- Methods Section -->
       <div id="java-funcs" class="tutorial-panel">
-        <h1>Java Methods</h1>
-        <p>A method is a block of code which only runs when it is called. You can pass data, known as parameters, into a method. Methods are used to perform certain actions, and they are also known as functions.</p>
+        <h2>Java Methods</h2>
+        <p>A method is a block of code which only runs when it is called. You can pass data, known as parameters, into a
+          method. Methods are used to perform certain actions, and they are also known as functions.</p>
 
         <!-- Code Example Box -->
         <div class="code-example-box">
@@ -230,12 +238,8 @@
         <span class="ad-label">SPONSOR AD</span>
         <div class="adsense-placeholder-sidebar" style="height: 600px;">
           <!-- AdSense Vertical Skyscraper -->
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-5471667535888198"
-               data-ad-slot="4680239312"
-               data-ad-format="vertical"
-               data-full-width-responsive="true"></ins>
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5471667535888198"
+            data-ad-slot="4680239312" data-ad-format="vertical" data-full-width-responsive="true"></ins>
         </div>
       </div>
     </aside>
@@ -277,11 +281,11 @@
       btn.addEventListener('click', () => {
         const lang = btn.getAttribute('data-lang');
         const filename = btn.getAttribute('data-file');
-        
+
         // Find the sibling pre code element and get text content
         const codeBox = btn.closest('.code-example-box').querySelector('pre code');
         const rawCode = codeBox.textContent || '';
-        
+
         // Create custom workspace data payload
         const workspaceData = JSON.stringify({
           files: [

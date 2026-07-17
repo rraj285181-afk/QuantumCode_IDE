@@ -1818,7 +1818,12 @@ async function runCurrentCode() {
         resetRunButtonState();
         
         // Auto switch to visualizer tab
-        document.getElementById('tab-visualizer-btn')?.click();
+        const tabVisualizer = document.getElementById('tab-visualizer-btn');
+        if (tabVisualizer && !tabVisualizer.classList.contains('active')) {
+          tabVisualizer.click();
+        } else {
+          initializeVisualizer();
+        }
       }, 500);
     }, 400);
     return;
@@ -1847,7 +1852,12 @@ async function runCurrentCode() {
         resetRunButtonState();
         
         // Auto switch to visualizer tab
-        document.getElementById('tab-visualizer-btn')?.click();
+        const tabVisualizer = document.getElementById('tab-visualizer-btn');
+        if (tabVisualizer && !tabVisualizer.classList.contains('active')) {
+          tabVisualizer.click();
+        } else {
+          initializeVisualizer();
+        }
       }, 500);
     }, 400);
     return;
@@ -2580,6 +2590,7 @@ function renderSimulationStep() {
   const algoType = isVHDL ? 'vhdl' : (isVerilog ? 'verilog' : ((templateInfo && templateInfo.type === 'algorithm') ? templateInfo.algoKey : 'bubble_sort'));
   
   if (algoType === 'vhdl' || algoType === 'verilog') {
+    canvas.style.display = 'block';
     renderVHDLWaveforms(canvas, step);
   }
   else if (algoType === 'bubble_sort') {
@@ -3948,18 +3959,24 @@ function simulateVHDL(code) {
 
   // 1. Find all signals declared in the code (both in entity port map and architecture declarations)
   const signals = {};
-  const signalRegex = /signal\s+(\w+)\s*:\s*std_logic\s*(:=\s*'([01XZ])')?/gi;
+  
+  // Find all VHDL signals: signal a, b, c : std_logic := '0';
+  const signalRegex = /signal\s+([^:]+)\s*:\s*(\w+)\s*(:=\s*'([01XZ])')?/gi;
   let match;
   while ((match = signalRegex.exec(cleanCode)) !== null) {
-    const name = match[1].toLowerCase();
-    const defaultVal = match[3] || '0';
-    signals[name] = defaultVal;
+    const names = match[1].split(',').map(n => n.trim().toLowerCase());
+    const defaultVal = match[4] || '0';
+    names.forEach(name => {
+      if (name) {
+        signals[name] = defaultVal;
+      }
+    });
   }
   
   // Look for ports in entity declarations: a, b : in std_logic; sum, carry : out std_logic;
-  const portSectionRegex = /port\s*\(([^)]+)\)/i;
-  const portMatch = portSectionRegex.exec(cleanCode);
-  if (portMatch) {
+  const portSectionRegex = /port\s*\(([^)]+)\)/gi;
+  let portMatch;
+  while ((portMatch = portSectionRegex.exec(cleanCode)) !== null) {
     const portContent = portMatch[1];
     const ports = portContent.split(';');
     ports.forEach(port => {
@@ -3971,6 +3988,25 @@ function simulateVHDL(code) {
             signals[name] = '0'; // default port value
           }
         });
+      }
+    });
+  }
+
+  // Parse port mapping connections
+  const portConnections = {}; // maps entity port -> testbench signal
+  const revPortConnections = {}; // maps testbench signal -> entity port
+  const portMapRegex = /port\s+map\s*\(([^)]+)\)/gi;
+  let pmMatch;
+  while ((pmMatch = portMapRegex.exec(cleanCode)) !== null) {
+    const connContent = pmMatch[1];
+    const conns = connContent.split(',');
+    conns.forEach(conn => {
+      const parts = conn.split('=>');
+      if (parts.length === 2) {
+        const portName = parts[0].trim().toLowerCase();
+        const sigName = parts[1].trim().toLowerCase();
+        portConnections[portName] = sigName;
+        revPortConnections[sigName] = portName;
       }
     });
   }
@@ -4014,12 +4050,27 @@ function simulateVHDL(code) {
     }
   }
 
-  // Evaluate concurrent assignments
+  // Evaluate concurrent assignments and propagate port mappings
   function updateConcurrentOutputs() {
     for (let pass = 0; pass < 3; pass++) {
+      // Propagate testbench inputs to port inputs
+      Object.entries(revPortConnections).forEach(([sig, port]) => {
+        if (signals[sig] !== undefined) {
+          signals[port] = signals[sig];
+        }
+      });
+
+      // Evaluate concurrent logic
       concurrentAssignments.forEach(assign => {
         const newVal = evaluateExpr(assign.expr, signals);
         signals[assign.target] = newVal;
+      });
+
+      // Propagate port outputs to testbench outputs
+      Object.entries(portConnections).forEach(([port, sig]) => {
+        if (signals[port] !== undefined) {
+          signals[sig] = signals[port];
+        }
       });
     }
   }
@@ -4038,9 +4089,9 @@ function simulateVHDL(code) {
   });
 
   // 3. Extract process blocks and execute them
-  const processMatch = cleanCode.match(/process[\s\S]+?end\s+process/i);
+  const processMatch = /process\s*(?:\([^)]*\))?\s*(?:is)?\s*begin?([\s\S]+?)end\s+process/i.exec(cleanCode);
   if (processMatch) {
-    const processBody = processMatch[0];
+    const processBody = processMatch[1];
     const statements = processBody.split(';');
     
     statements.forEach(stmt => {
@@ -4053,6 +4104,23 @@ function simulateVHDL(code) {
         const value = sigAssignMatch[2];
         if (signals[sigName] !== undefined) {
           signals[sigName] = value;
+          if (revPortConnections[sigName]) {
+            signals[revPortConnections[sigName]] = value;
+          }
+          updateConcurrentOutputs();
+        }
+        return;
+      }
+
+      const sigToSigMatch = /^(\w+)\s*<=\s*(\w+)$/i.exec(cleanStmt);
+      if (sigToSigMatch) {
+        const sigName = sigToSigMatch[1].toLowerCase();
+        const srcName = sigToSigMatch[2].toLowerCase();
+        if (signals[sigName] !== undefined && signals[srcName] !== undefined) {
+          signals[sigName] = signals[srcName];
+          if (revPortConnections[sigName]) {
+            signals[revPortConnections[sigName]] = signals[srcName];
+          }
           updateConcurrentOutputs();
         }
         return;
@@ -4235,10 +4303,20 @@ function simulateVerilog(code) {
   const declRegex = /\b(reg|wire|input|output)\s+([^;]+);/gi;
   let match;
   while ((match = declRegex.exec(cleanCode)) !== null) {
-    const names = match[2].split(',').map(n => n.trim().split(/\s+/)[0].trim().toLowerCase());
-    names.forEach(name => {
-      if (name && !name.includes('[') && signals[name] === undefined) {
-        signals[name] = '0';
+    const declContent = match[2];
+    const items = declContent.split(',');
+    items.forEach(item => {
+      const parts = item.trim().split('=');
+      const namePart = parts[0].trim().split(/\s+/).pop().trim().toLowerCase();
+      let defaultVal = '0';
+      if (parts[1]) {
+        const valStr = parts[1].trim().replace(/['"]/g, '');
+        if (valStr === '1' || valStr === '0') {
+          defaultVal = valStr;
+        }
+      }
+      if (namePart && !namePart.includes('[') && signals[namePart] === undefined) {
+        signals[namePart] = defaultVal;
       }
     });
   }
@@ -4255,6 +4333,18 @@ function simulateVerilog(code) {
         signals[name] = '0';
       }
     });
+  }
+
+  // Parse port connections
+  const portConnections = {}; // maps entity port -> testbench signal
+  const revPortConnections = {}; // maps testbench signal -> entity port
+  const verilogConnRegex = /\.([\w]+)\s*\(\s*([\w]+)\s*\)/g;
+  let vlMatch;
+  while ((vlMatch = verilogConnRegex.exec(cleanCode)) !== null) {
+    const portName = vlMatch[1].toLowerCase();
+    const sigName = vlMatch[2].toLowerCase();
+    portConnections[portName] = sigName;
+    revPortConnections[sigName] = portName;
   }
 
   // 2. Find concurrent assignments: assign sum = a ^ b;
@@ -4291,12 +4381,27 @@ function simulateVerilog(code) {
     }
   }
 
-  // Evaluate concurrent assignments
+  // Evaluate concurrent assignments and propagate port mappings
   function updateConcurrentOutputs() {
     for (let pass = 0; pass < 3; pass++) {
+      // Propagate testbench inputs to port inputs
+      Object.entries(revPortConnections).forEach(([sig, port]) => {
+        if (signals[sig] !== undefined) {
+          signals[port] = signals[sig];
+        }
+      });
+
+      // Evaluate concurrent logic
       concurrentAssignments.forEach(assign => {
         const newVal = evaluateExpr(assign.expr, signals);
         signals[assign.target] = newVal;
+      });
+
+      // Propagate port outputs to testbench outputs
+      Object.entries(portConnections).forEach(([port, sig]) => {
+        if (signals[port] !== undefined) {
+          signals[sig] = signals[port];
+        }
       });
     }
   }
@@ -4345,6 +4450,23 @@ function simulateVerilog(code) {
         const val = assignMatch[2] === '0' ? '0' : '1';
         if (signals[name] !== undefined) {
           signals[name] = val;
+          if (revPortConnections[name]) {
+            signals[revPortConnections[name]] = val;
+          }
+          updateConcurrentOutputs();
+        }
+        return;
+      }
+
+      const assignSigMatch = /^(\w+)\s*=\s*(\w+)$/.exec(cleanStmt);
+      if (assignSigMatch) {
+        const name = assignSigMatch[1].toLowerCase();
+        const srcName = assignSigMatch[2].toLowerCase();
+        if (signals[name] !== undefined && signals[srcName] !== undefined) {
+          signals[name] = signals[srcName];
+          if (revPortConnections[name]) {
+            signals[revPortConnections[name]] = signals[srcName];
+          }
           updateConcurrentOutputs();
         }
         return;
