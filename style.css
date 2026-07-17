@@ -3170,23 +3170,7 @@ kbd {
   }
 }
 
-/* Header Theme Toggle Button */
-.header-theme-toggle {
-  width: 38px;
-  height: 38px;
-  border-radius: 50% !important;
-  border: 1px solid var(--border-color) !important;
-  background: rgba(255, 255, 255, 0.03) !important;
-  color: var(--text-muted) !important;
-  transition: all var(--transition-fast) !important;
-}
 
-.header-theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border-color: var(--accent-indigo) !important;
-  color: var(--text-main) !important;
-  transform: scale(1.05);
-}
 
 /* Command Palette Overlay */
 .command-palette-content {

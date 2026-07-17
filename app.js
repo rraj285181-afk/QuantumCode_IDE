@@ -1104,7 +1104,6 @@ function setTheme(themeName) {
   if (select) select.value = themeName;
   applyAppThemeColors(themeName);
   if (editor) monaco.editor.setTheme(themeName);
-  updateThemeToggleIcon();
   saveStateToStorage();
   showTerminalLog(`[System] Theme switched to ${themeName}.`, 'system-text');
 }
@@ -1114,32 +1113,6 @@ function setLanguage(lang) {
   if (select) {
     select.value = lang;
     select.dispatchEvent(new Event('change'));
-  }
-}
-
-function toggleAppTheme() {
-  const current = state.theme;
-  let next = 'vs-dark';
-  if (current === 'vs-dark' || current === 'dracula' || current === 'monokai' || current === 'hc-black') {
-    next = 'vs-light';
-  } else {
-    next = 'vs-dark';
-  }
-  setTheme(next);
-}
-
-function updateThemeToggleIcon() {
-  const btn = document.getElementById('theme-toggle-btn');
-  if (!btn) return;
-  const icon = btn.querySelector('span');
-  if (!icon) return;
-  
-  if (state.theme === 'vs-light') {
-    icon.textContent = 'light_mode';
-    btn.title = 'Switch to Dark Theme';
-  } else {
-    icon.textContent = 'dark_mode';
-    btn.title = 'Switch to Light Theme';
   }
 }
 
