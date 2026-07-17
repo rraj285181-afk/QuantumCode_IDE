@@ -154,7 +154,7 @@ begin
     end process;
 end architecture sim;
 `
-,
+  ,
   verilog: `// Verilog Half Adder and Testbench Example
 module Half_Adder (
     input a,
@@ -820,10 +820,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Setup Run Button
   document.getElementById('run-btn').addEventListener('click', runCurrentCode);
-  
+
   // Setup Share Button
   document.getElementById('share-btn').addEventListener('click', shareCode);
-  
+
   // Setup Clear Terminal Button
   document.getElementById('clear-terminal-btn').addEventListener('click', clearTerminalLog);
 
@@ -897,7 +897,7 @@ function registerCustomMonacoThemes() {
 // Apply App UI custom theme colors to match selected theme
 function applyAppThemeColors(themeName) {
   const root = document.documentElement;
-  
+
   if (themeName === 'dracula') {
     root.style.setProperty('--bg-primary', '#282a36');
     root.style.setProperty('--bg-secondary', '#1e1f29');
@@ -961,7 +961,7 @@ function initMonacoEditor() {
     editor.dispose();
     editor = null;
   }
-  
+
   // Clear the loading screen inside the editor frame
   const loadingScreen = document.getElementById('editor-loading');
   if (loadingScreen) loadingScreen.remove();
@@ -1055,7 +1055,7 @@ function loadWorkspaceState() {
         else if (queryLang === 'php') ext = 'php';
         else if (queryLang === 'vhdl') ext = 'vhd';
         else if (queryLang === 'verilog') ext = 'v';
-        
+
         const newFileId = Date.now().toString();
         const newFile = {
           id: newFileId,
@@ -1150,14 +1150,14 @@ function renderFileTree() {
   state.files.forEach(file => {
     const fileRow = document.createElement('div');
     fileRow.className = `file-item ${file.id === state.activeFileId ? 'active' : ''}`;
-    
+
     // Left Info Group (Icon & Title)
     const infoGroup = document.createElement('div');
     infoGroup.className = 'file-info-group';
-    
+
     const icon = document.createElement('span');
     icon.className = `material-symbols-outlined file-icon-${file.language}`;
-    
+
     if (file.language === 'python') icon.textContent = 'description';
     else if (file.language === 'cpp' || file.language === 'c') icon.textContent = 'terminal';
     else if (file.language === 'java') icon.textContent = 'coffee';
@@ -1166,42 +1166,42 @@ function renderFileTree() {
     else if (file.language === 'php' || file.language === 'javascript' || file.language === 'typescript') icon.textContent = 'code';
     else if (file.language === 'r') icon.textContent = 'analytics';
     else icon.textContent = 'article';
-    
+
     const nameSpan = document.createElement('span');
     nameSpan.className = 'file-name';
     nameSpan.textContent = file.name;
-    
+
     infoGroup.appendChild(icon);
     infoGroup.appendChild(nameSpan);
-    
+
     // Right Actions Group (Rename, Delete)
     const actionsGroup = document.createElement('div');
     actionsGroup.className = 'file-actions-group';
-    
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'icon-btn';
     deleteBtn.title = 'Delete File';
-    
+
     const deleteIcon = document.createElement('span');
     deleteIcon.className = 'material-symbols-outlined';
     deleteIcon.textContent = 'delete';
     deleteBtn.appendChild(deleteIcon);
-    
+
     deleteBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       deleteFile(file.id);
     });
-    
+
     actionsGroup.appendChild(deleteBtn);
-    
+
     fileRow.appendChild(infoGroup);
     fileRow.appendChild(actionsGroup);
-    
+
     // Switch file on click
     fileRow.addEventListener('click', () => {
       selectFile(file.id);
     });
-    
+
     treeContainer.appendChild(fileRow);
   });
 }
@@ -1213,26 +1213,26 @@ function renderTabs() {
   state.files.forEach(file => {
     const tab = document.createElement('div');
     tab.className = `editor-tab ${file.id === state.activeFileId ? 'active' : ''}`;
-    
+
     const fileLabel = document.createElement('span');
     fileLabel.textContent = file.name;
-    
+
     const closeBtn = document.createElement('span');
     closeBtn.className = 'material-symbols-outlined tab-close';
     closeBtn.textContent = 'close';
-    
+
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       deleteFile(file.id);
     });
-    
+
     tab.appendChild(fileLabel);
     tab.appendChild(closeBtn);
-    
+
     tab.addEventListener('click', () => {
       selectFile(file.id);
     });
-    
+
     tabsContainer.appendChild(tab);
   });
 }
@@ -1277,7 +1277,7 @@ function getTemplateKey(content) {
       return { type: 'boilerplate' };
     }
   }
-  
+
   // Check algorithms
   for (const [algoKey, algoData] of Object.entries(ALGORITHM_TEMPLATES)) {
     for (const [lang, langData] of Object.entries(algoData)) {
@@ -1286,7 +1286,7 @@ function getTemplateKey(content) {
       }
     }
   }
-  
+
   return null;
 }
 
@@ -1325,7 +1325,7 @@ function initFileCreatorListeners() {
       if (activeFile && activeFile.language !== selectedLanguage) {
         // Change current file language
         activeFile.language = selectedLanguage;
-        
+
         // Update file name extension if it doesn't match
         const parts = activeFile.name.split('.');
         const baseName = parts.slice(0, -1).join('.');
@@ -1347,9 +1347,9 @@ function initFileCreatorListeners() {
         else if (selectedLanguage === 'php') newExt = 'php';
         else if (selectedLanguage === 'vhdl') newExt = 'vhd';
         else if (selectedLanguage === 'verilog') newExt = 'v';
-        
+
         activeFile.name = `${baseName || 'untitled'}.${newExt}`;
-        
+
         // Swap file contents to the matching template in the new language, or new language boilerplate
         const templateInfo = getTemplateKey(activeFile.content);
         if (templateInfo && templateInfo.type === 'algorithm') {
@@ -1358,15 +1358,15 @@ function initFileCreatorListeners() {
         } else {
           activeFile.content = BOILERPLATE_TEMPLATES[selectedLanguage] || '';
         }
-        
+
         if (editor) {
           editor.setValue(activeFile.content);
         }
-        
+
         saveStateToStorage();
         renderFileTree();
         renderTabs();
-        
+
         if (editor) {
           const model = editor.getModel();
           if (model) {
@@ -1381,7 +1381,7 @@ function initFileCreatorListeners() {
 function createNewFile() {
   const nameInput = document.getElementById('new-file-name');
   const filename = nameInput.value.trim();
-  
+
   if (!filename) {
     showTerminalLog('[System Alert] Filename cannot be empty.', 'error-text');
     return;
@@ -1390,7 +1390,7 @@ function createNewFile() {
   // Validate filename extension
   const extension = filename.split('.').pop().toLowerCase();
   const matched = EXTENSION_MAP[extension];
-  
+
   if (!matched) {
     showTerminalLog(`[System Alert] Unsupported file extension ".${extension}". Use standard code extensions (.py, .js, .ts, .rs, .go, .cs, .kt, .swift, .rb, .dart, .cpp, .c, .java)`, 'error-text');
     return;
@@ -1406,7 +1406,7 @@ function createNewFile() {
   // Create new file item
   const newId = Date.now().toString();
   const defaultTemplate = BOILERPLATE_TEMPLATES[matched.lang] || '';
-  
+
   const newFile = {
     id: newId,
     name: filename,
@@ -1425,7 +1425,7 @@ function createNewFile() {
   renderFileTree();
   renderTabs();
   switchToActiveFile();
-  
+
   showTerminalLog(`[System] Created file ${filename} successfully.`, 'system-text');
 }
 
@@ -1563,7 +1563,7 @@ function initSettingsListeners() {
     localStorage.removeItem('codexrun_font_size');
     localStorage.removeItem('codexrun_word_wrap');
     localStorage.removeItem('codexrun_minimap');
-    
+
     state.theme = 'vs-dark';
     state.fontSize = 14;
     state.wordWrap = 'off';
@@ -1579,16 +1579,16 @@ function initSettingsListeners() {
     renderFileTree();
     renderTabs();
     switchToActiveFile();
-    
+
     if (editor) {
       editor.updateOptions({
-        fontSize: 14,
+        fontSize: 20,
         wordWrap: 'off',
         minimap: { enabled: true }
       });
       monaco.editor.setTheme('vs-dark');
     }
-    
+
     showTerminalLog('[System] Workspace state reset completed.', 'system-text');
   });
 }
@@ -1597,70 +1597,73 @@ function initSettingsListeners() {
 // Terminal Tabs & Resizing
 // ==========================================================================
 
-function initTerminalTabs() {
+function setTerminalTabActive(tabName, toggleIfActive = false) {
   const terminal = document.getElementById('ide-terminal');
   const tabOutput = document.getElementById('tab-output-btn');
   const tabInput = document.getElementById('tab-input-btn');
   const tabVisualizer = document.getElementById('tab-visualizer-btn');
-  
+
   const panelOutput = document.getElementById('terminal-output-panel');
   const panelInput = document.getElementById('terminal-input-panel');
   const panelVisualizer = document.getElementById('terminal-visualizer-panel');
 
+  let targetTab = null;
+  let targetPanel = null;
+
+  if (tabName === 'output') {
+    targetTab = tabOutput;
+    targetPanel = panelOutput;
+  } else if (tabName === 'input') {
+    targetTab = tabInput;
+    targetPanel = panelInput;
+  } else if (tabName === 'visualizer') {
+    targetTab = tabVisualizer;
+    targetPanel = panelVisualizer;
+  }
+
+  if (!targetTab) return;
+
+  if (targetTab.classList.contains('active')) {
+    if (toggleIfActive && terminal) {
+      terminal.classList.toggle('minimized');
+      if (editor) setTimeout(() => editor.layout(), 100);
+    }
+    return;
+  }
+
+  if (terminal) {
+    terminal.classList.remove('minimized');
+  }
+
+  if (tabOutput) tabOutput.classList.remove('active');
+  if (tabInput) tabInput.classList.remove('active');
+  if (tabVisualizer) tabVisualizer.classList.remove('active');
+
+  if (panelOutput) panelOutput.classList.remove('active');
+  if (panelInput) panelInput.classList.remove('active');
+  if (panelVisualizer) panelVisualizer.classList.remove('active');
+
+  targetTab.classList.add('active');
+  if (targetPanel) targetPanel.classList.add('active');
+
+  if (tabName === 'visualizer') {
+    initializeVisualizer();
+  }
+}
+
+function initTerminalTabs() {
+  const tabOutput = document.getElementById('tab-output-btn');
+  const tabInput = document.getElementById('tab-input-btn');
+  const tabVisualizer = document.getElementById('tab-visualizer-btn');
+
   if (tabOutput) {
-    tabOutput.addEventListener('click', () => {
-      if (tabOutput.classList.contains('active')) {
-        terminal?.classList.toggle('minimized');
-        if (editor) setTimeout(() => editor.layout(), 100);
-        return;
-      }
-      terminal?.classList.remove('minimized');
-      tabOutput.classList.add('active');
-      if (tabInput) tabInput.classList.remove('active');
-      if (tabVisualizer) tabVisualizer.classList.remove('active');
-      
-      if (panelOutput) panelOutput.classList.add('active');
-      if (panelInput) panelInput.classList.remove('active');
-      if (panelVisualizer) panelVisualizer.classList.remove('active');
-    });
+    tabOutput.addEventListener('click', () => setTerminalTabActive('output', true));
   }
-
   if (tabInput) {
-    tabInput.addEventListener('click', () => {
-      if (tabInput.classList.contains('active')) {
-        terminal?.classList.toggle('minimized');
-        if (editor) setTimeout(() => editor.layout(), 100);
-        return;
-      }
-      terminal?.classList.remove('minimized');
-      tabInput.classList.add('active');
-      if (tabOutput) tabOutput.classList.remove('active');
-      if (tabVisualizer) tabVisualizer.classList.remove('active');
-      
-      if (panelInput) panelInput.classList.add('active');
-      if (panelOutput) panelOutput.classList.remove('active');
-      if (panelVisualizer) panelVisualizer.classList.remove('active');
-    });
+    tabInput.addEventListener('click', () => setTerminalTabActive('input', true));
   }
-
   if (tabVisualizer) {
-    tabVisualizer.addEventListener('click', () => {
-      if (tabVisualizer.classList.contains('active')) {
-        terminal?.classList.toggle('minimized');
-        if (editor) setTimeout(() => editor.layout(), 100);
-        return;
-      }
-      terminal?.classList.remove('minimized');
-      tabVisualizer.classList.add('active');
-      if (tabOutput) tabOutput.classList.remove('active');
-      if (tabInput) tabInput.classList.remove('active');
-      
-      if (panelVisualizer) panelVisualizer.classList.add('active');
-      if (panelOutput) panelOutput.classList.remove('active');
-      if (panelInput) panelInput.classList.remove('active');
-      
-      initializeVisualizer();
-    });
+    tabVisualizer.addEventListener('click', () => setTerminalTabActive('visualizer', true));
   }
 }
 
@@ -1677,14 +1680,14 @@ function initResizableTerminal() {
 
   document.addEventListener('mousemove', (e) => {
     if (!isResizing) return;
-    
+
     const containerHeight = document.getElementById('ide-workspace').offsetHeight;
     const headerHeight = document.getElementById('ide-header').offsetHeight;
     const clientY = e.clientY;
-    
+
     // Calculate new height based on mouse position relative to workspace bounds
     const newHeight = containerHeight - (clientY - headerHeight);
-    
+
     if (newHeight >= 80 && newHeight <= containerHeight - 150) {
       terminal.style.height = `${newHeight}px`;
       if (editor) editor.layout(); // Force Monaco to recalculate layout
@@ -1713,7 +1716,7 @@ function initResizableSidebar() {
 
   document.addEventListener('mousemove', (e) => {
     if (!isResizing) return;
-    
+
     const newWidth = e.clientX;
     if (newWidth >= 180 && newWidth <= 500) {
       document.documentElement.style.setProperty('--sidebar-width', `${newWidth}px`);
@@ -1751,7 +1754,7 @@ async function runCurrentCode() {
   runBtn.disabled = true;
   playIcon.classList.add('spinner-hide');
   spinner.classList.remove('spinner-hide');
-  
+
   statusBadge.className = 'status-badge running';
   statusBadge.textContent = 'Running';
 
@@ -1760,7 +1763,7 @@ async function runCurrentCode() {
   showTerminalLog(`[System] Compiling and running "${activeFile.name}" on cloud sandbox...`, 'system-text');
 
   // Switch terminal screen to Output tab to let user see logs
-  document.getElementById('tab-output-btn')?.click();
+  setTerminalTabActive('output', false);
 
   if (activeFile.language === 'html') {
     showTerminalLog('[System] HTML/CSS is web native. Opening preview window...', 'system-text');
@@ -1779,7 +1782,7 @@ async function runCurrentCode() {
     resetRunButtonState();
     return;
   }
-  
+
   if (activeFile.language === 'sql') {
     showTerminalLog('[SQL] Running query against local mock database...', 'system-text');
     setTimeout(() => {
@@ -1801,29 +1804,24 @@ async function runCurrentCode() {
       showTerminalLog('[VHDL] Elaborating top entity (ghdl -e)...', 'system-text');
       setTimeout(() => {
         showTerminalLog('[VHDL] Starting simulation (ghdl -r)...', 'system-text');
-        
+
         const simResult = simulateVHDL(activeFile.content);
-        
+
         simResult.logs.forEach(log => {
           showTerminalLog(log.text, log.type);
         });
-        
+
         simulationState.steps = simResult.steps;
         simulationState.currentStepIndex = 0;
-        
+
         statusBadge.className = simResult.success ? 'status-badge success' : 'status-badge error';
         statusBadge.textContent = simResult.success ? 'Success' : 'Error';
         document.getElementById('stat-time').textContent = `Time: ${simResult.duration}s`;
         document.getElementById('stat-status').textContent = `Status: ${simResult.success ? 'SUCCESS' : 'FAILED'}`;
         resetRunButtonState();
-        
+
         // Auto switch to visualizer tab
-        const tabVisualizer = document.getElementById('tab-visualizer-btn');
-        if (tabVisualizer && !tabVisualizer.classList.contains('active')) {
-          tabVisualizer.click();
-        } else {
-          initializeVisualizer();
-        }
+        setTerminalTabActive('visualizer', false);
       }, 500);
     }, 400);
     return;
@@ -1835,29 +1833,24 @@ async function runCurrentCode() {
       showTerminalLog('[Verilog] Generating design simulation (vvp)...', 'system-text');
       setTimeout(() => {
         showTerminalLog('[Verilog] Running simulation trace...', 'system-text');
-        
+
         const simResult = simulateVerilog(activeFile.content);
-        
+
         simResult.logs.forEach(log => {
           showTerminalLog(log.text, log.type);
         });
-        
+
         simulationState.steps = simResult.steps;
         simulationState.currentStepIndex = 0;
-        
+
         statusBadge.className = simResult.success ? 'status-badge success' : 'status-badge error';
         statusBadge.textContent = simResult.success ? 'Success' : 'Error';
         document.getElementById('stat-time').textContent = `Time: ${simResult.duration}s`;
         document.getElementById('stat-status').textContent = `Status: ${simResult.success ? 'SUCCESS' : 'FAILED'}`;
         resetRunButtonState();
-        
+
         // Auto switch to visualizer tab
-        const tabVisualizer = document.getElementById('tab-visualizer-btn');
-        if (tabVisualizer && !tabVisualizer.classList.contains('active')) {
-          tabVisualizer.click();
-        } else {
-          initializeVisualizer();
-        }
+        setTerminalTabActive('visualizer', false);
       }, 500);
     }, 400);
     return;
@@ -1874,12 +1867,12 @@ async function runCurrentCode() {
 
   // Proactively check if the user is running code requiring input but has empty stdin
   const codeSourceLower = activeFile.content.toLowerCase();
-  const hasInputCall = codeSourceLower.includes('input(') || 
-                       codeSourceLower.includes('cin >>') || 
-                       codeSourceLower.includes('scanf(') || 
-                       codeSourceLower.includes('scanner') || 
-                       codeSourceLower.includes('system.in');
-                       
+  const hasInputCall = codeSourceLower.includes('input(') ||
+    codeSourceLower.includes('cin >>') ||
+    codeSourceLower.includes('scanf(') ||
+    codeSourceLower.includes('scanner') ||
+    codeSourceLower.includes('system.in');
+
   if (hasInputCall && !stdinContent.trim()) {
     showTerminalLog('[System Tip] Your program may require inputs. If it fails, click the "Input" tab next to the "Output" tab below, type your inputs, and click "Run Code" again.', 'warning-text');
   }
@@ -1894,7 +1887,7 @@ async function runCurrentCode() {
         filename: f.name,
         contents: f.content
       });
-      
+
       // For C and C++, collect source files to pass to compilation arguments
       if (activeFile.language === 'c' || activeFile.language === 'cpp') {
         const ext = f.name.split('.').pop().toLowerCase();
@@ -1959,7 +1952,7 @@ async function runCurrentCode() {
     showTerminalLog(`[System Connection Error] Failed to connect to compiler engine: ${error.message}`, 'error-text');
     statusBadge.className = 'status-badge error';
     statusBadge.textContent = 'Error';
-    
+
     document.getElementById('stat-time').textContent = 'Time: -';
     document.getElementById('stat-status').textContent = 'Status: FAILED';
   } finally {
@@ -1971,7 +1964,7 @@ function displayExecutionResult(result, duration) {
   const statusBadge = document.getElementById('exec-status-badge');
   const statTime = document.getElementById('stat-time');
   const statStatus = document.getElementById('stat-status');
-  
+
   let compilationFailed = false;
 
   // Check compile step
@@ -1989,7 +1982,7 @@ function displayExecutionResult(result, duration) {
           showTerminalLog(outLine.text, 'error-text');
         });
       }
-      
+
       statTime.textContent = `Time: ${duration}s`;
       statStatus.textContent = `Compile Code: ${buildCode}`;
       statusBadge.className = 'status-badge error';
@@ -2044,7 +2037,7 @@ function resetRunButtonState() {
   const runBtn = document.getElementById('run-btn');
   const playIcon = runBtn.querySelector('.play-icon');
   const spinner = runBtn.querySelector('.loading-spinner');
-  
+
   runBtn.disabled = false;
   playIcon.classList.remove('spinner-hide');
   spinner.classList.add('spinner-hide');
@@ -2056,10 +2049,10 @@ function resetRunButtonState() {
 
 function showTerminalLog(message, className = '') {
   const logScreen = document.getElementById('terminal-log');
-  
+
   // Split input by newlines to render lines appropriately
   const lines = message.split('\n');
-  
+
   // If the last line is empty (due to trailing newline), pop it to avoid an empty trailing row
   if (lines.length > 1 && lines[lines.length - 1] === '') {
     lines.pop();
@@ -2090,7 +2083,7 @@ function shareCode() {
     showTerminalLog('[System Alert] No files to share.', 'error-text');
     return;
   }
-  
+
   // Make sure current active file has the latest editor contents saved before sharing
   if (editor && state.activeFileId) {
     const activeFile = state.files.find(f => f.id === state.activeFileId);
@@ -2104,23 +2097,23 @@ function shareCode() {
       files: state.files,
       activeFileId: state.activeFileId
     });
-    
+
     // Safely encode unicode string to base64
     const base64 = btoa(unescape(encodeURIComponent(workspaceData)));
     const shareUrl = `${window.location.origin}${window.location.pathname}#code=${base64}`;
-    
+
     // Populate modal inputs and social buttons
     document.getElementById('share-link-url').value = shareUrl;
-    
+
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('CodeXrun IDE: Check out my workspace code! ' + shareUrl)}`;
     document.getElementById('share-whatsapp-btn').setAttribute('href', whatsappUrl);
-    
+
     const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('CodeXrun IDE: Check out my workspace code!')}`;
     document.getElementById('share-telegram-btn').setAttribute('href', telegramUrl);
-    
+
     // Show Modal overlay
     document.getElementById('share-modal').classList.remove('hide');
-    
+
     showTerminalLog('[System] Share dialog opened. Link generated successfully.', 'system-text');
   } catch (e) {
     showTerminalLog(`[System Error] Sharing failed: ${e.message}`, 'error-text');
@@ -2138,7 +2131,7 @@ function initShortcutListeners() {
       e.preventDefault();
       runCurrentCode();
     }
-    
+
     // Ctrl + S -> Save state immediately
     if (e.ctrlKey && e.key === 's') {
       e.preventDefault();
@@ -2158,7 +2151,7 @@ function initShortcutListeners() {
 // Format Active File Code (Uses Monaco trigger with fallback manual indentation formatting)
 function formatCode() {
   if (!editor || !state.activeFileId) return;
-  
+
   const activeFile = state.files.find(f => f.id === state.activeFileId);
   if (!activeFile) return;
 
@@ -2182,25 +2175,25 @@ function basicCodeFormatter(code, language) {
   let indentLevel = 0;
   const indentSize = 4;
   let result = [];
-  
+
   for (let line of lines) {
     let trimmed = line.trim();
-    
+
     // Decrement indent before C-style closing brackets
     if (language !== 'python') {
       if (trimmed.startsWith('}') || trimmed.startsWith(')') || trimmed.startsWith(']')) {
         indentLevel = Math.max(0, indentLevel - 1);
       }
     }
-    
+
     const indent = ' '.repeat(indentLevel * indentSize);
-    
+
     if (trimmed === '') {
       result.push('');
     } else {
       result.push(indent + trimmed);
     }
-    
+
     // Increment indent after opening loops, branches, functions, or blocks
     if (language === 'python') {
       if (trimmed.endsWith(':')) {
@@ -2214,7 +2207,7 @@ function basicCodeFormatter(code, language) {
       }
     }
   }
-  
+
   return result.join('\n');
 }
 
@@ -2224,7 +2217,7 @@ function downloadWorkspaceAsZip() {
     showTerminalLog('[System Error] JSZip library is not loaded from CDN. Verify internet connection.', 'error-text');
     return;
   }
-  
+
   // Make sure currently open file is saved in state
   if (editor && state.activeFileId) {
     const activeFile = state.files.find(f => f.id === state.activeFileId);
@@ -2316,7 +2309,7 @@ function loadTemplate(templateId) {
   switchToActiveFile();
 
   showTerminalLog(`[System] Loaded template into new file: ${finalName}`, 'system-text');
-  
+
   // Switch visual tab selector to explorer panel to let users see the new file
   document.getElementById('tab-explorer-btn').click();
 }
@@ -2347,12 +2340,12 @@ function initShareModalListeners() {
     navigator.clipboard.writeText(shareUrl)
       .then(() => {
         showTerminalLog('[System] Shareable link copied to clipboard!', 'system-text');
-        
+
         // Show visual feedback on the "Copy" text inside input group
         const oldText = linkCopyBtn.textContent;
         linkCopyBtn.textContent = 'Copied!';
         linkCopyBtn.style.background = 'var(--color-success)';
-        
+
         setTimeout(() => {
           linkCopyBtn.textContent = oldText;
           linkCopyBtn.style.background = '';
@@ -2370,7 +2363,7 @@ function initShareModalListeners() {
 // Observe Google AdSense ads, safely push them when visible, and update container classes
 function initAdSenseObserver() {
   const ads = document.querySelectorAll('ins.adsbygoogle');
-  
+
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === 'attributes' && mutation.attributeName === 'data-ad-status') {
@@ -2394,7 +2387,7 @@ function initAdSenseObserver() {
     if (container && status === 'filled') {
       container.classList.add('ad-loaded');
     }
-    
+
     observer.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
 
     // Safe push logic
@@ -2565,12 +2558,12 @@ function renderSimulationStep() {
   const canvas = document.getElementById('visualizer-canvas');
   const varsList = document.getElementById('vis-variables-list');
   const descBox = document.getElementById('vis-description-box');
-  
+
   if (!canvas || !varsList || !descBox) return;
-  
+
   const step = simulationState.steps[simulationState.currentStepIndex];
   if (!step) return;
-  
+
   descBox.textContent = step.desc;
   varsList.innerHTML = '';
 
@@ -2580,15 +2573,15 @@ function renderSimulationStep() {
     badge.innerHTML = `<span class="var-name">${name}</span><span class="var-val">${val}</span>`;
     varsList.appendChild(badge);
   });
-  
+
   canvas.innerHTML = '';
-  
+
   const activeFile = state.files.find(f => f.id === state.activeFileId);
   const templateInfo = activeFile ? getTemplateKey(activeFile.content) : null;
   const isVHDL = activeFile && activeFile.language === 'vhdl';
   const isVerilog = activeFile && activeFile.language === 'verilog';
   const algoType = isVHDL ? 'vhdl' : (isVerilog ? 'verilog' : ((templateInfo && templateInfo.type === 'algorithm') ? templateInfo.algoKey : 'bubble_sort'));
-  
+
   if (algoType === 'vhdl' || algoType === 'verilog') {
     canvas.style.display = 'block';
     renderVHDLWaveforms(canvas, step);
@@ -2598,7 +2591,7 @@ function renderSimulationStep() {
     step.array.forEach((val, idx) => {
       const wrapper = document.createElement('div');
       wrapper.className = 'vis-bar-wrapper';
-      
+
       if (step.comparing.includes(idx)) {
         wrapper.classList.add('comparing');
       } else if (step.swapped.includes(idx)) {
@@ -2606,7 +2599,7 @@ function renderSimulationStep() {
       } else if (step.sorted.includes(idx)) {
         wrapper.classList.add('sorted');
       }
-      
+
       const heightPercent = (val / maxVal) * 80;
       wrapper.innerHTML = `
         <div class="vis-bar" style="height: ${heightPercent}px;"></div>
@@ -2614,7 +2607,7 @@ function renderSimulationStep() {
       `;
       canvas.appendChild(wrapper);
     });
-  } 
+  }
   else if (algoType === 'fibonacci') {
     const list = document.createElement('div');
     list.className = 'vis-node-list';
@@ -2636,7 +2629,7 @@ function renderSimulationStep() {
     step.array.forEach((val, idx) => {
       const node = document.createElement('div');
       node.className = 'vis-node';
-      
+
       if (idx === step.mid) {
         node.style.borderColor = 'var(--color-warning)';
         node.style.background = 'rgba(245, 158, 11, 0.15)';
@@ -2646,7 +2639,7 @@ function renderSimulationStep() {
       } else {
         node.style.opacity = '0.3';
       }
-      
+
       node.innerHTML = `
         <div>${val}</div>
         <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; font-weight: 500;">
@@ -2691,7 +2684,7 @@ function generateBubbleSortSteps(arr) {
   let steps = [];
   let a = [...arr];
   let n = a.length;
-  
+
   steps.push({
     type: 'init',
     array: [...a],
@@ -2701,7 +2694,7 @@ function generateBubbleSortSteps(arr) {
     vars: { n },
     desc: `Starting Bubble Sort with array: [${a.join(', ')}].`
   });
-  
+
   let sortedIndices = [];
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n - i - 1; j++) {
@@ -2711,23 +2704,23 @@ function generateBubbleSortSteps(arr) {
         comparing: [j, j + 1],
         swapped: [],
         sorted: [...sortedIndices],
-        vars: { i, j, 'arr[j]': a[j], 'arr[j+1]': a[j+1] },
-        desc: `Comparing index ${j} (${a[j]}) and index ${j+1} (${a[j+1]}).`
+        vars: { i, j, 'arr[j]': a[j], 'arr[j+1]': a[j + 1] },
+        desc: `Comparing index ${j} (${a[j]}) and index ${j + 1} (${a[j + 1]}).`
       });
-      
-      if (a[j] > a[j+1]) {
+
+      if (a[j] > a[j + 1]) {
         let temp = a[j];
-        a[j] = a[j+1];
-        a[j+1] = temp;
-        
+        a[j] = a[j + 1];
+        a[j + 1] = temp;
+
         steps.push({
           type: 'swap',
           array: [...a],
           comparing: [],
           swapped: [j, j + 1],
           sorted: [...sortedIndices],
-          vars: { i, j, temp: temp, 'arr[j]': a[j], 'arr[j+1]': a[j+1] },
-          desc: `Swap: ${a[j+1]} > ${a[j]}, swapping them.`
+          vars: { i, j, temp: temp, 'arr[j]': a[j], 'arr[j+1]': a[j + 1] },
+          desc: `Swap: ${a[j + 1]} > ${a[j]}, swapping them.`
         });
       }
     }
@@ -2742,24 +2735,24 @@ function generateBubbleSortSteps(arr) {
       desc: `Pass ${i + 1} complete. Index ${n - i - 1} (${a[n - i - 1]}) is now in its final sorted position.`
     });
   }
-  
+
   steps.push({
     type: 'final',
     array: [...a],
     comparing: [],
     swapped: [],
-    sorted: Array.from({length: n}, (_, k) => k),
+    sorted: Array.from({ length: n }, (_, k) => k),
     vars: {},
     desc: `Sorting complete! Fully sorted array: [${a.join(', ')}].`
   });
-  
+
   return steps;
 }
 
 function generateFibonacciSteps(n = 10) {
   let steps = [];
   let fib = [0, 1];
-  
+
   steps.push({
     type: 'init',
     array: [0, 1],
@@ -2767,13 +2760,13 @@ function generateFibonacciSteps(n = 10) {
     vars: { n, a: 0, b: 1, i: 2 },
     desc: `Initializing Fibonacci. First two numbers are 0 and 1.`
   });
-  
+
   for (let i = 2; i < n; i++) {
     let a = fib[fib.length - 2];
     let b = fib[fib.length - 1];
     let sum = a + b;
     fib.push(sum);
-    
+
     steps.push({
       type: 'step',
       array: [...fib],
@@ -2782,7 +2775,7 @@ function generateFibonacciSteps(n = 10) {
       desc: `Adding previous two numbers: ${a} + ${b} = ${sum}.`
     });
   }
-  
+
   steps.push({
     type: 'final',
     array: [...fib],
@@ -2790,7 +2783,7 @@ function generateFibonacciSteps(n = 10) {
     vars: { total: fib.length },
     desc: `Completed generating first ${n} Fibonacci numbers: [${fib.join(', ')}].`
   });
-  
+
   return steps;
 }
 
@@ -2800,7 +2793,7 @@ function generateBinarySearchSteps(arr, x) {
   let high = arr.length - 1;
   let mid = -1;
   let found = false;
-  
+
   steps.push({
     type: 'init',
     array: [...arr],
@@ -2811,10 +2804,10 @@ function generateBinarySearchSteps(arr, x) {
     vars: { low, high, target: x },
     desc: `Searching for target ${x} in sorted array: [${arr.join(', ')}].`
   });
-  
+
   while (low <= high) {
     mid = Math.floor((low + high) / 2);
-    
+
     steps.push({
       type: 'calc_mid',
       array: [...arr],
@@ -2825,7 +2818,7 @@ function generateBinarySearchSteps(arr, x) {
       vars: { low, high, mid, 'arr[mid]': arr[mid], target: x },
       desc: `Calculated middle index = ${mid} (value is ${arr[mid]}).`
     });
-    
+
     if (arr[mid] === x) {
       found = true;
       steps.push({
@@ -2840,7 +2833,7 @@ function generateBinarySearchSteps(arr, x) {
       });
       break;
     }
-    
+
     if (arr[mid] < x) {
       let prevLow = low;
       low = mid + 1;
@@ -2869,7 +2862,7 @@ function generateBinarySearchSteps(arr, x) {
       });
     }
   }
-  
+
   if (!found) {
     steps.push({
       type: 'not_found',
@@ -2882,14 +2875,14 @@ function generateBinarySearchSteps(arr, x) {
       desc: `Low (${low}) exceeded High (${high}). Target ${x} is not present in the array.`
     });
   }
-  
+
   return steps;
 }
 
 function generateStackSteps() {
   let steps = [];
   let items = [];
-  
+
   steps.push({
     type: 'init',
     items: [...items],
@@ -2897,7 +2890,7 @@ function generateStackSteps() {
     vars: { top: -1, size: 0 },
     desc: "Initializing an empty Stack (Last In, First Out)."
   });
-  
+
   items.push(10);
   steps.push({
     type: 'push',
@@ -2907,7 +2900,7 @@ function generateStackSteps() {
     vars: { top: 0, size: 1, 'pushed': 10 },
     desc: "Pushed 10 onto the stack. Top is now at index 0."
   });
-  
+
   items.push(20);
   steps.push({
     type: 'push',
@@ -2917,7 +2910,7 @@ function generateStackSteps() {
     vars: { top: 1, size: 2, 'pushed': 20 },
     desc: "Pushed 20 onto the stack. Top is now at index 1."
   });
-  
+
   let popped = items.pop();
   steps.push({
     type: 'pop',
@@ -2927,7 +2920,7 @@ function generateStackSteps() {
     vars: { top: 0, size: 1, 'popped': popped },
     desc: `Popped ${popped} from the stack. LIFO order retrieves the top element.`
   });
-  
+
   popped = items.pop();
   steps.push({
     type: 'pop',
@@ -2937,14 +2930,14 @@ function generateStackSteps() {
     vars: { top: -1, size: 0, 'popped': popped },
     desc: `Popped ${popped} from the stack. The stack is now empty.`
   });
-  
+
   return steps;
 }
 
 function generateQueueSteps() {
   let steps = [];
   let items = [];
-  
+
   steps.push({
     type: 'init',
     items: [...items],
@@ -2952,7 +2945,7 @@ function generateQueueSteps() {
     vars: { size: 0 },
     desc: "Initializing an empty Queue (First In, First Out)."
   });
-  
+
   items.push(10);
   steps.push({
     type: 'enqueue',
@@ -2962,7 +2955,7 @@ function generateQueueSteps() {
     vars: { size: 1, 'enqueued': 10 },
     desc: "Enqueued 10 to the rear of the queue."
   });
-  
+
   items.push(20);
   steps.push({
     type: 'enqueue',
@@ -2972,7 +2965,7 @@ function generateQueueSteps() {
     vars: { size: 2, 'enqueued': 20 },
     desc: "Enqueued 20 to the rear of the queue."
   });
-  
+
   let dequeued = items.shift();
   steps.push({
     type: 'dequeue',
@@ -2982,7 +2975,7 @@ function generateQueueSteps() {
     vars: { size: 1, 'dequeued': dequeued },
     desc: `Dequeued ${dequeued} from the front of the queue. FIFO order retrieves the oldest element.`
   });
-  
+
   dequeued = items.shift();
   steps.push({
     type: 'dequeue',
@@ -2992,7 +2985,7 @@ function generateQueueSteps() {
     vars: { size: 0, 'dequeued': dequeued },
     desc: `Dequeued ${dequeued} from the front of the queue. The queue is now empty.`
   });
-  
+
   return steps;
 }
 
@@ -3002,7 +2995,7 @@ function generateQueueSteps() {
 
 function runCustomSimulation(name, logs, steps, isVerilog) {
   const normName = name.toLowerCase();
-  
+
   if (normName === 'debounce') {
     let clk = '0';
     let button = '0';
@@ -3010,21 +3003,21 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let delay2 = '0';
     let delay3 = '0';
     let filtered = '0';
-    
+
     for (let t = 0; t <= 100; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) button = '0';
       else if (t >= 20 && t < 25) button = '1';
       else if (t >= 25 && t < 35) button = '0';
       else button = '1';
-      
+
       if (clk === '1') {
         delay3 = delay2;
         delay2 = delay1;
         delay1 = button;
         filtered = (delay1 === '1' && delay2 === '1' && delay3 === '1') ? '1' : '0';
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, button, filtered },
@@ -3033,21 +3026,21 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         desc: `[${t} ns] Clock toggled. button=${button}, filtered=${filtered}. delay1=${delay1}, delay2=${delay2}, delay3=${delay3}.`
       });
     }
-    
+
     logs.push({ text: `[Time: 20 ns] button state changed from 0 to 1`, type: 'output-text' });
     logs.push({ text: `[Time: 25 ns] button bounced back to 0`, type: 'output-text' });
     logs.push({ text: `[Time: 35 ns] button pressed stably to 1`, type: 'output-text' });
     logs.push({ text: `[Time: 50 ns] filtered output successfully asserted to 1`, type: 'output-text' });
     return true;
   }
-  
+
   if (normName === 'simple_cpu' || normName === 'tb_cpu') {
     let clk = '0';
     let rst = '1';
     let code = '00000000';
     let accum = '00000000';
     let acc_val = 0;
-    
+
     for (let t = 0; t <= 60; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) {
@@ -3063,7 +3056,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         rst = '0';
         code = '00000000';
       }
-      
+
       if (clk === '1') {
         if (rst === '1') {
           acc_val = 0;
@@ -3078,7 +3071,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         }
         accum = acc_val.toString(2).padStart(8, '0');
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, rst, code_bit0: code[7], accum_bit0: accum[7] },
@@ -3093,22 +3086,22 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     logs.push({ text: `[Time: 35 ns] Clock rising edge: accum updated to 00000011 (3)`, type: 'output-text' });
     return true;
   }
-  
+
   if (normName === 'counter4' || normName === 'tb_counter4') {
     let clk = '0';
     let rst = '1';
     let count_val = 0;
-    
+
     for (let t = 0; t <= 100; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) rst = '1';
       else rst = '0';
-      
+
       if (clk === '1') {
         if (rst === '1') count_val = 0;
         else count_val = (count_val + 1) & 0xF;
       }
-      
+
       const q = count_val.toString(2).padStart(4, '0');
       steps.push({
         time: t,
@@ -3121,17 +3114,17 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     logs.push({ text: `[Time: 20 ns] RESET released. Counter starts counting.`, type: 'output-text' });
     return true;
   }
-  
+
   if (normName === 'lfsr_gen' || normName === 'tb_lfsr_gen') {
     let clk = '0';
     let rst = '1';
     let reg = [1, 0, 0, 0];
-    
+
     for (let t = 0; t <= 100; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 15) rst = '1';
       else rst = '0';
-      
+
       if (clk === '1') {
         if (rst === '1') {
           reg = [1, 0, 0, 0];
@@ -3140,7 +3133,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           reg = [reg[1], reg[2], reg[3], feedback];
         }
       }
-      
+
       const randStr = reg.join('');
       steps.push({
         time: t,
@@ -3152,22 +3145,22 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'crc_calc' || normName === 'tb_crc') {
     let clk = '0';
     let data = '0';
     let crc_val = [0, 0, 0, 0];
-    
+
     for (let t = 0; t <= 80; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) data = '1';
       else data = '0';
-      
+
       if (clk === '1') {
         const fb = (data === '1' ? 1 : 0) ^ crc_val[3];
         crc_val = [fb, crc_val[0] ^ fb, crc_val[1], crc_val[2]];
       }
-      
+
       const crcStr = crc_val.join('');
       steps.push({
         time: t,
@@ -3179,12 +3172,12 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'bin_to_bcd' || normName === 'tb_bin_bcd') {
     let bin = '1011';
     let tens = '0001';
     let ones = '0001';
-    
+
     steps.push({
       time: 0,
       signals: { bin_bit0: bin[3], tens_bit0: tens[3], ones_bit0: ones[3] },
@@ -3192,7 +3185,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
       vars: { time: '0 ns', bin, tens, ones },
       desc: `[0 ns] Input bin=1011 (11). Decoded tens=${tens}, ones=${ones}`
     });
-    
+
     bin = '1110';
     tens = '0001';
     ones = '0100';
@@ -3205,12 +3198,12 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     });
     return true;
   }
-  
+
   if (normName === 'clock_divider' || normName === 'tb_clock_div') {
     let clk_in = '0';
     let clk_out = '0';
     let count = 0;
-    
+
     for (let t = 0; t <= 100; t += 5) {
       clk_in = (clk_in === '0') ? '1' : '0';
       if (clk_in === '1') {
@@ -3221,7 +3214,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           count++;
         }
       }
-      
+
       steps.push({
         time: t,
         signals: { clk_in, clk_out },
@@ -3232,23 +3225,23 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'servo_ctrl' || normName === 'tb_servo') {
     let clk = '0';
     let pos = 5;
     let pwm = '0';
     let counter = 0;
-    
+
     for (let t = 0; t <= 120; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 60) pos = 2;
       else pos = 8;
-      
+
       if (clk === '1') {
         counter = (counter < 19) ? (counter + 1) : 0;
         pwm = (counter < pos + 2) ? '1' : '0';
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, pwm },
@@ -3259,14 +3252,14 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'vga_sync' || normName === 'tb_vga') {
     let clk = '0';
     let hsync = '1';
     let vsync = '1';
     let h_pos = 0;
     let v_pos = 0;
-    
+
     for (let t = 0; t <= 150; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (clk === '1') {
@@ -3279,7 +3272,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
       }
       hsync = (h_pos >= 15 && h_pos < 18) ? '0' : '1';
       vsync = (v_pos >= 8 && v_pos < 10) ? '0' : '1';
-      
+
       steps.push({
         time: t,
         signals: { clk, hsync, vsync },
@@ -3290,23 +3283,23 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'i2s_transmitter' || normName === 'tb_i2s') {
     let sclk = '0';
     let ws = '0';
     let sd = '0';
     let data = '10110011';
     let bit_idx = 7;
-    
+
     for (let t = 0; t <= 120; t += 5) {
       sclk = (sclk === '0') ? '1' : '0';
       ws = (t < 60) ? '0' : '1';
-      
+
       if (sclk === '1') {
         sd = data[7 - bit_idx];
         bit_idx = (bit_idx === 0) ? 7 : (bit_idx - 1);
       }
-      
+
       steps.push({
         time: t,
         signals: { sclk, ws, sd },
@@ -3317,25 +3310,25 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'synchroniser' || normName === 'tb_synchroniser') {
     let clk = '0';
     let data_in = '0';
     let ff1 = '0';
     let ff2 = '0';
     let data_out = '0';
-    
+
     for (let t = 0; t <= 100; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t >= 20 && t < 60) data_in = '1';
       else data_in = '0';
-      
+
       if (clk === '1') {
         ff2 = ff1;
         ff1 = data_in;
         data_out = ff2;
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, data_in, data_out },
@@ -3346,18 +3339,18 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'bidir_buffer' || normName === 'tb_bidir') {
     let oe = '0';
     let data_wr = '0';
-    
+
     const stim = [
       { t: 0, oe: '0', data_wr: '1', bus: 'Z', rd: 'Z' },
       { t: 10, oe: '1', data_wr: '1', bus: '1', rd: '1' },
       { t: 20, oe: '1', data_wr: '0', bus: '0', rd: '0' },
       { t: 30, oe: '0', data_wr: '1', bus: 'Z', rd: 'Z' }
     ];
-    
+
     stim.forEach(s => {
       steps.push({
         time: s.t,
@@ -3369,13 +3362,13 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     });
     return true;
   }
-  
+
   if (normName === 'dff_reset' || normName === 'tb_dff_reset') {
     let clk = '0';
     let rst = '1';
     let d = '0';
     let q = '0';
-    
+
     for (let t = 0; t <= 80; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) {
@@ -3385,12 +3378,12 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         if (t >= 20 && t < 40) d = '1';
         else d = '0';
       }
-      
+
       if (clk === '1') {
         if (rst === '1') q = '0';
         else q = d;
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, rst, d, q },
@@ -3401,7 +3394,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'simple_ram' || normName === 'tb_ram') {
     let clk = '0';
     let we = '0';
@@ -3409,7 +3402,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let din = '0000';
     let dout = '0000';
     let ram = ['0000', '0000', '0000', '0000'];
-    
+
     for (let t = 0; t <= 60; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 10) {
@@ -3421,7 +3414,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
       } else {
         we = '0'; addr = '01';
       }
-      
+
       if (clk === '1') {
         const idx = parseInt(addr, 2);
         if (we === '1') {
@@ -3429,7 +3422,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         }
         dout = ram[idx];
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, we, dout_bit0: dout[3] },
@@ -3440,7 +3433,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'pipeline3' || normName === 'tb_pipeline3') {
     let clk = '0';
     let rst = '1';
@@ -3448,7 +3441,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let stage1 = '0000';
     let stage2 = '0000';
     let dout = '0000';
-    
+
     for (let t = 0; t <= 80; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) {
@@ -3460,7 +3453,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         else if (t >= 40 && t < 50) din = '0011';
         else din = '0100';
       }
-      
+
       if (clk === '1') {
         if (rst === '1') {
           stage1 = '0000'; stage2 = '0000'; dout = '0000';
@@ -3470,7 +3463,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           stage1 = din;
         }
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, rst, dout_bit0: dout[3] },
@@ -3481,7 +3474,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'fifo4' || normName === 'tb_fifo4') {
     let clk = '0';
     let rst = '1';
@@ -3492,7 +3485,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let full = '0';
     let empty = '1';
     let mem = [];
-    
+
     for (let t = 0; t <= 80; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) {
@@ -3509,7 +3502,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           wr_en = '0'; rd_en = '0';
         }
       }
-      
+
       if (clk === '1') {
         if (rst === '1') {
           mem = [];
@@ -3525,7 +3518,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         full = (mem.length === 4) ? '1' : '0';
         empty = (mem.length === 0) ? '1' : '0';
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, wr_en, rd_en, full, empty },
@@ -3536,7 +3529,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'spi_master' || normName === 'tb_spi') {
     let clk = '0';
     let rst = '1';
@@ -3546,7 +3539,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let cs_n = '1';
     let done = '0';
     let data = '10110100';
-    
+
     for (let t = 0; t <= 120; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) rst = '1';
@@ -3554,7 +3547,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         rst = '0';
         start = (t === 20) ? '1' : '0';
       }
-      
+
       if (t >= 25 && t < 105) {
         cs_n = '0';
         sclk = (t % 10 === 0) ? '1' : '0';
@@ -3566,7 +3559,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         mosi = '0';
       }
       done = (t >= 105 && t < 115) ? '1' : '0';
-      
+
       steps.push({
         time: t,
         signals: { clk, sclk, mosi, cs_n, done },
@@ -3577,7 +3570,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'uart_tx' || normName === 'tb_uart_tx') {
     let clk = '0';
     let rst = '1';
@@ -3585,7 +3578,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let tx_pin = '1';
     let tx_done = '0';
     let data = '01000001';
-    
+
     for (let t = 0; t <= 150; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) rst = '1';
@@ -3593,7 +3586,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         rst = '0';
         tx_start = (t === 20) ? '1' : '0';
       }
-      
+
       if (t >= 30 && t < 40) tx_pin = '0'; // Start bit
       else if (t >= 40 && t < 120) {
         const bitIdx = Math.floor((t - 40) / 10);
@@ -3605,7 +3598,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         tx_pin = '1';
         tx_done = '0';
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, tx_pin, tx_done },
@@ -3616,22 +3609,22 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'pwm_gen' || normName === 'tb_pwm') {
     let clk = '0';
     let rst = '1';
     let duty = 10;
     let pwm_out = '0';
     let counter = 0;
-    
+
     for (let t = 0; t <= 120; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) rst = '1';
       else rst = '0';
-      
+
       if (t >= 20 && t < 60) duty = 10;
       else duty = 15;
-      
+
       if (clk === '1') {
         if (rst === '1') {
           counter = 0;
@@ -3640,7 +3633,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         }
         pwm_out = (counter < duty) ? '1' : '0';
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, pwm_out },
@@ -3651,13 +3644,13 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'synchronous_dff' || normName === 'tb_sync_dff') {
     let clk = '0';
     let rst = '1';
     let d = '0';
     let q = '0';
-    
+
     for (let t = 0; t <= 60; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 15) {
@@ -3665,12 +3658,12 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
       } else {
         rst = '0'; d = '1';
       }
-      
+
       if (clk === '1') {
         if (rst === '1') q = '0';
         else q = d;
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, rst, d, q },
@@ -3681,13 +3674,13 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'clock_enabled_reg' || normName === 'tb_enabled_reg') {
     let clk = '0';
     let en = '0';
     let d = '0';
     let q = '0';
-    
+
     for (let t = 0; t <= 60; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) {
@@ -3695,11 +3688,11 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
       } else {
         en = '1'; d = '1';
       }
-      
+
       if (clk === '1') {
         if (en === '1') q = d;
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, en, d, q },
@@ -3710,19 +3703,19 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'dlatch' || normName === 'tb_dlatch') {
     let clk = '0';
     let d = '0';
     let q = '0';
-    
+
     const stim = [
       { t: 0, clk: '0', d: '1', q: '0' },
       { t: 10, clk: '1', d: '1', q: '1' },
       { t: 20, clk: '0', d: '0', q: '1' },
       { t: 30, clk: '1', d: '0', q: '0' }
     ];
-    
+
     stim.forEach(s => {
       steps.push({
         time: s.t,
@@ -3734,17 +3727,17 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     });
     return true;
   }
-  
+
   if (normName === 'toggle_fsm' || normName === 'tb_toggle_fsm') {
     let clk = '0';
     let state = '0';
-    
+
     for (let t = 0; t <= 80; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (clk === '1') {
         state = (state === '0') ? '1' : '0';
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, state },
@@ -3755,7 +3748,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'dma_controller' || normName === 'tb_dma') {
     let clk = '0';
     let rst = '1';
@@ -3763,7 +3756,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let mem_write = '0';
     let dma_busy = '0';
     let current_state = 'IDLE';
-    
+
     for (let t = 0; t <= 80; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) rst = '1';
@@ -3771,7 +3764,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
         rst = '0';
         start = (t === 20) ? '1' : '0';
       }
-      
+
       if (clk === '1') {
         if (rst === '1') {
           current_state = 'IDLE';
@@ -3793,7 +3786,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           }
         }
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, rst, start, mem_write, dma_busy },
@@ -3804,19 +3797,19 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'interrupt_ctrl' || normName === 'tb_interrupt') {
     let irq_inputs = '0000';
     let irq_active = '0';
     let irq_addr = '00';
-    
+
     const stim = [
       { t: 0, irq: '0000', active: '0', addr: '00' },
       { t: 10, irq: '0010', active: '1', addr: '01' },
       { t: 20, irq: '1010', active: '1', addr: '11' },
       { t: 30, irq: '0000', active: '0', addr: '00' }
     ];
-    
+
     stim.forEach(s => {
       steps.push({
         time: s.t,
@@ -3828,7 +3821,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     });
     return true;
   }
-  
+
   if (normName === 'wishbone_slave' || normName === 'tb_wishbone') {
     let clk = '0';
     let rst = '1';
@@ -3837,7 +3830,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     let we = '0';
     let ack = '0';
     let reg = '00000000';
-    
+
     for (let t = 0; t <= 60; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) rst = '1';
@@ -3849,7 +3842,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           cyc = '0'; stb = '0'; we = '0';
         }
       }
-      
+
       if (clk === '1') {
         if (rst === '1') {
           reg = '00000000';
@@ -3863,7 +3856,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           }
         }
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, cyc, stb, we, ack },
@@ -3874,14 +3867,14 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   if (normName === 'axi_slave' || normName === 'tb_axi') {
     let clk = '0';
     let resetn = '0';
     let awvalid = '0';
     let wvalid = '0';
     let reg_out = '00000000';
-    
+
     for (let t = 0; t <= 60; t += 5) {
       clk = (clk === '0') ? '1' : '0';
       if (t < 20) resetn = '0';
@@ -3893,7 +3886,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           awvalid = '0'; wvalid = '0';
         }
       }
-      
+
       if (clk === '1') {
         if (resetn === '0') {
           reg_out = '00000000';
@@ -3901,7 +3894,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
           reg_out = '10101010';
         }
       }
-      
+
       steps.push({
         time: t,
         signals: { clk, resetn, awvalid, wvalid },
@@ -3912,7 +3905,7 @@ function runCustomSimulation(name, logs, steps, isVerilog) {
     }
     return true;
   }
-  
+
   return false;
 }
 
@@ -3921,10 +3914,10 @@ function simulateVHDL(code) {
   const steps = [];
   let duration = 0.05;
   let success = true;
-  
+
   // Clean comments and whitespace
   const cleanCode = code.replace(/--.*$/gm, '');
-  
+
   const entityMatch = cleanCode.match(/entity\s+(\w+)/i);
   if (entityMatch) {
     const entityName = entityMatch[1].toLowerCase();
@@ -3939,7 +3932,7 @@ function simulateVHDL(code) {
   if (!/entity\s+\w+\s+is/i.test(cleanCode) || !/architecture\s+\w+\s+of\s+\w+\s+is/i.test(cleanCode)) {
     logs.push({ text: 'main.vhd:1:1: error: No entity or architecture declarations found in VHDL code.', type: 'error-text' });
     logs.push({ text: '--- COMPILATION FAILED ---', type: 'error-text' });
-    
+
     // Push a dummy failed step so the visualizer doesn't crash
     steps.push({
       time: 0,
@@ -3948,7 +3941,7 @@ function simulateVHDL(code) {
       vars: { status: 'COMPILE ERROR' },
       desc: 'Compilation failed. Please fix your syntax or use the default template.'
     });
-    
+
     return { logs, steps, success: false, duration: 0.0 };
   }
 
@@ -3959,7 +3952,7 @@ function simulateVHDL(code) {
 
   // 1. Find all signals declared in the code (both in entity port map and architecture declarations)
   const signals = {};
-  
+
   // Find all VHDL signals: signal a, b, c : std_logic := '0';
   const signalRegex = /signal\s+([^:]+)\s*:\s*(\w+)\s*(:=\s*'([01XZ])')?/gi;
   let match;
@@ -3972,7 +3965,7 @@ function simulateVHDL(code) {
       }
     });
   }
-  
+
   // Look for ports in entity declarations: a, b : in std_logic; sum, carry : out std_logic;
   const portSectionRegex = /port\s*\(([^)]+)\)/gi;
   let portMatch;
@@ -4014,7 +4007,7 @@ function simulateVHDL(code) {
   // 2. Find concurrent signal assignments outside processes
   const processBlockRegex = /process[\s\S]+?end\s+process/gi;
   const concurrentCode = cleanCode.replace(processBlockRegex, '');
-  
+
   const concurrentAssignments = [];
   const assignmentRegex = /(\w+)\s*<=\s*([^;]+);/g;
   while ((match = assignmentRegex.exec(concurrentCode)) !== null) {
@@ -4027,8 +4020,8 @@ function simulateVHDL(code) {
   // Helper to evaluate expressions
   function evaluateExpr(expr, signalMap) {
     let cleanExpr = expr.toLowerCase().replace(/['"]/g, '').trim();
-    
-    const keys = Object.keys(signalMap).sort((a,b) => b.length - a.length);
+
+    const keys = Object.keys(signalMap).sort((a, b) => b.length - a.length);
     keys.forEach(sig => {
       const val = (signalMap[sig] === '1') ? 'true' : 'false';
       const regex = new RegExp('\\b' + sig + '\\b', 'g');
@@ -4040,12 +4033,12 @@ function simulateVHDL(code) {
     cleanExpr = cleanExpr.replace(/\bor\b/g, ' || ');
     cleanExpr = cleanExpr.replace(/\bnot\b/g, ' ! ');
     cleanExpr = cleanExpr.replace(/\bxnor\b/g, ' === ');
-    
+
     try {
       const sanitized = cleanExpr.replace(/[^a-z0-9\s&|!=\(\)]/gi, '');
       const result = new Function(`return (${sanitized})`)();
       return result ? '1' : '0';
-    } catch(e) {
+    } catch (e) {
       return 'X';
     }
   }
@@ -4093,11 +4086,11 @@ function simulateVHDL(code) {
   if (processMatch) {
     const processBody = processMatch[1];
     const statements = processBody.split(';');
-    
+
     statements.forEach(stmt => {
       const cleanStmt = stmt.trim();
       if (!cleanStmt) return;
-      
+
       const sigAssignMatch = /^(\w+)\s*<=\s*'([01XZ])'$/i.exec(cleanStmt);
       if (sigAssignMatch) {
         const sigName = sigAssignMatch[1].toLowerCase();
@@ -4125,12 +4118,12 @@ function simulateVHDL(code) {
         }
         return;
       }
-      
+
       const waitMatch = /^wait\s+for\s+(\d+)\s*(ns|ps|us|ms)$/i.exec(cleanStmt);
       if (waitMatch) {
         const duration = parseInt(waitMatch[1], 10);
         time += duration;
-        
+
         steps.push({
           time: time,
           signals: { ...signals },
@@ -4140,7 +4133,7 @@ function simulateVHDL(code) {
         });
         return;
       }
-      
+
       const reportMatch = /^report\s+([\s\S]+)$/i.exec(cleanStmt);
       if (reportMatch) {
         let rawMsg = reportMatch[1];
@@ -4148,12 +4141,12 @@ function simulateVHDL(code) {
         msg = msg.replace(/std_logic'image\((\w+)\)/g, (match, sigName) => {
           return signals[sigName.toLowerCase()] || 'U';
         });
-        
+
         Object.keys(signals).forEach(sig => {
           const regex = new RegExp('\\b' + sig + '\\b', 'g');
           msg = msg.replace(regex, signals[sig]);
         });
-        
+
         logs.push({
           text: `[Time: ${time} ns] REPORT: ${msg}`,
           type: 'output-text'
@@ -4168,7 +4161,7 @@ function simulateVHDL(code) {
 
   duration = 0.05 + Math.random() * 0.04;
   duration = parseFloat(duration.toFixed(2));
-  
+
   return { logs, steps, success: true, duration };
 }
 
@@ -4190,10 +4183,10 @@ function renderVHDLWaveforms(canvas, step) {
   const rowHeight = 55;
   const topPadding = 20;
   const bottomPadding = 30;
-  
+
   const svgHeight = signalsList.length * rowHeight + topPadding + bottomPadding;
   const plotWidth = svgWidth - leftPadding - rightPadding;
-  const maxTime = lastStep.time || 40; 
+  const maxTime = lastStep.time || 40;
 
   let svgContent = `<svg class="vhdl-waveform-svg" width="100%" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
 
@@ -4216,7 +4209,7 @@ function renderVHDLWaveforms(canvas, step) {
     const rowBase = topPadding + idx * rowHeight;
     const yHigh = rowBase + 12;
     const yLow = rowBase + 35;
-    
+
     svgContent += `<text class="vhdl-label-text" x="15" y="${rowBase + 28}">${sig}</text>`;
     svgContent += `<line x1="${leftPadding}" y1="${rowBase + 45}" x2="${leftPadding + plotWidth}" y2="${rowBase + 45}" stroke="rgba(255,255,255,0.03)" stroke-width="1" />`;
 
@@ -4228,7 +4221,7 @@ function renderVHDLWaveforms(canvas, step) {
     steps.forEach(s => {
       const x = leftPadding + (s.time / maxTime) * plotWidth;
       const y = (s.signals[sig] === '1') ? yHigh : yLow;
-      
+
       pathD += ` H ${x}`;
       if (y !== prevY) {
         pathD += ` V ${y}`;
@@ -4242,14 +4235,14 @@ function renderVHDLWaveforms(canvas, step) {
     const cursorTime = step.time;
     const cursorX = leftPadding + (cursorTime / maxTime) * plotWidth;
     const currentVal = step.signals[sig] || '0';
-    
-    svgContent += `<text class="vhdl-value-text" x="${cursorX + 6}" y="${(yHigh + yLow)/2 + 4}">${currentVal}</text>`;
+
+    svgContent += `<text class="vhdl-value-text" x="${cursorX + 6}" y="${(yHigh + yLow) / 2 + 4}">${currentVal}</text>`;
   });
 
   // Draw active time cursor
   const activeX = leftPadding + (step.time / maxTime) * plotWidth;
   svgContent += `<line class="vhdl-cursor-line" x1="${activeX}" y1="${topPadding - 10}" x2="${activeX}" y2="${svgHeight - bottomPadding + 5}" />`;
-  
+
   svgContent += `<rect x="${activeX - 25}" y="${topPadding - 18}" width="50" height="14" rx="3" fill="var(--accent-indigo)" opacity="0.85" />`;
   svgContent += `<text x="${activeX}" y="${topPadding - 8}" fill="#ffffff" font-family="var(--font-mono)" font-size="9px" font-weight="600" text-anchor="middle">${step.time} ns</text>`;
 
@@ -4280,7 +4273,7 @@ function simulateVerilog(code) {
   if (!/module\s+\w+/i.test(cleanCode) || !/endmodule/i.test(cleanCode)) {
     logs.push({ text: 'main.v:1: error: No module or endmodule declarations found in Verilog code.', type: 'error-text' });
     logs.push({ text: '--- COMPILATION FAILED ---', type: 'error-text' });
-    
+
     steps.push({
       time: 0,
       signals: {},
@@ -4288,7 +4281,7 @@ function simulateVerilog(code) {
       vars: { status: 'COMPILE ERROR' },
       desc: 'Compilation failed. Please fix your syntax or use the default template.'
     });
-    
+
     return { logs, steps, success: false, duration: 0.0 };
   }
 
@@ -4299,7 +4292,7 @@ function simulateVerilog(code) {
 
   // 1. Find all signals declared (reg, wire, inputs, outputs)
   const signals = {};
-  
+
   const declRegex = /\b(reg|wire|input|output)\s+([^;]+);/gi;
   let match;
   while ((match = declRegex.exec(cleanCode)) !== null) {
@@ -4359,8 +4352,8 @@ function simulateVerilog(code) {
   // Helper to evaluate expressions
   function evaluateExpr(expr, signalMap) {
     let cleanExpr = expr.toLowerCase().replace(/['"]/g, '').trim();
-    
-    const keys = Object.keys(signalMap).sort((a,b) => b.length - a.length);
+
+    const keys = Object.keys(signalMap).sort((a, b) => b.length - a.length);
     keys.forEach(sig => {
       const val = (signalMap[sig] === '1') ? 'true' : 'false';
       const regex = new RegExp('\\b' + sig + '\\b', 'g');
@@ -4371,12 +4364,12 @@ function simulateVerilog(code) {
     cleanExpr = cleanExpr.replace(/&/g, ' && '); // AND
     cleanExpr = cleanExpr.replace(/\|/g, ' || '); // OR
     cleanExpr = cleanExpr.replace(/~/g, ' ! '); // NOT
-    
+
     try {
       const sanitized = cleanExpr.replace(/[^a-z0-9\s&|!=\(\)]/gi, '');
       const result = new Function(`return (${sanitized})`)();
       return result ? '1' : '0';
-    } catch(e) {
+    } catch (e) {
       return 'X';
     }
   }
@@ -4425,7 +4418,7 @@ function simulateVerilog(code) {
   if (initialMatch) {
     const body = initialMatch[1];
     const statements = body.split(';');
-    
+
     statements.forEach(stmt => {
       const cleanStmt = stmt.trim();
       if (!cleanStmt) return;
@@ -4477,13 +4470,13 @@ function simulateVerilog(code) {
         const contentParts = displayMatch[1].split(',');
         const formatString = contentParts[0].replace(/"/g, '').trim();
         const displaySignals = contentParts.slice(1).map(s => s.trim().toLowerCase());
-        
+
         let outputMsg = formatString;
         displaySignals.forEach(sig => {
           const val = signals[sig] || 'x';
           outputMsg = outputMsg.replace(/%b|%d|%h/i, val);
         });
-        
+
         logs.push({
           text: `[Time: ${time} ns] $display: ${outputMsg}`,
           type: 'output-text'
