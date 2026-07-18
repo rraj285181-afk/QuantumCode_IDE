@@ -5202,6 +5202,11 @@ function initZenMode() {
     zenBtn.addEventListener('click', toggleZenMode);
   }
 
+  const exitFloatingBtn = document.getElementById('zen-exit-floating-btn');
+  if (exitFloatingBtn) {
+    exitFloatingBtn.addEventListener('click', toggleZenMode);
+  }
+
   // Keyboard shortcut Alt + Z
   window.addEventListener('keydown', (e) => {
     if (e.altKey && e.key.toLowerCase() === 'z') {
