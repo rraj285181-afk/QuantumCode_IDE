@@ -27,6 +27,9 @@
 
   <!-- PeerJS WebRTC P2P Library -->
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+  <!-- sql.js WASM Database Engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
 </head>
 
 <body>
@@ -361,6 +364,20 @@
                   <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                     <code id="collab-room-id" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); word-break: break-all;">-</code>
                     <button id="collab-copy-id-btn" class="icon-btn" title="Copy Room ID"><span class="material-symbols-outlined" style="font-size: 1.1rem;">content_copy</span></button>
+                  </div>
+                </div>
+
+                <!-- Voice Chat and Peer List -->
+                <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Active Peers:</span>
+                    <button id="collab-voice-btn" class="secondary-btn" style="height: 24px; padding: 0 8px; font-size: 0.75rem; border-color: var(--accent-indigo);">
+                      <span class="material-symbols-outlined" style="font-size: 1rem;">mic_off</span>
+                      <span>Voice Chat</span>
+                    </button>
+                  </div>
+                  <div id="collab-peer-list" style="display: flex; flex-direction: column; gap: 4px; max-height: 80px; overflow-y: auto;">
+                    <div style="font-size: 0.75rem; color: var(--text-dark);">• You (Local)</div>
                   </div>
                 </div>
 

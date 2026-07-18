@@ -955,6 +955,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGitPanel();
   initCollabPanel();
   initWaveformBuilder();
+  initSQLDatabase();
 
   // Load Monaco Editor using the AMD loader
   if (window.monaco) {
@@ -2285,6 +2286,16 @@ async function runCurrentCode() {
 
   // Switch terminal screen to Output tab to let user see logs
   setTerminalTabActive('output', false);
+
+  if (activeFile.language === 'sql') {
+    executeSQLQuery(activeFile.content);
+    runBtn.disabled = false;
+    playIcon.classList.remove('spinner-hide');
+    spinner.classList.add('spinner-hide');
+    statusBadge.className = 'status-badge success';
+    statusBadge.textContent = 'Success';
+    return;
+  }
 
   if (activeFile.language === 'html') {
     showTerminalLog('[System] HTML/CSS is web native. Opening preview window...', 'system-text');
@@ -5494,6 +5505,7 @@ function initCollabPanel() {
   const chatInput = document.getElementById('collab-chat-input');
   const chatSendBtn = document.getElementById('collab-chat-send-btn');
   const copyIdBtn = document.getElementById('collab-copy-id-btn');
+  const voiceBtn = document.getElementById('collab-voice-btn');
 
   if (hostBtn) hostBtn.addEventListener('click', collabStartHost);
   if (joinBtn) joinBtn.addEventListener('click', collabStartJoin);
@@ -5513,7 +5525,14 @@ function initCollabPanel() {
       }
     });
   }
+  if (voiceBtn) {
+    voiceBtn.addEventListener('click', collabToggleVoice);
+  }
 }
+
+let collabLocalStream = null;
+let collabVoiceActive = false;
+let collabActiveCall = null;
 
 function collabStartHost() {
   if (typeof Peer === 'undefined') {
@@ -5535,11 +5554,22 @@ function collabStartHost() {
     document.getElementById('collab-status-badge').style.background = 'rgba(16, 185, 129, 0.15)';
     document.getElementById('collab-status-badge').style.color = 'var(--color-success)';
     showTerminalLog(`[Collaboration] Room opened successfully. ID: ${id}`, 'success-text');
+    updatePeerList();
   });
 
   peerInstance.on('connection', (conn) => {
     peerConnection = conn;
     setupCollabConnectionListeners(conn);
+  });
+
+  peerInstance.on('call', (call) => {
+    collabActiveCall = call;
+    if (collabLocalStream) {
+      call.answer(collabLocalStream);
+    } else {
+      call.answer();
+    }
+    setupVoiceCallListeners(call);
   });
 
   peerInstance.on('error', (err) => {
@@ -5573,6 +5603,16 @@ function collabStartJoin() {
     setupCollabConnectionListeners(conn);
   });
 
+  peerInstance.on('call', (call) => {
+    collabActiveCall = call;
+    if (collabLocalStream) {
+      call.answer(collabLocalStream);
+    } else {
+      call.answer();
+    }
+    setupVoiceCallListeners(call);
+  });
+
   peerInstance.on('error', (err) => {
     showTerminalLog(`[Collaboration Error] PeerJS: ${err.type} - ${err.message}`, 'error-text');
   });
@@ -5588,6 +5628,7 @@ function setupCollabConnectionListeners(conn) {
     document.getElementById('collab-status-badge').style.color = 'var(--accent-cyan)';
     
     showTerminalLog('[Collaboration] WebRTC peer channel connected successfully.', 'success-text');
+    updatePeerList();
 
     if (editor) {
       editor.onDidChangeModelContent(() => {
@@ -5625,6 +5666,70 @@ function setupCollabConnectionListeners(conn) {
   });
 }
 
+function collabToggleVoice() {
+  const voiceBtn = document.getElementById('collab-voice-btn');
+  if (!voiceBtn) return;
+
+  if (collabVoiceActive) {
+    // Disable voice chat
+    if (collabLocalStream) {
+      collabLocalStream.getTracks().forEach(track => track.stop());
+      collabLocalStream = null;
+    }
+    collabVoiceActive = false;
+    voiceBtn.querySelector('.material-symbols-outlined').textContent = 'mic_off';
+    voiceBtn.querySelector('span:not(.material-symbols-outlined)').textContent = 'Voice Chat';
+    voiceBtn.style.borderColor = 'var(--accent-indigo)';
+    showTerminalLog('[Collaboration] Local microphone muted.', 'system-text');
+  } else {
+    // Enable voice chat
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      collabLocalStream = stream;
+      collabVoiceActive = true;
+      voiceBtn.querySelector('.material-symbols-outlined').textContent = 'mic';
+      voiceBtn.querySelector('span:not(.material-symbols-outlined)').textContent = 'Voice Active';
+      voiceBtn.style.borderColor = 'var(--color-success)';
+      showTerminalLog('[Collaboration] Microphone activated.', 'system-text');
+
+      if (peerConnection && peerConnection.open) {
+        const call = peerInstance.call(peerConnection.peer, stream);
+        collabActiveCall = call;
+        setupVoiceCallListeners(call);
+      }
+    }).catch(err => {
+      showTerminalLog(`[Collaboration Error] Microphone access denied: ${err.message}`, 'error-text');
+    });
+  }
+}
+
+function setupVoiceCallListeners(call) {
+  call.on('stream', (remoteStream) => {
+    let audioEl = document.getElementById('collab-remote-audio');
+    if (!audioEl) {
+      audioEl = document.createElement('audio');
+      audioEl.id = 'collab-remote-audio';
+      audioEl.autoplay = true;
+      document.body.appendChild(audioEl);
+    }
+    audioEl.srcObject = remoteStream;
+    showTerminalLog('[Collaboration] Voice channel established.', 'success-text');
+  });
+
+  call.on('close', () => {
+    showTerminalLog('[Collaboration] Voice call ended.', 'system-text');
+  });
+}
+
+function updatePeerList() {
+  const peerList = document.getElementById('collab-peer-list');
+  if (!peerList) return;
+
+  peerList.innerHTML = `<div style="font-size: 0.75rem; color: var(--text-dark);">• You (Local - ${isCollabHost ? 'Host' : 'Guest'})</div>`;
+  if (peerConnection && peerConnection.open) {
+    peerList.innerHTML += `<div style="font-size: 0.75rem; color: var(--accent-cyan);">• Peer (${isCollabHost ? 'Guest' : 'Host'} connected)</div>`;
+  }
+}
+
 function collabSendMessage() {
   const input = document.getElementById('collab-chat-input');
   const text = input ? input.value.trim() : '';
@@ -5659,6 +5764,10 @@ function appendChatMessage(sender, text, isSelf) {
 }
 
 function collabDisconnect() {
+  if (collabLocalStream) {
+    collabLocalStream.getTracks().forEach(track => track.stop());
+    collabLocalStream = null;
+  }
   if (peerConnection) {
     peerConnection.close();
     peerConnection = null;
@@ -5671,19 +5780,21 @@ function collabDisconnect() {
   document.getElementById('collab-active-section').classList.add('hide');
   document.getElementById('collab-init-section').classList.remove('hide');
   showTerminalLog('[Collaboration] Room closed or disconnected.', 'system-text');
+  updatePeerList();
 }
 
 // ==========================================================================
-// Custom Signal Waveform Builder
+// Custom Signal Waveform Builder (Pro Version)
 // ==========================================================================
 let waveBuilderActive = false;
 const waveBuilderState = {
   signals: ['CLK', 'RST', 'DATA'],
-  intervals: 10,
+  intervals: 12,
+  cellWidth: 40, // Default width (in px)
   data: {
-    CLK: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    RST: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    DATA: [0, 0, 0, 1, 1, 0, 1, 1, 0, 0]
+    CLK: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    RST: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    DATA: [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1]
   }
 };
 
@@ -5715,11 +5826,17 @@ function renderWaveformBuilderGrid(canvas) {
   
   const builderWrapper = document.createElement('div');
   builderWrapper.className = 'vis-waveform-builder';
+  builderWrapper.style.setProperty('--wave-cell-width', `${waveBuilderState.cellWidth}px`);
   
   const header = document.createElement('div');
   header.className = 'vis-wave-grid-header';
   header.innerHTML = `
-    <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">Signal Timeline</span>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">Wave Timeline</span>
+      <button id="wave-zoom-out-btn" class="icon-btn" style="height: 24px;" title="Zoom Out"><span class="material-symbols-outlined" style="font-size: 1.1rem;">zoom_out</span></button>
+      <button id="wave-zoom-in-btn" class="icon-btn" style="height: 24px;" title="Zoom In"><span class="material-symbols-outlined" style="font-size: 1.1rem;">zoom_in</span></button>
+      <button id="wave-export-svg-btn" class="icon-btn" style="height: 24px; color: var(--accent-cyan);" title="Export SVG"><span class="material-symbols-outlined" style="font-size: 1.1rem;">download</span></button>
+    </div>
     <div style="display: flex; gap: 6px;">
       <input type="text" id="new-sig-name" placeholder="Signal" style="width: 70px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; color: var(--text-main); font-size: 0.75rem; outline: none;" />
       <button id="add-sig-btn" class="primary-btn" style="height: 24px; padding: 0 8px; font-size: 0.75rem;">Add</button>
@@ -5728,6 +5845,19 @@ function renderWaveformBuilderGrid(canvas) {
   `;
 
   builderWrapper.appendChild(header);
+
+  // Time grid cycle counters header
+  const cycleHeaderRow = document.createElement('div');
+  cycleHeaderRow.className = 'vis-wave-row';
+  cycleHeaderRow.style.height = '24px';
+  cycleHeaderRow.style.borderBottom = '1px solid var(--border-color)';
+  cycleHeaderRow.innerHTML = `
+    <div class="vis-wave-label" style="font-size: 0.7rem; color: var(--text-muted);">Cycle</div>
+    <div class="vis-wave-timeline">
+      ${Array.from({ length: waveBuilderState.intervals }).map((_, i) => `<div class="vis-wave-cell" style="border-left:none; text-align:center; font-size:0.7rem; color:var(--accent-cyan); line-height:24px;">T${i}</div>`).join('')}
+    </div>
+  `;
+  builderWrapper.appendChild(cycleHeaderRow);
 
   waveBuilderState.signals.forEach(sig => {
     const row = document.createElement('div');
@@ -5766,6 +5896,7 @@ function renderWaveformBuilderGrid(canvas) {
 
   canvas.appendChild(builderWrapper);
 
+  // Setup buttons inside grid
   const addSigBtn = document.getElementById('add-sig-btn');
   if (addSigBtn) {
     addSigBtn.addEventListener('click', () => {
@@ -5789,5 +5920,159 @@ function renderWaveformBuilderGrid(canvas) {
       renderWaveformBuilderGrid(canvas);
     });
   }
+
+  // Zoom and Export listeners
+  const zoomInBtn = document.getElementById('wave-zoom-in-btn');
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener('click', () => {
+      if (waveBuilderState.cellWidth < 100) {
+        waveBuilderState.cellWidth += 10;
+        renderWaveformBuilderGrid(canvas);
+      }
+    });
+  }
+
+  const zoomOutBtn = document.getElementById('wave-zoom-out-btn');
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+      if (waveBuilderState.cellWidth > 20) {
+        waveBuilderState.cellWidth -= 10;
+        renderWaveformBuilderGrid(canvas);
+      }
+    });
+  }
+
+  const exportBtn = document.getElementById('wave-export-svg-btn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportWaveformToSVG);
+  }
 }
+
+function exportWaveformToSVG() {
+  const heightPerRow = 40;
+  const widthPerInterval = 50;
+  const margin = 50;
+  const svgWidth = waveBuilderState.intervals * widthPerInterval + margin * 2;
+  const svgHeight = waveBuilderState.signals.length * heightPerRow + margin * 2;
+
+  let paths = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" style="background:#0f172a; font-family:monospace; color:#ffffff;">`;
+  paths += `<rect width="100%" height="100%" fill="#0f172a"/>`;
+
+  for (let t = 0; t < waveBuilderState.intervals; t++) {
+    const x = margin + t * widthPerInterval + widthPerInterval / 2;
+    paths += `<text x="${x}" y="30" fill="#64748b" font-size="12" text-anchor="middle">T${t}</text>`;
+  }
+
+  waveBuilderState.signals.forEach((sig, sIdx) => {
+    const yOffset = margin + sIdx * heightPerRow;
+    const lowY = yOffset + 30;
+    const highY = yOffset + 10;
+
+    paths += `<text x="15" y="${yOffset + 22}" fill="#e2e8f0" font-size="14" font-weight="bold">${sig}</text>`;
+
+    let pathD = '';
+    const array = waveBuilderState.data[sig] || [];
+    for (let t = 0; t < waveBuilderState.intervals; t++) {
+      const startX = margin + t * widthPerInterval;
+      const endX = startX + widthPerInterval;
+      const levelY = array[t] === 1 ? highY : lowY;
+
+      if (t === 0) {
+        pathD += `M ${startX} ${levelY}`;
+      } else {
+        const prevLevelY = array[t - 1] === 1 ? highY : lowY;
+        if (prevLevelY !== levelY) {
+          pathD += ` L ${startX} ${levelY}`;
+        }
+      }
+      pathD += ` L ${endX} ${levelY}`;
+    }
+    paths += `<path d="${pathD}" fill="none" stroke="#22d3ee" stroke-width="3" />`;
+    paths += `<line x1="10" y1="${yOffset + heightPerRow}" x2="${svgWidth - 10}" y2="${yOffset + heightPerRow}" stroke="#1e293b" stroke-dasharray="3" />`;
+  });
+
+  paths += `</svg>`;
+
+  const blob = new Blob([paths], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'waveform_simulation.svg';
+  a.click();
+  URL.revokeObjectURL(url);
+  showTerminalLog('[System] Waveform exported and downloaded as SVG.', 'system-text');
+}
+
+// ==========================================================================
+// SQL Playground local execution
+// ==========================================================================
+let sqlEngine = null;
+
+async function initSQLDatabase() {
+  if (typeof initSqlJs === 'undefined') {
+    return;
+  }
+  try {
+    const config = {
+      locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${filename}`
+    };
+    const SQL = await initSqlJs(config);
+    sqlEngine = new SQL.Database();
+    showTerminalLog('[Database] Local SQLite WASM environment initialized.', 'system-text');
+  } catch (err) {
+    showTerminalLog(`[Database Error] Initialization failed: ${err.message}`, 'error-text');
+  }
+}
+
+function executeSQLQuery(queries) {
+  if (!sqlEngine) {
+    showTerminalLog('[Database Error] SQL engine is still loading or failed to initialize.', 'error-text');
+    return;
+  }
+
+  showTerminalLog('> Running SQL queries local-client side...', 'system-text');
+
+  const queryArray = queries.split(';').map(q => q.trim()).filter(q => q.length > 0);
+  
+  queryArray.forEach(query => {
+    try {
+      showTerminalLog(`SQL> ${query};`, 'system-text');
+      const res = sqlEngine.exec(query);
+      if (res.length > 0) {
+        res.forEach(table => {
+          const tableHTML = document.createElement('table');
+          tableHTML.className = 'sql-result-table';
+          
+          let headerHTML = '<tr>';
+          table.columns.forEach(col => {
+            headerHTML += `<th>${col}</th>`;
+          });
+          headerHTML += '</tr>';
+          
+          let rowsHTML = '';
+          table.values.forEach(row => {
+            rowsHTML += '<tr>';
+            row.forEach(val => {
+              rowsHTML += `<td>${val === null ? 'NULL' : val}</td>`;
+            });
+            rowsHTML += '</tr>';
+          });
+          
+          tableHTML.innerHTML = headerHTML + rowsHTML;
+          
+          const terminalLog = document.getElementById('terminal-log');
+          if (terminalLog) {
+            terminalLog.appendChild(tableHTML);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+          }
+        });
+      } else {
+        showTerminalLog('Query executed successfully. (No rows returned)', 'success-text');
+      }
+    } catch (err) {
+      showTerminalLog(`[SQL Error] ${err.message}`, 'error-text');
+    }
+  });
+}
+
 

@@ -3519,3 +3519,48 @@ body.zen-mode #ide-terminal {
   height: 50%;
   background: var(--accent-cyan);
 }
+
+/* SQL Playground Styles */
+.sql-result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sql-result-table th, .sql-result-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.sql-result-table th {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.sql-result-table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Waveform Analyzer Zoom Options */
+.vis-waveform-builder {
+  --wave-cell-width: 40px; /* Default */
+}
+
+.vis-wave-cell {
+  width: var(--wave-cell-width);
+  flex: none !important;
+}
+
+.vis-wave-timeline {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
