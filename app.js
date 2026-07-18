@@ -5202,9 +5202,9 @@ function initZenMode() {
     zenBtn.addEventListener('click', toggleZenMode);
   }
 
-  const exitFloatingBtn = document.getElementById('zen-exit-floating-btn');
-  if (exitFloatingBtn) {
-    exitFloatingBtn.addEventListener('click', toggleZenMode);
+  const zenTabBtn = document.getElementById('zen-tab-btn');
+  if (zenTabBtn) {
+    zenTabBtn.addEventListener('click', toggleZenMode);
   }
 
   // Keyboard shortcut Alt + Z
@@ -5218,20 +5218,31 @@ function initZenMode() {
 
 function toggleZenMode() {
   document.body.classList.toggle('zen-mode');
-  const zenBtn = document.getElementById('zen-btn');
-  if (zenBtn) {
-    const icon = zenBtn.querySelector('.material-symbols-outlined');
-    const text = zenBtn.querySelector('span:not(.material-symbols-outlined)');
-    if (document.body.classList.contains('zen-mode')) {
-      if (icon) icon.textContent = 'fullscreen_exit';
-      if (text) text.textContent = 'Normal';
-      showTerminalLog('[System] Focus Mode enabled. Press Alt+Z to exit.', 'system-text');
-    } else {
-      if (icon) icon.textContent = 'fullscreen';
-      if (text) text.textContent = 'Zen';
-      showTerminalLog('[System] Focus Mode disabled.', 'system-text');
+  
+  const updateBtnUI = (btnId) => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      const icon = btn.querySelector('.material-symbols-outlined');
+      const text = btn.querySelector('span:not(.material-symbols-outlined)');
+      if (document.body.classList.contains('zen-mode')) {
+        if (icon) icon.textContent = 'fullscreen_exit';
+        if (text) text.textContent = 'Normal';
+      } else {
+        if (icon) icon.textContent = 'fullscreen';
+        if (text) text.textContent = 'Zen';
+      }
     }
+  };
+
+  updateBtnUI('zen-btn');
+  updateBtnUI('zen-tab-btn');
+
+  if (document.body.classList.contains('zen-mode')) {
+    showTerminalLog('[System] Focus Mode enabled. Press Alt+Z to exit.', 'system-text');
+  } else {
+    showTerminalLog('[System] Focus Mode disabled.', 'system-text');
   }
+
   if (editor) {
     setTimeout(() => editor.layout(), 100);
   }

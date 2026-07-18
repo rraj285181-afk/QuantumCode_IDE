@@ -3564,7 +3564,3 @@ body.zen-mode #ide-terminal {
   overflow-x: auto;
   scrollbar-width: thin;
 }
-
-body.zen-mode #zen-exit-floating-btn {
-  display: flex !important;
-}
