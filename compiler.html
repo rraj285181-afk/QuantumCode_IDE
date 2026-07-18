@@ -39,7 +39,8 @@
     <!-- Top Header Navigation -->
     <header id="ide-header">
       <div class="header-logo-group">
-        <button id="mobile-sidebar-toggle" class="icon-btn mobile-only" style="margin-right: 4px;" title="Toggle Sidebar">
+        <button id="mobile-sidebar-toggle" class="icon-btn mobile-only" style="margin-right: 4px;"
+          title="Toggle Sidebar">
           <span class="material-symbols-outlined">menu</span>
         </button>
         <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
@@ -274,17 +275,20 @@
             <div class="panel-header">
               <h2>Git & Version Control</h2>
             </div>
-            <div class="git-panel-content" style="padding: 16px; display: flex; flex-direction: column; gap: 16px; height: calc(100% - 60px); overflow-y: auto;">
+            <div class="git-panel-content"
+              style="padding: 16px; display: flex; flex-direction: column; gap: 16px; height: calc(100% - 60px); overflow-y: auto;">
               <!-- Staging Section -->
               <div class="git-section">
-                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Staged Changes</h3>
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+                  Staged Changes</h3>
                 <div id="git-staged-list" style="display: flex; flex-direction: column; gap: 4px;">
                   <!-- Staged files list -->
                 </div>
               </div>
 
               <div class="git-section">
-                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Changes</h3>
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+                  Changes</h3>
                 <div id="git-unstaged-list" style="display: flex; flex-direction: column; gap: 4px;">
                   <!-- Unstaged files list -->
                 </div>
@@ -292,18 +296,24 @@
 
               <!-- Commit Input -->
               <div class="git-section" style="display: flex; flex-direction: column; gap: 8px;">
-                <input type="text" id="git-commit-msg" placeholder="Commit message" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
-                <button id="git-commit-btn" class="primary-btn" style="width: 100%; justify-content: center; height: 36px;">Commit to Local</button>
+                <input type="text" id="git-commit-msg" placeholder="Commit message"
+                  style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                <button id="git-commit-btn" class="primary-btn"
+                  style="width: 100%; justify-content: center; height: 36px;">Commit to Local</button>
               </div>
 
               <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;" />
 
               <!-- Remote GitHub Sync -->
               <div class="git-section" style="display: flex; flex-direction: column; gap: 8px;">
-                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Remote Sync</h3>
-                <input type="password" id="git-pat" placeholder="GitHub Personal Access Token" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
-                <input type="text" id="git-repo" placeholder="GitHub Repository (owner/repo)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
-                <button id="git-push-btn" class="secondary-btn" style="width: 100%; justify-content: center; height: 36px; border-color: var(--accent-indigo);">
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+                  Remote Sync</h3>
+                <input type="password" id="git-pat" placeholder="GitHub Personal Access Token"
+                  style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                <input type="text" id="git-repo" placeholder="GitHub Repository (owner/repo)"
+                  style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                <button id="git-push-btn" class="secondary-btn"
+                  style="width: 100%; justify-content: center; height: 36px; border-color: var(--accent-indigo);">
                   <span class="material-symbols-outlined">publish</span>
                   <span>Push to GitHub</span>
                 </button>
@@ -311,7 +321,8 @@
 
               <!-- Visual Commit History Graph -->
               <div class="git-section">
-                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Commit History</h3>
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+                  Commit History</h3>
                 <div id="git-history-graph" style="display: flex; flex-direction: column; gap: 8px;">
                   <!-- Commit list/nodes will be generated here -->
                 </div>
@@ -324,28 +335,34 @@
             <div class="panel-header">
               <h2>Collaboration</h2>
             </div>
-            <div class="collab-panel-content" style="padding: 16px; display: flex; flex-direction: column; gap: 16px; height: calc(100% - 60px); overflow-y: auto;">
-              
+            <div class="collab-panel-content"
+              style="padding: 16px; display: flex; flex-direction: column; gap: 16px; height: calc(100% - 60px); overflow-y: auto;">
+
               <!-- Room Controls -->
               <div id="collab-init-section" style="display: flex; flex-direction: column; gap: 12px;">
-                <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                <div
+                  style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
                   Host a room or join a room using WebRTC Peer-to-Peer connection to code in real-time.
                 </div>
-                
-                <button id="collab-host-btn" class="primary-btn" style="width: 100%; justify-content: center; height: 38px;">
+
+                <button id="collab-host-btn" class="primary-btn"
+                  style="width: 100%; justify-content: center; height: 38px;">
                   <span class="material-symbols-outlined">wifi</span>
                   <span>Host Room</span>
                 </button>
 
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text-dark); font-size: 0.75rem;">
+                <div
+                  style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text-dark); font-size: 0.75rem;">
                   <hr style="flex: 1; border: 0; border-top: 1px solid var(--border-color);" />
                   <span>OR</span>
                   <hr style="flex: 1; border: 0; border-top: 1px solid var(--border-color);" />
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                  <input type="text" id="collab-peer-input" placeholder="Enter Host Room ID" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
-                  <button id="collab-join-btn" class="secondary-btn" style="width: 100%; justify-content: center; height: 38px; border-color: var(--accent-cyan);">
+                  <input type="text" id="collab-peer-input" placeholder="Enter Host Room ID"
+                    style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                  <button id="collab-join-btn" class="secondary-btn"
+                    style="width: 100%; justify-content: center; height: 38px; border-color: var(--accent-cyan);">
                     <span class="material-symbols-outlined">login</span>
                     <span>Join Room</span>
                   </button>
@@ -355,40 +372,55 @@
               <!-- Active Session Details -->
               <div id="collab-active-section" class="hide" style="display: flex; flex-direction: column; gap: 12px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                  <div id="collab-status-badge" class="status-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">Host Room Active</div>
-                  <button id="collab-disconnect-btn" class="icon-btn" title="Disconnect Session" style="color: var(--color-error);"><span class="material-symbols-outlined">power_settings_new</span></button>
+                  <div id="collab-status-badge" class="status-badge"
+                    style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">
+                    Host Room Active</div>
+                  <button id="collab-disconnect-btn" class="icon-btn" title="Disconnect Session"
+                    style="color: var(--color-error);"><span
+                      class="material-symbols-outlined">power_settings_new</span></button>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+                <div
+                  style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
                   <div style="font-size: 0.75rem; color: var(--text-muted);">Room ID:</div>
                   <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                    <code id="collab-room-id" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); word-break: break-all;">-</code>
-                    <button id="collab-copy-id-btn" class="icon-btn" title="Copy Room ID"><span class="material-symbols-outlined" style="font-size: 1.1rem;">content_copy</span></button>
+                    <code id="collab-room-id"
+                      style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); word-break: break-all;">-</code>
+                    <button id="collab-copy-id-btn" class="icon-btn" title="Copy Room ID"><span
+                        class="material-symbols-outlined" style="font-size: 1.1rem;">content_copy</span></button>
                   </div>
                 </div>
 
                 <!-- Voice Chat and Peer List -->
-                <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+                <div
+                  style="display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
                   <div style="display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Active Peers:</span>
-                    <button id="collab-voice-btn" class="secondary-btn" style="height: 24px; padding: 0 8px; font-size: 0.75rem; border-color: var(--accent-indigo);">
+                    <button id="collab-voice-btn" class="secondary-btn"
+                      style="height: 24px; padding: 0 8px; font-size: 0.75rem; border-color: var(--accent-indigo);">
                       <span class="material-symbols-outlined" style="font-size: 1rem;">mic_off</span>
                       <span>Voice Chat</span>
                     </button>
                   </div>
-                  <div id="collab-peer-list" style="display: flex; flex-direction: column; gap: 4px; max-height: 80px; overflow-y: auto;">
+                  <div id="collab-peer-list"
+                    style="display: flex; flex-direction: column; gap: 4px; max-height: 80px; overflow-y: auto;">
                     <div style="font-size: 0.75rem; color: var(--text-dark);">• You (Local)</div>
                   </div>
                 </div>
 
                 <!-- Chat Box -->
-                <div style="display: flex; flex-direction: column; border: 1px solid var(--border-color); border-radius: 8px; height: 200px; overflow: hidden; background: rgba(0,0,0,0.2);">
-                  <div id="collab-chat-messages" style="flex: 1; padding: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;">
+                <div
+                  style="display: flex; flex-direction: column; border: 1px solid var(--border-color); border-radius: 8px; height: 200px; overflow: hidden; background: rgba(0,0,0,0.2);">
+                  <div id="collab-chat-messages"
+                    style="flex: 1; padding: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;">
                     <!-- Messages -->
                   </div>
-                  <div style="display: flex; border-top: 1px solid var(--border-color); padding: 4px; gap: 4px; background: rgba(255,255,255,0.02);">
-                    <input type="text" id="collab-chat-input" placeholder="Type message..." style="flex: 1; background: transparent; border: none; padding: 6px; color: var(--text-main); font-size: 0.8rem; outline: none;" />
-                    <button id="collab-chat-send-btn" class="icon-btn" style="color: var(--accent-indigo);"><span class="material-symbols-outlined" style="font-size: 1.2rem;">send</span></button>
+                  <div
+                    style="display: flex; border-top: 1px solid var(--border-color); padding: 4px; gap: 4px; background: rgba(255,255,255,0.02);">
+                    <input type="text" id="collab-chat-input" placeholder="Type message..."
+                      style="flex: 1; background: transparent; border: none; padding: 6px; color: var(--text-main); font-size: 0.8rem; outline: none;" />
+                    <button id="collab-chat-send-btn" class="icon-btn" style="color: var(--accent-indigo);"><span
+                        class="material-symbols-outlined" style="font-size: 1.2rem;">send</span></button>
                   </div>
                 </div>
               </div>
@@ -408,11 +440,13 @@
       <section id="editor-terminal-container">
 
         <!-- Code Tabs Panel -->
-        <div id="editor-tabs-bar" style="display: flex; justify-content: space-between; align-items: center; padding-right: 12px; overflow: hidden;">
+        <div id="editor-tabs-bar"
+          style="display: flex; justify-content: space-between; align-items: center; padding-right: 12px; overflow: hidden;">
           <div id="editor-tabs-list" class="tabs-list">
             <!-- Open file tabs will be generated here -->
           </div>
-          <button id="zen-tab-btn" class="icon-btn" title="Toggle Zen / Focus Mode (Alt+Z)" style="color: var(--text-muted); cursor: pointer; display: flex; align-items: center;">
+          <button id="zen-tab-btn" class="icon-btn" title="Toggle Zen / Focus Mode (Alt+Z)"
+            style="color: var(--text-muted); cursor: pointer; display: flex; align-items: center;">
             <span class="material-symbols-outlined" style="font-size: 1.2rem;">fullscreen</span>
           </button>
         </div>
@@ -486,7 +520,8 @@
 
             <!-- Input Panel -->
             <div id="terminal-input-panel" class="terminal-body">
-              <textarea id="stdin-textarea" placeholder="Enter program inputs (stdin) here, one per line. They will be passed to your program when running."></textarea>
+              <textarea id="stdin-textarea"
+                placeholder="Enter program inputs (stdin) here, one per line. They will be passed to your program when running."></textarea>
             </div>
 
             <!-- Visualizer Panel -->
@@ -497,7 +532,7 @@
                   <div id="visualizer-canvas">
                     <!-- Dynamic sorting bars or list nodes will be injected here -->
                   </div>
-                  
+
                   <div class="visualizer-controls">
                     <button id="vis-control-reset" class="secondary-btn" title="Reset Simulation">
                       <span class="material-symbols-outlined">replay</span>
@@ -511,14 +546,14 @@
                     <button id="vis-control-next" class="secondary-btn" title="Next Step">
                       <span class="material-symbols-outlined">skip_next</span>
                     </button>
-                    
+
                     <div class="slider-group">
                       <span class="material-symbols-outlined">speed</span>
                       <input type="range" id="vis-control-speed" min="200" max="2000" value="1300" step="100" />
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Visualizer Meta Info Panel (right) -->
                 <div class="visualizer-meta-panel">
                   <!-- Section 1: Description -->
@@ -528,7 +563,7 @@
                       Select an algorithm template to begin visualization.
                     </div>
                   </div>
-                  
+
                   <!-- Section 2: Variables -->
                   <div class="vis-meta-section">
                     <h3><span class="material-symbols-outlined">variables</span> Variables</h3>
@@ -536,7 +571,7 @@
                       <!-- Dynamic variable badges will be injected here -->
                     </div>
                   </div>
-                  
+
                   <!-- Section 3: Custom Input -->
                   <div class="vis-meta-section">
                     <h3><span class="material-symbols-outlined">edit</span> Custom Data</h3>
@@ -545,8 +580,10 @@
                       <button id="vis-custom-data-btn" class="primary-btn">Set</button>
                     </div>
                     <div style="display: flex; gap: 8px; margin-top: 8px; width: 100%;">
-                      <button id="vis-toggle-wave-builder" class="secondary-btn" style="flex: 1; height: 32px; justify-content: center; font-size: 0.8rem; border-color: var(--accent-indigo);">
-                        <span class="material-symbols-outlined" style="font-size: 1.1rem;">settings_input_component</span>
+                      <button id="vis-toggle-wave-builder" class="secondary-btn"
+                        style="flex: 1; height: 32px; justify-content: center; font-size: 0.8rem; border-color: var(--accent-indigo);">
+                        <span class="material-symbols-outlined"
+                          style="font-size: 1.1rem;">settings_input_component</span>
                         <span>Waveform Builder</span>
                       </button>
                     </div>

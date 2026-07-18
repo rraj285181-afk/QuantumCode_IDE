@@ -1123,24 +1123,30 @@ const COMMANDS = [
   { label: 'Run Code', action: () => runCurrentCode(), shortcut: 'Ctrl+Enter' },
   { label: 'Format Document', action: () => formatCode(), shortcut: 'Alt+Shift+F' },
   { label: 'Clear Terminal Output', action: () => clearTerminalLog(), shortcut: '' },
-  { label: 'Create New File', action: () => {
-    document.getElementById('tab-explorer-btn').click();
-    const container = document.getElementById('new-file-input-container');
-    container.classList.remove('hide');
-    document.getElementById('new-file-name').focus();
-  }, shortcut: 'Alt+N' },
-  { label: 'Create New Folder', action: () => {
-    document.getElementById('tab-explorer-btn').click();
-    const container = document.getElementById('new-folder-input-container');
-    container.classList.remove('hide');
-    document.getElementById('new-folder-name').focus();
-  }, shortcut: '' },
+  {
+    label: 'Create New File', action: () => {
+      document.getElementById('tab-explorer-btn').click();
+      const container = document.getElementById('new-file-input-container');
+      container.classList.remove('hide');
+      document.getElementById('new-file-name').focus();
+    }, shortcut: 'Alt+N'
+  },
+  {
+    label: 'Create New Folder', action: () => {
+      document.getElementById('tab-explorer-btn').click();
+      const container = document.getElementById('new-folder-input-container');
+      container.classList.remove('hide');
+      document.getElementById('new-folder-name').focus();
+    }, shortcut: ''
+  },
   { label: 'Download Workspace (ZIP)', action: () => downloadWorkspaceAsZip(), shortcut: '' },
-  { label: 'Reset Workspace', action: () => {
-    if (confirm('Are you sure you want to reset your workspace? This will delete all custom files.')) {
-      document.getElementById('reset-workspace-btn')?.click();
-    }
-  }, shortcut: '' },
+  {
+    label: 'Reset Workspace', action: () => {
+      if (confirm('Are you sure you want to reset your workspace? This will delete all custom files.')) {
+        document.getElementById('reset-workspace-btn')?.click();
+      }
+    }, shortcut: ''
+  },
   { label: 'Theme: CodeXrun Dark', action: () => setTheme('vs-dark') },
   { label: 'Theme: Dracula', action: () => setTheme('dracula') },
   { label: 'Theme: Monokai', action: () => setTheme('monokai') },
@@ -1162,7 +1168,7 @@ let filteredCommands = [];
 function toggleCommandPalette() {
   const modal = document.getElementById('command-palette-modal');
   if (!modal) return;
-  
+
   if (modal.classList.contains('hide')) {
     modal.classList.remove('hide');
     const input = document.getElementById('command-palette-input');
@@ -1180,7 +1186,7 @@ function renderCommandPaletteResults(query = '') {
   resultsContainer.innerHTML = '';
 
   const cleanQuery = query.toLowerCase().replace('>', '').trim();
-  filteredCommands = COMMANDS.filter(cmd => 
+  filteredCommands = COMMANDS.filter(cmd =>
     cmd.label.toLowerCase().includes(cleanQuery)
   );
 
@@ -1191,11 +1197,11 @@ function renderCommandPaletteResults(query = '') {
   }
 
   commandPaletteSelectedIndex = 0;
-  
+
   filteredCommands.forEach((cmd, index) => {
     const item = document.createElement('div');
     item.className = `command-palette-item ${index === 0 ? 'selected' : ''}`;
-    
+
     const labelSpan = document.createElement('span');
     labelSpan.textContent = cmd.label;
     item.appendChild(labelSpan);
@@ -1391,9 +1397,9 @@ function createPathRecursive(fullPath, isFolder = false) {
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i];
     const isLast = (i === parts.length - 1);
-    
+
     let existing = state.files.find(f => f.name.toLowerCase() === part.toLowerCase() && f.parentId === currentParentId);
-    
+
     if (existing) {
       if (existing.type !== 'folder' && (!isLast || isFolder)) {
         showTerminalLog(`[System Error] Conflict: "${part}" is a file.`, 'error-text');
@@ -1651,7 +1657,7 @@ function renderTabs() {
 
   state.files.forEach(file => {
     if (file.type === 'folder') return; // Skip folders
-    
+
     const tab = document.createElement('div');
     tab.className = `editor-tab ${file.id === state.activeFileId ? 'active' : ''}`;
 
@@ -3098,7 +3104,7 @@ function renderBST(canvas, step) {
   const root = step.tree;
   const svgWidth = canvas.clientWidth || 600;
   const svgHeight = 220;
-  
+
   assignNodePositions(root, svgWidth / 2, 30, svgWidth / 4);
 
   let svgContent = `<svg width="100%" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
@@ -5218,7 +5224,7 @@ function initZenMode() {
 
 function toggleZenMode() {
   document.body.classList.toggle('zen-mode');
-  
+
   const updateBtnUI = (btnId) => {
     const btn = document.getElementById(btnId);
     if (btn) {
@@ -5558,7 +5564,7 @@ function collabStartHost() {
 
   showTerminalLog('[System] Initializing WebRTC Signaling Broker...', 'system-text');
   isCollabHost = true;
-  
+
   const customRoomId = 'codexrun_' + Math.random().toString(36).substring(2, 10);
   peerInstance = new Peer(customRoomId);
 
@@ -5609,7 +5615,7 @@ function collabStartJoin() {
 
   showTerminalLog('[System] Connecting to peer host...', 'system-text');
   isCollabHost = false;
-  
+
   const clientPeerId = 'codexrun_' + Math.random().toString(36).substring(2, 10);
   peerInstance = new Peer(clientPeerId);
 
@@ -5642,7 +5648,7 @@ function setupCollabConnectionListeners(conn) {
     document.getElementById('collab-status-badge').textContent = 'Connected';
     document.getElementById('collab-status-badge').style.background = 'rgba(14, 165, 233, 0.15)';
     document.getElementById('collab-status-badge').style.color = 'var(--accent-cyan)';
-    
+
     showTerminalLog('[Collaboration] WebRTC peer channel connected successfully.', 'success-text');
     updatePeerList();
 
@@ -5839,11 +5845,11 @@ function toggleWaveformBuilder() {
 
 function renderWaveformBuilderGrid(canvas) {
   canvas.innerHTML = '';
-  
+
   const builderWrapper = document.createElement('div');
   builderWrapper.className = 'vis-waveform-builder';
   builderWrapper.style.setProperty('--wave-cell-width', `${waveBuilderState.cellWidth}px`);
-  
+
   const header = document.createElement('div');
   header.className = 'vis-wave-grid-header';
   header.innerHTML = `
@@ -5894,8 +5900,8 @@ function renderWaveformBuilderGrid(canvas) {
       if (array[t] === 1) cell.classList.add('high');
 
       if (t > 0) {
-        if (array[t] === 1 && array[t-1] === 0) cell.classList.add('rise');
-        if (array[t] === 0 && array[t-1] === 1) cell.classList.add('fall');
+        if (array[t] === 1 && array[t - 1] === 0) cell.classList.add('rise');
+        if (array[t] === 0 && array[t - 1] === 1) cell.classList.add('fall');
       }
 
       cell.addEventListener('click', () => {
@@ -6049,7 +6055,7 @@ function executeSQLQuery(queries) {
   showTerminalLog('> Running SQL queries local-client side...', 'system-text');
 
   const queryArray = queries.split(';').map(q => q.trim()).filter(q => q.length > 0);
-  
+
   queryArray.forEach(query => {
     try {
       showTerminalLog(`SQL> ${query};`, 'system-text');
@@ -6058,13 +6064,13 @@ function executeSQLQuery(queries) {
         res.forEach(table => {
           const tableHTML = document.createElement('table');
           tableHTML.className = 'sql-result-table';
-          
+
           let headerHTML = '<tr>';
           table.columns.forEach(col => {
             headerHTML += `<th>${col}</th>`;
           });
           headerHTML += '</tr>';
-          
+
           let rowsHTML = '';
           table.values.forEach(row => {
             rowsHTML += '<tr>';
@@ -6073,9 +6079,9 @@ function executeSQLQuery(queries) {
             });
             rowsHTML += '</tr>';
           });
-          
+
           tableHTML.innerHTML = headerHTML + rowsHTML;
-          
+
           const terminalLog = document.getElementById('terminal-log');
           if (terminalLog) {
             terminalLog.appendChild(tableHTML);
