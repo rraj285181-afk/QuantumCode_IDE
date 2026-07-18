@@ -983,9 +983,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup Download ZIP Button
   document.getElementById('download-zip-btn').addEventListener('click', downloadWorkspaceAsZip);
 
-  // Setup Templates Listeners
-  initTemplatesListeners();
-
   // Setup Share Modal Listeners
   initShareModalListeners();
 
@@ -1992,7 +1989,6 @@ function initSidebarTabs() {
   const tabs = [
     { btn: 'tab-explorer-btn', panel: 'panel-explorer' },
     { btn: 'tab-settings-btn', panel: 'panel-settings' },
-    { btn: 'tab-templates-btn', panel: 'panel-templates' },
     { btn: 'tab-git-btn', panel: 'panel-git' },
     { btn: 'tab-collab-btn', panel: 'panel-collab' },
     { btn: 'tab-help-btn', panel: 'panel-help' }
@@ -2773,16 +2769,7 @@ function downloadWorkspaceAsZip() {
     });
 }
 
-// Setup template categories loading listeners
-function initTemplatesListeners() {
-  const buttons = document.querySelectorAll('.template-item-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const templateId = btn.getAttribute('data-template');
-      loadTemplate(templateId);
-    });
-  });
-}
+
 
 // Load chosen algorithm template into workspace
 function loadTemplate(templateId) {
