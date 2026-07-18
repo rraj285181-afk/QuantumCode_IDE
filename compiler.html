@@ -24,6 +24,9 @@
   <!-- Google AdSense Main Library -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5471667535888198"
     crossorigin="anonymous"></script>
+
+  <!-- PeerJS WebRTC P2P Library -->
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 
 <body>
@@ -83,6 +86,12 @@
           </select>
         </div>
 
+        <!-- Zen Mode Action Button -->
+        <button id="zen-btn" class="secondary-btn" title="Toggle Zen / Focus Mode (Alt+Z)">
+          <span class="material-symbols-outlined">fullscreen</span>
+          <span>Zen</span>
+        </button>
+
         <!-- Format Action Button -->
         <button id="format-btn" class="secondary-btn" title="Format current file code">
           <span class="material-symbols-outlined">format_align_left</span>
@@ -124,6 +133,12 @@
           </button>
           <button id="tab-templates-btn" class="sidebar-nav-btn" title="Code Templates">
             <span class="material-symbols-outlined">menu_book</span>
+          </button>
+          <button id="tab-git-btn" class="sidebar-nav-btn" title="Git Integration">
+            <span class="material-symbols-outlined">commit</span>
+          </button>
+          <button id="tab-collab-btn" class="sidebar-nav-btn" title="P2P Collaboration">
+            <span class="material-symbols-outlined">groups</span>
           </button>
           <button id="tab-help-btn" class="sidebar-nav-btn" title="Help & Shortcuts">
             <span class="material-symbols-outlined">help</span>
@@ -304,6 +319,119 @@
             </div>
           </div>
 
+          <!-- Git Integration Panel -->
+          <div id="panel-git" class="sidebar-panel">
+            <div class="panel-header">
+              <h2>Git & Version Control</h2>
+            </div>
+            <div class="git-panel-content" style="padding: 16px; display: flex; flex-direction: column; gap: 16px; height: calc(100% - 60px); overflow-y: auto;">
+              <!-- Staging Section -->
+              <div class="git-section">
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Staged Changes</h3>
+                <div id="git-staged-list" style="display: flex; flex-direction: column; gap: 4px;">
+                  <!-- Staged files list -->
+                </div>
+              </div>
+
+              <div class="git-section">
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Changes</h3>
+                <div id="git-unstaged-list" style="display: flex; flex-direction: column; gap: 4px;">
+                  <!-- Unstaged files list -->
+                </div>
+              </div>
+
+              <!-- Commit Input -->
+              <div class="git-section" style="display: flex; flex-direction: column; gap: 8px;">
+                <input type="text" id="git-commit-msg" placeholder="Commit message" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                <button id="git-commit-btn" class="primary-btn" style="width: 100%; justify-content: center; height: 36px;">Commit to Local</button>
+              </div>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;" />
+
+              <!-- Remote GitHub Sync -->
+              <div class="git-section" style="display: flex; flex-direction: column; gap: 8px;">
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Remote Sync</h3>
+                <input type="password" id="git-pat" placeholder="GitHub Personal Access Token" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                <input type="text" id="git-repo" placeholder="GitHub Repository (owner/repo)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                <button id="git-push-btn" class="secondary-btn" style="width: 100%; justify-content: center; height: 36px; border-color: var(--accent-indigo);">
+                  <span class="material-symbols-outlined">publish</span>
+                  <span>Push to GitHub</span>
+                </button>
+              </div>
+
+              <!-- Visual Commit History Graph -->
+              <div class="git-section">
+                <h3 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Commit History</h3>
+                <div id="git-history-graph" style="display: flex; flex-direction: column; gap: 8px;">
+                  <!-- Commit list/nodes will be generated here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- P2P Collaboration Panel -->
+          <div id="panel-collab" class="sidebar-panel">
+            <div class="panel-header">
+              <h2>Collaboration</h2>
+            </div>
+            <div class="collab-panel-content" style="padding: 16px; display: flex; flex-direction: column; gap: 16px; height: calc(100% - 60px); overflow-y: auto;">
+              
+              <!-- Room Controls -->
+              <div id="collab-init-section" style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                  Host a room or join a room using WebRTC Peer-to-Peer connection to code in real-time.
+                </div>
+                
+                <button id="collab-host-btn" class="primary-btn" style="width: 100%; justify-content: center; height: 38px;">
+                  <span class="material-symbols-outlined">wifi</span>
+                  <span>Host Room</span>
+                </button>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text-dark); font-size: 0.75rem;">
+                  <hr style="flex: 1; border: 0; border-top: 1px solid var(--border-color);" />
+                  <span>OR</span>
+                  <hr style="flex: 1; border: 0; border-top: 1px solid var(--border-color);" />
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <input type="text" id="collab-peer-input" placeholder="Enter Host Room ID" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; color: var(--text-main); font-size: 0.85rem; outline: none;" />
+                  <button id="collab-join-btn" class="secondary-btn" style="width: 100%; justify-content: center; height: 38px; border-color: var(--accent-cyan);">
+                    <span class="material-symbols-outlined">login</span>
+                    <span>Join Room</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Active Session Details -->
+              <div id="collab-active-section" class="hide" style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div id="collab-status-badge" class="status-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); font-size: 0.75rem; padding: 4px 8px; border-radius: 4px;">Host Room Active</div>
+                  <button id="collab-disconnect-btn" class="icon-btn" title="Disconnect Session" style="color: var(--color-error);"><span class="material-symbols-outlined">power_settings_new</span></button>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Room ID:</div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <code id="collab-room-id" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); word-break: break-all;">-</code>
+                    <button id="collab-copy-id-btn" class="icon-btn" title="Copy Room ID"><span class="material-symbols-outlined" style="font-size: 1.1rem;">content_copy</span></button>
+                  </div>
+                </div>
+
+                <!-- Chat Box -->
+                <div style="display: flex; flex-direction: column; border: 1px solid var(--border-color); border-radius: 8px; height: 200px; overflow: hidden; background: rgba(0,0,0,0.2);">
+                  <div id="collab-chat-messages" style="flex: 1; padding: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;">
+                    <!-- Messages -->
+                  </div>
+                  <div style="display: flex; border-top: 1px solid var(--border-color); padding: 4px; gap: 4px; background: rgba(255,255,255,0.02);">
+                    <input type="text" id="collab-chat-input" placeholder="Type message..." style="flex: 1; background: transparent; border: none; padding: 6px; color: var(--text-main); font-size: 0.8rem; outline: none;" />
+                    <button id="collab-chat-send-btn" class="icon-btn" style="color: var(--accent-indigo);"><span class="material-symbols-outlined" style="font-size: 1.2rem;">send</span></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </aside>
 
@@ -448,6 +576,12 @@
                     <div class="vis-custom-inputs">
                       <input type="text" id="vis-custom-data-input" placeholder="e.g. 64, 34, 25, 12" />
                       <button id="vis-custom-data-btn" class="primary-btn">Set</button>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 8px; width: 100%;">
+                      <button id="vis-toggle-wave-builder" class="secondary-btn" style="flex: 1; height: 32px; justify-content: center; font-size: 0.8rem; border-color: var(--accent-indigo);">
+                        <span class="material-symbols-outlined" style="font-size: 1.1rem;">settings_input_component</span>
+                        <span>Waveform Builder</span>
+                      </button>
                     </div>
                   </div>
                 </div>

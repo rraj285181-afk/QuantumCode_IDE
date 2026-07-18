@@ -951,6 +951,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileLayout();
   initShortcutListeners();
   initVisualizerListeners();
+  initZenMode();
+  initGitPanel();
+  initCollabPanel();
+  initWaveformBuilder();
 
   // Load Monaco Editor using the AMD loader
   if (window.monaco) {
@@ -1989,6 +1993,8 @@ function initSidebarTabs() {
     { btn: 'tab-explorer-btn', panel: 'panel-explorer' },
     { btn: 'tab-settings-btn', panel: 'panel-settings' },
     { btn: 'tab-templates-btn', panel: 'panel-templates' },
+    { btn: 'tab-git-btn', panel: 'panel-git' },
+    { btn: 'tab-collab-btn', panel: 'panel-collab' },
     { btn: 'tab-help-btn', panel: 'panel-help' }
   ];
 
@@ -5185,6 +5191,615 @@ function initMobileLayout() {
       if (editor) {
         setTimeout(() => editor.layout(), 100);
       }
+    });
+  }
+}
+
+// ==========================================================================
+// Zen / Focus Mode
+// ==========================================================================
+function initZenMode() {
+  const zenBtn = document.getElementById('zen-btn');
+  if (zenBtn) {
+    zenBtn.addEventListener('click', toggleZenMode);
+  }
+
+  // Keyboard shortcut Alt + Z
+  window.addEventListener('keydown', (e) => {
+    if (e.altKey && e.key.toLowerCase() === 'z') {
+      e.preventDefault();
+      toggleZenMode();
+    }
+  });
+}
+
+function toggleZenMode() {
+  document.body.classList.toggle('zen-mode');
+  const zenBtn = document.getElementById('zen-btn');
+  if (zenBtn) {
+    const icon = zenBtn.querySelector('.material-symbols-outlined');
+    const text = zenBtn.querySelector('span:not(.material-symbols-outlined)');
+    if (document.body.classList.contains('zen-mode')) {
+      if (icon) icon.textContent = 'fullscreen_exit';
+      if (text) text.textContent = 'Normal';
+      showTerminalLog('[System] Focus Mode enabled. Press Alt+Z to exit.', 'system-text');
+    } else {
+      if (icon) icon.textContent = 'fullscreen';
+      if (text) text.textContent = 'Zen';
+      showTerminalLog('[System] Focus Mode disabled.', 'system-text');
+    }
+  }
+  if (editor) {
+    setTimeout(() => editor.layout(), 100);
+  }
+}
+
+// ==========================================================================
+// Git Integration & Remote Push
+// ==========================================================================
+const gitState = {
+  baseline: {},
+  staged: [],
+  commits: []
+};
+
+function initGitPanel() {
+  // Capture initial baseline
+  state.files.forEach(f => {
+    if (f.type !== 'folder' && !gitState.baseline[f.name]) {
+      gitState.baseline[f.name] = f.content;
+    }
+  });
+
+  const commitBtn = document.getElementById('git-commit-btn');
+  const pushBtn = document.getElementById('git-push-btn');
+
+  if (commitBtn) commitBtn.addEventListener('click', handleGitCommit);
+  if (pushBtn) pushBtn.addEventListener('click', handleGitPush);
+
+  // Hook Monaco Editor change event to update Git Panel dynamically
+  if (editor) {
+    editor.onDidChangeModelContent(() => {
+      if (state.activeFileId) {
+        const file = state.files.find(f => f.id === state.activeFileId);
+        if (file) {
+          file.content = editor.getValue();
+        }
+      }
+      renderGitPanel();
+    });
+  }
+
+  // Hook Git panel render when tab clicked
+  const gitTab = document.getElementById('tab-git-btn');
+  if (gitTab) {
+    gitTab.addEventListener('click', renderGitPanel);
+  }
+
+  renderGitPanel();
+}
+
+function renderGitPanel() {
+  const stagedList = document.getElementById('git-staged-list');
+  const unstagedList = document.getElementById('git-unstaged-list');
+  if (!stagedList || !unstagedList) return;
+
+  stagedList.innerHTML = '';
+  unstagedList.innerHTML = '';
+
+  const modifiedFiles = [];
+  const untrackedFiles = [];
+
+  state.files.forEach(file => {
+    if (file.type === 'folder') return;
+    const baselineContent = gitState.baseline[file.name];
+    if (baselineContent === undefined) {
+      untrackedFiles.push(file.name);
+    } else if (baselineContent !== file.content) {
+      modifiedFiles.push(file.name);
+    }
+  });
+
+  const allUnstaged = [...modifiedFiles, ...untrackedFiles];
+  const unstagedToShow = allUnstaged.filter(f => !gitState.staged.includes(f));
+
+  if (unstagedToShow.length === 0) {
+    unstagedList.innerHTML = '<div style="color: var(--text-dark); font-size: 0.75rem; padding: 4px;">No unstaged changes</div>';
+  } else {
+    unstagedToShow.forEach(file => {
+      const row = document.createElement('div');
+      row.className = 'git-file-row';
+      const isUntracked = untrackedFiles.includes(file);
+
+      row.innerHTML = `
+        <div class="git-file-info">
+          <span class="material-symbols-outlined" style="font-size: 1rem; color: var(--text-muted);">description</span>
+          <span class="git-file-name" title="${file}">${file}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="git-file-status-badge ${isUntracked ? 'status-badge info' : 'git-file-status-badge git-status-modified'}">${isUntracked ? 'Untracked' : 'Modified'}</span>
+          <button class="icon-btn stage-btn" title="Stage File" style="color: var(--color-success);"><span class="material-symbols-outlined" style="font-size: 1.1rem;">add</span></button>
+        </div>
+      `;
+
+      row.querySelector('.stage-btn').addEventListener('click', () => {
+        gitState.staged.push(file);
+        renderGitPanel();
+      });
+
+      unstagedList.appendChild(row);
+    });
+  }
+
+  if (gitState.staged.length === 0) {
+    stagedList.innerHTML = '<div style="color: var(--text-dark); font-size: 0.75rem; padding: 4px;">No staged changes</div>';
+  } else {
+    gitState.staged.forEach(file => {
+      const row = document.createElement('div');
+      row.className = 'git-file-row';
+
+      row.innerHTML = `
+        <div class="git-file-info">
+          <span class="material-symbols-outlined" style="font-size: 1rem; color: var(--color-success);">description</span>
+          <span class="git-file-name" title="${file}">${file}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="git-file-status-badge git-status-staged">Staged</span>
+          <button class="icon-btn unstage-btn" title="Unstage File" style="color: var(--color-error);"><span class="material-symbols-outlined" style="font-size: 1.1rem;">remove</span></button>
+        </div>
+      `;
+
+      row.querySelector('.unstage-btn').addEventListener('click', () => {
+        gitState.staged = gitState.staged.filter(f => f !== file);
+        renderGitPanel();
+      });
+
+      stagedList.appendChild(row);
+    });
+  }
+
+  renderGitHistory();
+}
+
+function handleGitCommit() {
+  const commitMsgInput = document.getElementById('git-commit-msg');
+  const commitMsg = commitMsgInput ? commitMsgInput.value.trim() : '';
+
+  if (gitState.staged.length === 0) {
+    showTerminalLog('[System Alert] No changes staged to commit.', 'error-text');
+    return;
+  }
+  if (!commitMsg) {
+    showTerminalLog('[System Alert] Please enter a commit message.', 'error-text');
+    return;
+  }
+
+  gitState.staged.forEach(filename => {
+    const file = state.files.find(f => f.name === filename);
+    if (file) {
+      gitState.baseline[filename] = file.content;
+    }
+  });
+
+  const commitId = Math.random().toString(36).substring(2, 9);
+  gitState.commits.unshift({
+    id: commitId,
+    message: commitMsg,
+    timestamp: new Date().toLocaleTimeString(),
+    files: [...gitState.staged]
+  });
+
+  gitState.staged = [];
+  if (commitMsgInput) commitMsgInput.value = '';
+
+  renderGitPanel();
+  showTerminalLog(`[System] Committed ${gitState.commits[0].files.length} files successfully (Commit Hash: ${commitId}).`, 'system-text');
+}
+
+function renderGitHistory() {
+  const historyContainer = document.getElementById('git-history-graph');
+  if (!historyContainer) return;
+
+  historyContainer.innerHTML = '';
+
+  if (gitState.commits.length === 0) {
+    historyContainer.innerHTML = '<div style="color: var(--text-dark); font-size: 0.75rem; padding: 4px;">No local commits yet</div>';
+    return;
+  }
+
+  gitState.commits.forEach(commit => {
+    const node = document.createElement('div');
+    node.className = 'git-commit-node';
+
+    node.innerHTML = `
+      <div class="git-commit-dot"></div>
+      <div class="git-commit-details">
+        <div class="git-commit-msg">${commit.message}</div>
+        <div class="git-commit-meta">commit ${commit.id} • ${commit.timestamp}</div>
+      </div>
+    `;
+    historyContainer.appendChild(node);
+  });
+}
+
+async function handleGitPush() {
+  const patInput = document.getElementById('git-pat');
+  const repoInput = document.getElementById('git-repo');
+
+  const pat = patInput ? patInput.value.trim() : '';
+  const repo = repoInput ? repoInput.value.trim() : '';
+
+  if (!pat || !repo) {
+    showTerminalLog('[System Alert] Both GitHub PAT and repo path (owner/repo) are required to push.', 'error-text');
+    return;
+  }
+
+  const pushBtn = document.getElementById('git-push-btn');
+  pushBtn.disabled = true;
+  const originalText = pushBtn.querySelector('span:not(.material-symbols-outlined)').textContent;
+  pushBtn.querySelector('span:not(.material-symbols-outlined)').textContent = 'Pushing...';
+
+  showTerminalLog(`[System] Contacting GitHub api for repository "${repo}"...`, 'system-text');
+
+  try {
+    for (const file of state.files) {
+      if (file.type === 'folder') continue;
+
+      const path = getFullItemPath(file);
+      const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+
+      let sha = null;
+      try {
+        const checkRes = await fetch(url, {
+          headers: {
+            'Authorization': `token ${pat}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (checkRes.ok) {
+          const fileData = await checkRes.json();
+          sha = fileData.sha;
+        }
+      } catch (err) {
+        // file doesn't exist
+      }
+
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${pat}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Update ${file.name} from CodeXrun browser IDE`,
+          content: btoa(unescape(encodeURIComponent(file.content))),
+          sha: sha || undefined
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'GitHub api error');
+      }
+    }
+
+    showTerminalLog('[System] Remote Push Completed Successfully! All files synced to GitHub.', 'success-text');
+  } catch (err) {
+    showTerminalLog(`[System Error] Failed to push: ${err.message}`, 'error-text');
+  } finally {
+    pushBtn.disabled = false;
+    pushBtn.querySelector('span:not(.material-symbols-outlined)').textContent = originalText;
+  }
+}
+
+// ==========================================================================
+// P2P Collaboration (PeerJS Integration)
+// ==========================================================================
+let peerInstance = null;
+let peerConnection = null;
+let isCollabHost = false;
+
+function initCollabPanel() {
+  const hostBtn = document.getElementById('collab-host-btn');
+  const joinBtn = document.getElementById('collab-join-btn');
+  const disconnectBtn = document.getElementById('collab-disconnect-btn');
+  const chatInput = document.getElementById('collab-chat-input');
+  const chatSendBtn = document.getElementById('collab-chat-send-btn');
+  const copyIdBtn = document.getElementById('collab-copy-id-btn');
+
+  if (hostBtn) hostBtn.addEventListener('click', collabStartHost);
+  if (joinBtn) joinBtn.addEventListener('click', collabStartJoin);
+  if (disconnectBtn) disconnectBtn.addEventListener('click', collabDisconnect);
+  if (chatSendBtn) chatSendBtn.addEventListener('click', collabSendMessage);
+  if (chatInput) {
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') collabSendMessage();
+    });
+  }
+  if (copyIdBtn) {
+    copyIdBtn.addEventListener('click', () => {
+      const roomIdCode = document.getElementById('collab-room-id');
+      if (roomIdCode) {
+        navigator.clipboard.writeText(roomIdCode.textContent);
+        showTerminalLog('[System] Room ID copied to clipboard.', 'system-text');
+      }
+    });
+  }
+}
+
+function collabStartHost() {
+  if (typeof Peer === 'undefined') {
+    showTerminalLog('[System Error] PeerJS library failed to load. Check network connection.', 'error-text');
+    return;
+  }
+
+  showTerminalLog('[System] Initializing WebRTC Signaling Broker...', 'system-text');
+  isCollabHost = true;
+  
+  const customRoomId = 'codexrun_' + Math.random().toString(36).substring(2, 10);
+  peerInstance = new Peer(customRoomId);
+
+  peerInstance.on('open', (id) => {
+    document.getElementById('collab-init-section').classList.add('hide');
+    document.getElementById('collab-active-section').classList.remove('hide');
+    document.getElementById('collab-room-id').textContent = id;
+    document.getElementById('collab-status-badge').textContent = 'Host Room Active';
+    document.getElementById('collab-status-badge').style.background = 'rgba(16, 185, 129, 0.15)';
+    document.getElementById('collab-status-badge').style.color = 'var(--color-success)';
+    showTerminalLog(`[Collaboration] Room opened successfully. ID: ${id}`, 'success-text');
+  });
+
+  peerInstance.on('connection', (conn) => {
+    peerConnection = conn;
+    setupCollabConnectionListeners(conn);
+  });
+
+  peerInstance.on('error', (err) => {
+    showTerminalLog(`[Collaboration Error] PeerJS: ${err.type} - ${err.message}`, 'error-text');
+  });
+}
+
+function collabStartJoin() {
+  if (typeof Peer === 'undefined') {
+    showTerminalLog('[System Error] PeerJS library failed to load.', 'error-text');
+    return;
+  }
+
+  const peerInput = document.getElementById('collab-peer-input');
+  const targetRoomId = peerInput ? peerInput.value.trim() : '';
+
+  if (!targetRoomId) {
+    showTerminalLog('[System Alert] Please enter the Host Room ID to join.', 'error-text');
+    return;
+  }
+
+  showTerminalLog('[System] Connecting to peer host...', 'system-text');
+  isCollabHost = false;
+  
+  const clientPeerId = 'codexrun_' + Math.random().toString(36).substring(2, 10);
+  peerInstance = new Peer(clientPeerId);
+
+  peerInstance.on('open', () => {
+    const conn = peerInstance.connect(targetRoomId);
+    peerConnection = conn;
+    setupCollabConnectionListeners(conn);
+  });
+
+  peerInstance.on('error', (err) => {
+    showTerminalLog(`[Collaboration Error] PeerJS: ${err.type} - ${err.message}`, 'error-text');
+  });
+}
+
+function setupCollabConnectionListeners(conn) {
+  conn.on('open', () => {
+    document.getElementById('collab-init-section').classList.add('hide');
+    document.getElementById('collab-active-section').classList.remove('hide');
+    document.getElementById('collab-room-id').textContent = conn.peer;
+    document.getElementById('collab-status-badge').textContent = 'Connected';
+    document.getElementById('collab-status-badge').style.background = 'rgba(14, 165, 233, 0.15)';
+    document.getElementById('collab-status-badge').style.color = 'var(--accent-cyan)';
+    
+    showTerminalLog('[Collaboration] WebRTC peer channel connected successfully.', 'success-text');
+
+    if (editor) {
+      editor.onDidChangeModelContent(() => {
+        if (peerConnection && peerConnection.open) {
+          peerConnection.send({
+            type: 'edit',
+            content: editor.getValue(),
+            fileId: state.activeFileId
+          });
+        }
+      });
+    }
+  });
+
+  conn.on('data', (data) => {
+    if (data.type === 'edit') {
+      if (editor && state.activeFileId === data.fileId) {
+        const currVal = editor.getValue();
+        if (currVal !== data.content) {
+          const stateFile = state.files.find(f => f.id === data.fileId);
+          if (stateFile) {
+            stateFile.content = data.content;
+          }
+          editor.setValue(data.content);
+        }
+      }
+    } else if (data.type === 'chat') {
+      appendChatMessage(data.sender, data.text, false);
+    }
+  });
+
+  conn.on('close', () => {
+    showTerminalLog('[Collaboration] Peer disconnected.', 'error-text');
+    collabDisconnect();
+  });
+}
+
+function collabSendMessage() {
+  const input = document.getElementById('collab-chat-input');
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+
+  const senderName = isCollabHost ? 'Host' : 'Guest';
+  appendChatMessage(senderName, text, true);
+
+  if (peerConnection && peerConnection.open) {
+    peerConnection.send({
+      type: 'chat',
+      sender: senderName,
+      text: text
+    });
+  }
+
+  if (input) input.value = '';
+}
+
+function appendChatMessage(sender, text, isSelf) {
+  const container = document.getElementById('collab-chat-messages');
+  if (!container) return;
+
+  const msg = document.createElement('div');
+  msg.className = `collab-chat-msg ${isSelf ? 'self' : 'other'}`;
+  msg.innerHTML = `
+    <span class="collab-chat-sender">${sender}</span>
+    <span>${text}</span>
+  `;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function collabDisconnect() {
+  if (peerConnection) {
+    peerConnection.close();
+    peerConnection = null;
+  }
+  if (peerInstance) {
+    peerInstance.destroy();
+    peerInstance = null;
+  }
+
+  document.getElementById('collab-active-section').classList.add('hide');
+  document.getElementById('collab-init-section').classList.remove('hide');
+  showTerminalLog('[Collaboration] Room closed or disconnected.', 'system-text');
+}
+
+// ==========================================================================
+// Custom Signal Waveform Builder
+// ==========================================================================
+let waveBuilderActive = false;
+const waveBuilderState = {
+  signals: ['CLK', 'RST', 'DATA'],
+  intervals: 10,
+  data: {
+    CLK: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    RST: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    DATA: [0, 0, 0, 1, 1, 0, 1, 1, 0, 0]
+  }
+};
+
+function initWaveformBuilder() {
+  const toggleBtn = document.getElementById('vis-toggle-wave-builder');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', toggleWaveformBuilder);
+  }
+}
+
+function toggleWaveformBuilder() {
+  const canvas = document.getElementById('visualizer-canvas');
+  if (!canvas) return;
+
+  waveBuilderActive = !waveBuilderActive;
+  const toggleBtn = document.getElementById('vis-toggle-wave-builder');
+
+  if (waveBuilderActive) {
+    toggleBtn.querySelector('span:not(.material-symbols-outlined)').textContent = 'Normal Vis';
+    renderWaveformBuilderGrid(canvas);
+  } else {
+    toggleBtn.querySelector('span:not(.material-symbols-outlined)').textContent = 'Waveform Builder';
+    renderSimulationStep();
+  }
+}
+
+function renderWaveformBuilderGrid(canvas) {
+  canvas.innerHTML = '';
+  
+  const builderWrapper = document.createElement('div');
+  builderWrapper.className = 'vis-waveform-builder';
+  
+  const header = document.createElement('div');
+  header.className = 'vis-wave-grid-header';
+  header.innerHTML = `
+    <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">Signal Timeline</span>
+    <div style="display: flex; gap: 6px;">
+      <input type="text" id="new-sig-name" placeholder="Signal" style="width: 70px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; color: var(--text-main); font-size: 0.75rem; outline: none;" />
+      <button id="add-sig-btn" class="primary-btn" style="height: 24px; padding: 0 8px; font-size: 0.75rem;">Add</button>
+      <button id="gen-clk-btn" class="secondary-btn" style="height: 24px; padding: 0 8px; font-size: 0.75rem; border-color: var(--accent-indigo);">Clock CLK</button>
+    </div>
+  `;
+
+  builderWrapper.appendChild(header);
+
+  waveBuilderState.signals.forEach(sig => {
+    const row = document.createElement('div');
+    row.className = 'vis-wave-row';
+
+    const label = document.createElement('div');
+    label.className = 'vis-wave-label';
+    label.textContent = sig;
+    row.appendChild(label);
+
+    const timeline = document.createElement('div');
+    timeline.className = 'vis-wave-timeline';
+
+    const array = waveBuilderState.data[sig] || [];
+    for (let t = 0; t < waveBuilderState.intervals; t++) {
+      const cell = document.createElement('div');
+      cell.className = 'vis-wave-cell';
+      if (array[t] === 1) cell.classList.add('high');
+
+      if (t > 0) {
+        if (array[t] === 1 && array[t-1] === 0) cell.classList.add('rise');
+        if (array[t] === 0 && array[t-1] === 1) cell.classList.add('fall');
+      }
+
+      cell.addEventListener('click', () => {
+        waveBuilderState.data[sig][t] = waveBuilderState.data[sig][t] === 1 ? 0 : 1;
+        renderWaveformBuilderGrid(canvas);
+      });
+
+      timeline.appendChild(cell);
+    }
+
+    row.appendChild(timeline);
+    builderWrapper.appendChild(row);
+  });
+
+  canvas.appendChild(builderWrapper);
+
+  const addSigBtn = document.getElementById('add-sig-btn');
+  if (addSigBtn) {
+    addSigBtn.addEventListener('click', () => {
+      const nameInput = document.getElementById('new-sig-name');
+      const sigName = nameInput ? nameInput.value.trim().toUpperCase() : '';
+      if (sigName && !waveBuilderState.signals.includes(sigName)) {
+        waveBuilderState.signals.push(sigName);
+        waveBuilderState.data[sigName] = new Array(waveBuilderState.intervals).fill(0);
+        renderWaveformBuilderGrid(canvas);
+      }
+    });
+  }
+
+  const genClkBtn = document.getElementById('gen-clk-btn');
+  if (genClkBtn) {
+    genClkBtn.addEventListener('click', () => {
+      waveBuilderState.data['CLK'] = [];
+      for (let t = 0; t < waveBuilderState.intervals; t++) {
+        waveBuilderState.data['CLK'].push(t % 2 === 0 ? 0 : 1);
+      }
+      renderWaveformBuilderGrid(canvas);
     });
   }
 }

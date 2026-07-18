@@ -3277,3 +3277,245 @@ kbd {
   font-weight: 600;
   color: var(--text-main);
 }
+
+/* Zen / Focus Mode */
+body.zen-mode #ide-sidebar,
+body.zen-mode #sidebar-resize-handle,
+body.zen-mode header#ide-header {
+  display: none !important;
+}
+
+body.zen-mode #ide-workspace {
+  height: 100vh !important;
+}
+
+body.zen-mode #editor-terminal-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.zen-mode #ide-terminal {
+  display: none !important;
+}
+
+/* Git Panel Styling */
+.git-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.git-file-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.git-file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.git-file-name {
+  color: var(--text-main);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.git-file-status-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.git-status-modified {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.git-status-staged {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--color-success);
+}
+
+.git-commit-node {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.git-commit-node::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 14px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+.git-commit-node:last-child::after {
+  display: none;
+}
+
+.git-commit-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-indigo);
+  border: 3px solid var(--bg-primary);
+  z-index: 2;
+  margin-top: 2px;
+}
+
+.git-commit-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.git-commit-msg {
+  font-size: 0.8rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.git-commit-meta {
+  font-size: 0.7rem;
+  color: var(--text-dark);
+  font-family: var(--font-mono);
+}
+
+/* Collaboration Chat message styles */
+.collab-chat-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 85%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.collab-chat-msg.self {
+  align-self: flex-end;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #ffffff;
+}
+
+.collab-chat-msg.other {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.collab-chat-sender {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Custom Signal Waveform Builder Styles */
+.vis-waveform-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  background: rgba(0,0,0,0.15);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.vis-wave-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.vis-wave-row {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.vis-wave-label {
+  width: 80px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.vis-wave-timeline {
+  flex: 1;
+  display: flex;
+  height: 100%;
+}
+
+.vis-wave-cell {
+  flex: 1;
+  border-left: 1px dashed rgba(255,255,255,0.08);
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition-fast);
+}
+
+.vis-wave-cell:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.vis-wave-cell::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--text-dark);
+  top: 75%;
+}
+
+.vis-wave-cell.high::after {
+  top: 25%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+/* Draw connection risers / fallers for high-low borders */
+.vis-wave-cell.rise::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+  top: 25%;
+  height: 50%;
+  background: var(--accent-cyan);
+}
+
+.vis-wave-cell.fall::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+  top: 25%;
+  height: 50%;
+  background: var(--accent-cyan);
+}
